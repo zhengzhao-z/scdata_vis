@@ -31,6 +31,13 @@ app.get("/a",(req,res)=>{
     })
 })
 
+// 获取热力图相关值
+app.get("/heatmap",(req,res)=>{
+    G5zd.find({},{"_id": 0, "latitude": 1 ,"longitude":1},(err,clo)=>{
+        res.send(clo);
+    })
+})
+
 /* 3000端口监听 */
 app.listen(3000,()=>{
     console.log('http://localhost:3000');
