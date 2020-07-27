@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description: 服务器
  * @version: 0.1
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
@@ -21,12 +21,11 @@ app.all('*', (req, res, next)=>{
     if (req.method == "OPTIONS") res.sendStatus(200);
     else next();
 });
-const {G5zd} =  require('./db.js');
+const {G5zd,Monitor} =  require('./db.js');
 
 
 app.get("/a",(req,res)=>{
     G5zd.findOne({},function(err,clo){
-        console.log(clo)
         res.send(clo)
     })
 })
@@ -34,6 +33,15 @@ app.get("/a",(req,res)=>{
 // 获取热力图相关值
 app.get("/heatmap",(req,res)=>{
     G5zd.find({},{"_id": 0, "latitude": 1 ,"longitude":1},(err,clo)=>{
+        res.send(clo);
+    })
+})
+
+// 获取流量数据
+app.post("/traffic",(req,res)=>{
+    let id = req.body.id,
+        date = req.body.date;
+    Monitor.get(id).find({"GCRQ":date},{"UPDATE_TIME":0,"_id":0},(err,clo)=>{
         res.send(clo);
     })
 })
