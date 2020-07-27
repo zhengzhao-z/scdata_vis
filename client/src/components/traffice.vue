@@ -5,7 +5,9 @@
  * @LastEditor: zhengzhao
 --> 
 <template>
-  
+  <div id="traffic">
+
+  </div>
 </template>
 
 <script>
@@ -17,11 +19,11 @@ export default {
         }
     },
     mounted(){
-        this.$axios.post("htpp://localhost:3000/traffic",{
+        this.$axios.post("http://localhost:3000/traffic",{
             "id":"51000020160416172821205SpZ3O8tEy",
             "date":"2019-06-01 00:00:00"
         }).then(res=>{
-            
+            console.log(res)
         })
     }
 }
