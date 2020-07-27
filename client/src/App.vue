@@ -12,14 +12,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import HelloWorld from './components/HelloWorld'
 import tmap from './components/map'
 import traffic from './components/traffice'
-=======
-import HelloWorld from "./components/HelloWorld";
-import tmap from "./components/map";
->>>>>>> 812cad73f923a8029c6631b4927f0788731583b3
 
 export default {
   name: "App",
