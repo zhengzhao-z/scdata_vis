@@ -18,7 +18,7 @@ import * as d3 from "d3";
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
 Vue.prototype.$d3 = d3;
-Window.d3 = d3; //暂时设置为全局变量
+window.d3 = d3; //暂时设置为全局变量
 
 
 Vue.config.productionTip = false

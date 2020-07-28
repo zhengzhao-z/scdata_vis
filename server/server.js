@@ -41,7 +41,7 @@ app.get("/heatmap",(req,res)=>{
 app.post("/traffic",(req,res)=>{
     let id = req.body.id,
         date = req.body.date;
-    Monitor.get(id).find({"GCRQ":date},{"UPDATE_TIME":0,"_id":0},(err,clo)=>{
+    Monitor.get(id).find({"GCRQ":date},{"UPDATE_TIME":0,"_id":0,"GCRQ":0,"CLZQ":0},(err,clo)=>{
         res.send(clo);
     })
 })
