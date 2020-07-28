@@ -12,42 +12,83 @@ export default {
   name: "tmap",
   data() {
     return {
-      map: {}
+      map: {},
+      eventData: null,
+      heatmapOverlay: null
     };
   },
   mounted() {
+    this.getEventData();
     this.mapInit();
-    this.heatmapInit();
     this.mapOutlineInit();
   },
+  computed: {
+    G() {
+      if (this.$store.state.eventLieBie) {
+        console.log(this.$store.state.eventLieBie);
+        if (this.eventData) {
+          let leibie = [];
+          let dataFilter = this.eventData.filter(item => {
+            return this.$store.state.eventLieBie.includes(item.BLOCK_REASON);
+          });
+          console.log(dataFilter);
+          return dataFilter;
+        }
+      } else {
+        return this.eventData;
+      }
+    }
+  },
+  watch: {
+    G(newValue, oldValue) {
+      console.log("重新绘制");
+      this.heatmapInit(newValue);
+    }
+  },
   methods: {
+    getEventData() {
+      // this.$axios.get("http://localhost:3000/heatmap").then(res => {
+      // });
+      this.$axios.get("../../static/event.json").then(res => {
+        this.eventData = res.data;
+      });
+    },
     mapInit() {
       let map = new T.Map("tmap");
-      map.centerAndZoom(new T.LngLat(104.07, 30.67), 7);
+      map.centerAndZoom(new T.LngLat(104.07, 30.67), 6);
       this.map = map;
       this.map.enableScrollWheelZoom();
-      this.map.setMinZoom(6);
+      this.map.setMinZoom(5);
       this.map.setMaxZoom(12);
-      console.log(this.map.getBounds());
     },
-    heatmapInit() {
-      this.$axios.get("http://localhost:3000/heatmap").then(res => {
-        let arr = res.data;
-        let points = [];
-        for (let i = 0; i < arr.length; i++) {
-          points.push({
-            lat: arr[i].latitude,
-            lng: arr[i].longitude,
-            count: 1
-          });
-        }
-        let heatmapOverlay = new T.HeatmapOverlay({
-          radius: 15
-          //这里改热力图渐变颜色
-        });
-        this.map.addOverLay(heatmapOverlay);
-        heatmapOverlay.setDataSet({ data: points, max: 300 });
+    heatmapInit(arr) {
+      if (this.heatmapOverlay) {
+        this.map.removeOverLay(this.heatmapOverlay);
+      }
+      this.heatmapOverlay = new T.HeatmapOverlay({
+        radius: 10
+        //这里改热力图渐变颜色
       });
+      let count = 4;
+      if (!arr) {
+        return;
+      }
+      if (arr.length < 1000) {
+        count = 10;
+      }
+      let points = [];
+      for (let i = 0; i < arr.length; i++) {
+        points.push({
+          lat: arr[i].latitude,
+          lng: arr[i].longitude,
+          count: count
+        });
+      }
+
+      this.map.addOverLay(this.heatmapOverlay);
+      console.log(this.map);
+      console.log("绘制", points.length);
+      this.heatmapOverlay.setDataSet({ data: points, max: 300 });
     },
     mapOutlineInit() {
       this.$axios.get("../../static/四川省轮廓.json").then(res => {
@@ -87,7 +128,7 @@ export default {
   padding: 0;
 }
 #tmap {
-  height: 100%;
-  width: 100%;
+  height: 50%;
+  width: 50%;
 }
 </style>
