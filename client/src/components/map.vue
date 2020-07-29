@@ -132,14 +132,17 @@ export default {
           let marker = new T.Marker(new T.LngLat(res.data[i].longitude,res.data[i].latitude), {icon: icon});
           marker.name = res.data[i].GCZMC;
           marker.id = res.data[i].GZCBS;
-          marker.addEventListener("click",function(e){
-            //监听事件 todo
+          marker.addEventListener("click",(e)=>{
+            //点击事件 todo
+            // 放大 中心
+            this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 15);
+            //显示traffic
           });
           this.map.addOverLay(marker);
         }
       })
     }
-  }
+  },
 };
 </script>
 
@@ -151,7 +154,9 @@ export default {
 #tmap {
   position:absolute;
   left: 15%;
+  top: 3%;
   height: 80%;
   width: 85%;
+  z-index: 0;
 }
 </style>

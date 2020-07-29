@@ -164,23 +164,23 @@ export default {
                 .data(data)
                 .enter()
                 .append("rect")
-                .attr("x",(d,i)=>parseInt(i/12)*16)
+                .attr("x",(d,i)=>parseInt(i/12)*13)
                 .attr("y",(d,i)=>(i%12)*9)
-                .attr("width",15)
+                .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>this.color(this.scale(d[1].speed/d[1].speed_counter)))
                 .append("title")
                     .text(d=>d[1].speed/d[1].speed_counter);
             //下行速度
             svg.append("g")
-                .attr("transform","translate(400,0)")
+                .attr("transform","translate(315,0)")
                 .selectAll("rect")
                 .data(data1)
                 .enter()
                 .append("rect")
-                .attr("x",(d,i)=>parseInt(i/12)*16)
+                .attr("x",(d,i)=>parseInt(i/12)*13)
                 .attr("y",(d,i)=>(i%12)*9)
-                .attr("width",15)
+                .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>this.color(this.scale(d[1].speed/d[1].speed_counter)))
                 .append("title")
@@ -192,9 +192,9 @@ export default {
                 .data(data)
                 .enter()
                 .append("rect")
-                .attr("x",(d,i)=>parseInt(i/12)*16)
+                .attr("x",(d,i)=>parseInt(i/12)*13)
                 .attr("y",(d,i)=>(i%12)*9)
-                .attr("width",15)
+                .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>{
                     if(d[1].gcbfb_counter){
@@ -206,14 +206,14 @@ export default {
                     .text(d=>d[1].gcbfb/d[1].gcbfb_counter);
             //下行跟车百分比
             svg.append("g")
-                .attr("transform","translate(400,113)")
+                .attr("transform","translate(315,113)")
                 .selectAll("rect")
                 .data(data1)
                 .enter()
                 .append("rect")
-                .attr("x",(d,i)=>parseInt(i/12)*16)
+                .attr("x",(d,i)=>parseInt(i/12)*13)
                 .attr("y",(d,i)=>(i%12)*9)
-                .attr("width",15)
+                .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>{
                     if(d[1].gcbfb_counter){
@@ -234,5 +234,9 @@ export default {
 <style>
 #traffic{
     width: 600px;
+    position:absolute;
+    z-index: 99;
+    left: 15%;
+    top: 3%;
 }
 </style>
