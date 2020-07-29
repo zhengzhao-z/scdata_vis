@@ -1,5 +1,5 @@
 /*
- * @Description: 服务器
+ * @Description: 
  * @version: 0.1
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
@@ -21,7 +21,7 @@ app.all('*', (req, res, next)=>{
     if (req.method == "OPTIONS") res.sendStatus(200);
     else next();
 });
-const {G5zd,Monitor} =  require('./db.js');
+const {G5zd,G65zd,G76zd,Monitor,Monitors} =  require('./db.js');
 
 
 app.get("/a",(req,res)=>{
@@ -41,7 +41,14 @@ app.get("/heatmap",(req,res)=>{
 app.post("/traffic",(req,res)=>{
     let id = req.body.id,
         date = req.body.date;
-    Monitor.get(id).find({"GCRQ":date},{"UPDATE_TIME":0,"_id":0,"GCRQ":0,"CLZQ":0},(err,clo)=>{
+    Monitors.get(id).find({"GCRQ":date},{"UPDATE_TIME":0,"_id":0,"GCRQ":0,"CLZQ":0},(err,clo)=>{
+        res.send(clo);
+    })
+})
+
+// 监测站坐标
+app.get("/monitor",(req,res)=>{
+    Monitor.find({},{"_id":0,"latitude":1,"longitude":1,"GZCMC":1,"GZCBS":1},(err,clo)=>{
         res.send(clo);
     })
 })

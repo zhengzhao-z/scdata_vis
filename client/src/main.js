@@ -20,10 +20,6 @@ Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
 Vue.prototype.$d3 = d3;
 window.d3 = d3; //暂时设置为全局变量
-<<<<<<< HEAD
-
-=======
->>>>>>> 578bbf430aa982411140e0e7a5339e3dea68f8ae
 
 Vue.config.productionTip = false;
 

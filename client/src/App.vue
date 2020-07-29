@@ -3,10 +3,16 @@
  * @version: 0.1
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
+--> 
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
 -->
 <template>
   <div id="app">
-    <traffic></traffic>
+    <!-- <traffic></traffic> -->
     <tmap></tmap>
     <!-- <OV></OV> -->
     <input

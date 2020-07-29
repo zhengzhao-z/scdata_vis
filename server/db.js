@@ -11,7 +11,10 @@ mongoose.connect('mongodb://zz:123456zr@121.89.218.162/scdata?authSource=scdata'
 
 
 const G5zd = mongoose.model('G5zd',new mongoose.Schema(),'G5zd');
-let Monitor = new Map();
+const G65zd = mongoose.model('G65zd',new mongoose.Schema(),'G65zd');
+const G76zd = mongoose.model('G76zd',new mongoose.Schema(),'G76zd');
+const Monitor = mongoose.model('Monitor',new mongoose.Schema(),'Monitor');
+let Monitors = new Map();
 let arr=[
 "51000020160504B7B7DE9BC2D5680D2C",
 "510000201605042A9FEF5C5F1CDE06E8",
@@ -39,7 +42,8 @@ let arr=[
 "510000201604191745378985wg9cHLBP"
 ]
 for(let i=0;i<arr.length;i++){
-    Monitor.set(arr[i],mongoose.model(arr[i],new mongoose.Schema(),arr[i]));
+    Monitors.set(arr[i],mongoose.model(arr[i],new mongoose.Schema(),arr[i]));
 }
 
-module.exports = {G5zd,Monitor}
+
+module.exports = {G5zd,G65zd,G76zd,Monitor,Monitors}
