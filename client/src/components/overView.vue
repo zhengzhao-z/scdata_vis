@@ -16,7 +16,8 @@ export default {
   mounted(){
     
     function drawImg(thisel,dataList,width,heigth){
-
+        let dx=55;
+        let dy=15;
         let tempCalList=dataList.data.map(m=>m.length);
         let maxInx=0;
         for (let i=0;i<tempCalList.length;i++){
@@ -40,17 +41,38 @@ export default {
             .attr("width",width)
             .attr("height",heigth)
         
+        let drawRectWith;
+        let drawRectHeigth;
+        drawRectWith=width-dx;
+        drawRectHeigth=heigth-dy;
+
+        let genBottomWItemList=[];
+        
+        let heigthItem=((heigth-dataList.data.length*dataList.barCap)/dataList.data.length);
+       for(let i=0;i<=dataList.data.length;i++){
+          genBottomWItemList[i]=heigthItem*i+i*dataList.barCap;
+        }
+        //console.log(genBottomWItemList);
+        var xScaleY = d3.scaleOrdinal()
+              .domain(dataList.names)
+              .range(genBottomWItemList)
+
+			  var xAxisY = d3.axisLeft().scale(xScaleY);
+
+				svg.append('g')
+				   .attr('transform', 'translate('+(dx-5)+','+dy+')')
+				   .call(xAxisY);
+       // return ;
         let lastProp=-1;
         let lastXLists=[];
         for(let m=0;m<dataList.data.length;m++){
 
-          let prop=Math.max(...dataList.data[m])/Math.max(...dataNum)*width;//width最大值
+          let prop=Math.max(...dataList.data[m])/Math.max(...dataNum)*drawRectWith;//width最大值
 
           let scale = d3.scaleLinear()
             .domain([Math.min(...dataList.data[m]),Math.max(...dataList.data[m])])
             .range([1,prop]);
           
-        
           svg.append("g")
             .selectAll("rect")
             .data(dataList.data[m])
@@ -58,14 +80,14 @@ export default {
             .append("rect")
             .attr("x",(d,i)=>{
               if(lastProp===-1){
-                return 0
+                return 0+dx
               }
-              return lastXLists[i];
+              return lastXLists[i]+dx
             })
             .attr("y",(d,i)=> {
-              let temp=i*((heigth-dataList.data.length*dataList.barCap)/dataList.data.length)+i*dataList.barCap
+              let temp=i*heigthItem+i*dataList.barCap
               //console.log((heigth-dataList.data.length*dataList.barCap));
-              return temp;
+              return temp+dy;
             })
             .attr("width",(d,i)=>{
               let temp=scale(d)
@@ -76,8 +98,29 @@ export default {
               //console.log(lastXLists)
               return  temp
             })
-            .attr("height",((heigth-dataList.data.length*dataList.barCap)/dataList.data.length))
+            .attr("height",heigthItem)
             .attr("fill",dataList.color[m])
+
+          // 绘制文字标签
+          svg.selectAll("text")
+                  .data(["test"])
+                  .enter().append("text")
+                  .attr("x", function(d,i){
+                      return 300;
+                  } )
+                  .attr("y",function(d,i){
+                     return 300;
+                  })
+                  .attr("dx", function(d,i){
+                      return 0;
+                  })
+                  // .attr("dy", 15)
+                  // .attr("text-anchor", "begin")
+                  .attr("font-size", 14)
+                  .attr("fill","black")
+                  .text(function(d,i){
+                      return d;
+                  });
 
             lastProp=prop
         }
@@ -94,16 +137,40 @@ function findRoadCodeInx(roadCodeList,roadCode){
   return -1;
 }
 
+//统计事件类型
+function dataEventList(jsonDataList){
+    let overView;
+    let eventList=[];
+    let finedFlag=true;
+    overView=jsonDataList.overview;
+    for(let i=0;i<overView.length;i++){
+      finedFlag=false;
+      for(let j=0;j<eventList.length;j++){
+        if(overView[i].blockReason===eventList[j]){
+          finedFlag=true;
+          break;
+        }
+      }
+      if(!finedFlag){
+        eventList.push(overView[i].blockReason);
+      }
+    }
+    return eventList;
+}
+
 //处理数据
 function dataProcess(jsonDataList){
 
  let overView;
  overView=jsonDataList.overview;
 
-let roadCodeList=[]
+ let resData;
+
+ let roadCodeList=[]
 
  let overViewListTemp=[
  ];
+ let eventList= dataEventList(jsonDataList);//阻断事件类型统计
 
  for(let i=0;i<overView.length;i++){
 
@@ -116,21 +183,39 @@ let roadCodeList=[]
     if(overViewListTemp[roadCodeInx]===undefined||overViewListTemp[roadCodeInx]===null){
       overViewListTemp[roadCodeInx]=[];
     }
-    overViewListTemp[roadCodeInx].push(parseInt(overView[i].number));
+   
+   //获取事件下标
+    let j;
+    for(j=0;j<eventList.length;j++){
+      if(eventList[j]===overView[i].blockReason){
+        break;
+      }
+    }
 
+    overViewListTemp[roadCodeInx][j]=parseInt(overView[i].number);
+    
  }
 
+  //不足填零
   let listMaxLen=Math.max(...overViewListTemp.map(m=>m.length))
   for(let i=0;i<overViewListTemp.length;i++){
-    if(overViewListTemp[i].length<listMaxLen){
-      for(let j=overViewListTemp[i].length;j<listMaxLen;j++){
-        overViewListTemp[i][j]=0;
-      }
+    //if(overViewListTemp[i].length<listMaxLen){
+      for(let j=0;j<listMaxLen;j++){
+        if(overViewListTemp[i][j]===null||overViewListTemp[i][j]===undefined){
+          overViewListTemp[i][j]=0;
+        }
+     // }
     }
   }
 
-  console.log(overViewListTemp);
-  return overViewListTemp;
+  resData={
+    "name":roadCodeList,
+    "data":overViewListTemp,
+    "event":eventList
+  }
+console.log(resData)
+  //console.log(overViewListTemp);
+  return resData;
 }
 
 let jsonData={
@@ -403,103 +488,21 @@ let jsonData={
         {"roadCode":"S8","blockReason":"车辆交通事故","number":"5"}]
 }
 
-        let heigth=600;
-        let width=1000;
+        let heigth=800;
+        let width=800;
+
+      let  resData=dataProcess(jsonData);
 
       let dataList={
-          color:["red","blue","black","yellow","blue","black","yellow","red","blue","black","yellow","red","blue","black","yellow","blue","black","yellow","blue","black","yellow","red","blue","black","yellow","blue","black","yellow"],
+          color:d3.schemeSet1.concat(d3.schemeSet2).concat(d3.schemeSet3),
           barCap:5,
-          data:dataProcess(jsonData)
+          data:resData.data,
+          names:resData.name
         }
-        
-
-        drawImg(this.$el,dataList,width,heigth);
-   
-
-
-
-      // //创建具有贝茨分布规律的随机数,0~1
-			// var datas = d3.range(1000).map(function() {
-			// 	return d3.randomBates(10)();
-			// });
-			
-			// var width = 800,
-			// height = 400,
-			// padding = {
-			// 	top: 10,
-			// 	right: 40,
-			// 	bottom: 40,
-			// 	left: 40
-			// };
-			
-			// var svg = d3.select(this.$el)
-      // .append("svg")
-			// .attr('width', width + 'px')
-			// .attr('height', height + 'px');
-			
-			// // x轴
-			// var xScale = d3.scaleLinear()
-			// .range([padding.left, width - padding.right]);
-			// // 将x轴，0~1，轴分成20个刻度 [0,0.05,0.1,0.15 ...,1.00]
-			
-			// // var xAxis = d3.axisBottom()
-			// // .scale(xScale)
-			// // .ticks(20);
-			// // svg.append('g')
-			// // .call(xAxis)
-			// // .attr("transform", "translate(0," + (height - padding.bottom) + ")");
-			
-			// // 构造一个直方图布局,返回随机数在每个x轴刻度区域出现的次数
-			// var his = d3.histogram()
-			// .domain(xScale.domain())
-			// .thresholds(xScale.ticks(20))
-			// (datas);
-			
-			// // y轴
-			// var yScale = d3.scaleLinear()
-			// .domain([0, d3.max(his,
-			// function(d) {
-			// 	return d.length;
-			// })])
-			// .range([height - padding.bottom, padding.top]);
-			
-			// // var yAxis = d3.axisLeft()
-			// // .scale(yScale)
-			// // .ticks(10);
-			// // svg.append('g')
-			// // .call(yAxis)
-			// // .attr("transform", "translate(" + padding.left + ",0)");
-			
-			// var bar = svg.selectAll(".bar")
-			// .data(his)
-			// .join("g")
-			// .attr("class", "bar")
-			// .attr("transform",
-			// function(d) {
-			// 	return "translate(" + xScale(d.x0) + "," + yScale(d.length) + ")";
-			// });
-			
-			// // 构造柱
-			// bar.append("rect")
-      // .attr("x", 1)
-      // .attr("fill","#ff00ff")
-			// .attr("height", xScale(his[0].x1) - xScale(his[0].x0) - 1)
-			// .attr("width",
-			// function(d) {
-			// 	return height - yScale(d.length) - padding.bottom;
-			// });
-			
-			// bar.append("text")
-			// .attr("dy", ".75em")
-			// .attr("y", 6)
-			// .attr("x", (xScale(his[0].x1) - xScale(his[0].x0)) / 2)
-			// .attr("text-anchor", "middle")
-			// .attr("font-size", "8px")
-			// .attr("fill", "White")
-			// .text(function(d) {
-			// 	return d.length;
-			// });
-
+         
+        //console.log(dataList.data)
+        //console.log(dataList.names)
+        drawImg(this.$el,dataList,width,heigth)
 
 
   }
