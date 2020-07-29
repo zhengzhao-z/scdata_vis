@@ -101,26 +101,26 @@ export default {
             .attr("height",heigthItem)
             .attr("fill",dataList.color[m])
 
-          // 绘制文字标签
-          svg.selectAll("text")
-                  .data(["test"])
-                  .enter().append("text")
-                  .attr("x", function(d,i){
-                      return 300;
-                  } )
-                  .attr("y",function(d,i){
-                     return 300;
-                  })
-                  .attr("dx", function(d,i){
-                      return 0;
-                  })
-                  // .attr("dy", 15)
-                  // .attr("text-anchor", "begin")
-                  .attr("font-size", 14)
-                  .attr("fill","black")
-                  .text(function(d,i){
-                      return d;
-                  });
+          // // 绘制文字标签
+          // svg.selectAll("text")
+          //         .data(["test"])
+          //         .enter().append("text")
+          //         .attr("x", function(d,i){
+          //             return 300;
+          //         } )
+          //         .attr("y",function(d,i){
+          //            return 300;
+          //         })
+          //         .attr("dx", function(d,i){
+          //             return 0;
+          //         })
+          //         // .attr("dy", 15)
+          //         // .attr("text-anchor", "begin")
+          //         .attr("font-size", 14)
+          //         .attr("fill","black")
+          //         .text(function(d,i){
+          //             return d;
+          //         });
 
             lastProp=prop
         }
