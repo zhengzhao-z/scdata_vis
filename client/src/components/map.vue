@@ -1,7 +1,7 @@
 <!--
  * @Description: 天地图
  * @version: 0.1
- * @Author: zhengzhao
+ * @Author: cmj
  * @LastEditor: zhengzhao
 -->
 <template>
@@ -12,42 +12,84 @@ export default {
   name: "tmap",
   data() {
     return {
-      map: {}
+      map: {},
+      eventData: null,
+      heatmapOverlay: null
     };
   },
   mounted() {
+    this.getEventData();
     this.mapInit();
-    this.heatmapInit();
     this.mapOutlineInit();
+    this.drawMonitor();
+  },
+  computed: {
+    G() {
+      if (this.$store.state.eventLieBie) {
+        console.log(this.$store.state.eventLieBie);
+        if (this.eventData) {
+          let leibie = [];
+          let dataFilter = this.eventData.filter(item => {
+            return this.$store.state.eventLieBie.includes(item.BLOCK_REASON);
+          });
+          console.log(dataFilter);
+          return dataFilter;
+        }
+      } else {
+        return this.eventData;
+      }
+    }
+  },
+  watch: {
+    G(newValue, oldValue) {
+      console.log("重新绘制");
+      this.heatmapInit(newValue);
+    }
   },
   methods: {
+    getEventData() {
+      // this.$axios.get("http://localhost:3000/heatmap").then(res => {
+      // });
+      this.$axios.get("../../static/event.json").then(res => {
+        this.eventData = res.data;
+      });
+    },
     mapInit() {
       let map = new T.Map("tmap");
       map.centerAndZoom(new T.LngLat(104.07, 30.67), 7);
       this.map = map;
       this.map.enableScrollWheelZoom();
-      this.map.setMinZoom(6);
-      this.map.setMaxZoom(12);
-      console.log(this.map.getBounds());
+      this.map.setMinZoom(7);
+      this.map.setMaxZoom(10);
     },
-    heatmapInit() {
-      this.$axios.get("http://localhost:3000/heatmap").then(res => {
-        let arr = res.data;
-        let points = [];
-        for (let i = 0; i < arr.length; i++) {
-          points.push({
-            lat: arr[i].latitude,
-            lng: arr[i].longitude,
-            count: 1
-          });
-        }
-        let heatmapOverlay = new T.HeatmapOverlay({
-          radius: 15
-          //这里改热力图渐变颜色
-        });
-        this.map.addOverLay(heatmapOverlay);
-        heatmapOverlay.setDataSet({ data: points, max: 300 });
+    heatmapInit(arr) {
+      if (this.heatmapOverlay) {
+        this.map.removeOverLay(this.heatmapOverlay);
+      }
+      this.heatmapOverlay = new T.HeatmapOverlay({
+        radius: 10
+        //这里改热力图渐变颜色
       });
+      let count = 4;
+      if (!arr) {
+        return;
+      }
+      if (arr.length < 1000) {
+        count = 10;
+      }
+      let points = [];
+      for (let i = 0; i < arr.length; i++) {
+        points.push({
+          lat: arr[i].latitude,
+          lng: arr[i].longitude,
+          count: count
+        });
+      }
+
+      this.map.addOverLay(this.heatmapOverlay);
+      console.log(this.map);
+      console.log("绘制", points.length);
+      this.heatmapOverlay.setDataSet({ data: points, max: 300 });
     },
     mapOutlineInit() {
       this.$axios.get("../../static/四川省轮廓.json").then(res => {
@@ -76,8 +118,31 @@ export default {
       }); //path为天地图经纬度数组，第二个参数为配置项
       line.setLineStyle("dashed");
       this.map.addOverLay(line); // 绘制线到地图上
+    },
+    // 在地图上添加监测点
+    // 检查点 与 热力图 应互斥出行 
+    drawMonitor(){
+      this.$axios.get("http://localhost:3000/monitor").then(res=>{
+        let data = res.data;
+        let icon = new T.Icon({
+          iconUrl:"../../static/monitor.png",
+           iconSize: new T.Point(30, 30),
+        });
+        for(let i=0;i<res.data.length;i++){
+          let marker = new T.Marker(new T.LngLat(res.data[i].longitude,res.data[i].latitude), {icon: icon});
+          marker.name = res.data[i].GCZMC;
+          marker.id = res.data[i].GZCBS;
+          marker.addEventListener("click",(e)=>{
+            //点击事件 todo
+            // 放大 中心
+            this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 15);
+            //显示traffic
+          });
+          this.map.addOverLay(marker);
+        }
+      })
     }
-  }
+  },
 };
 </script>
 
@@ -87,7 +152,11 @@ export default {
   padding: 0;
 }
 #tmap {
-  height: 100%;
-  width: 100%;
+  position:absolute;
+  left: 15%;
+  top: 3%;
+  height: 80%;
+  width: 85%;
+  z-index: 0;
 }
 </style>
