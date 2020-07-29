@@ -3,7 +3,7 @@
  * @version: 0.1
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
---> 
+-->
 <!--
  * @Description: 
  * @version: 0.1
@@ -13,7 +13,7 @@
 <template>
   <div id="app">
     <!-- <traffic></traffic> -->
-    <tmap></tmap>
+    <!-- <tmap></tmap> -->
     <!-- <OV></OV> -->
     <input
       type="checkbox"
@@ -34,6 +34,7 @@
     <br />
     <span>Checked names: {{ selectedLiebie }}</span>
     <div><button @click="sendMessage">提交</button></div>
+    <calendar></calendar>
   </div>
 </template>
 
@@ -42,7 +43,7 @@ import HelloWorld from "./components/HelloWorld";
 import tmap from "./components/map";
 import OV from "./components/overView";
 import traffic from "./components/traffice";
-
+import calendar from "./components/calendar";
 export default {
   name: "App",
   data() {
@@ -60,7 +61,8 @@ export default {
     HelloWorld,
     tmap,
     traffic,
-    OV
+    OV,
+    calendar
   }
 };
 </script>
