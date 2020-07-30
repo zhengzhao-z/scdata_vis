@@ -31,16 +31,11 @@ export default {
   mounted() {},
   components: {
     HelloWorld,
-<<<<<<< HEAD
-    OV,
-    tmap
-=======
     tmap,
     traffic,
     OV,
     control,
     calendar
->>>>>>> 00cad3bbecfcbbb6b56e630793798e28a9b9a223
   }
 };
 </script>
