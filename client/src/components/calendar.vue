@@ -1,8 +1,14 @@
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
   <div
     ref="calendar"
     id="calendar"
-    :style="{ width: '700px', height: '300px' }"
+    :style="{ width: '700px', height: '200px' }"
   ></div>
 </template>
 
@@ -42,9 +48,9 @@ export default {
       const chart = this.$echarts.init(chartDom);
       chart.setOption({
         title: {
-          top: 30,
-          left: "center",
-          text: "2019上半年交通阻断事件"
+          top: 10,
+          left: 30,
+          text: "2019交通阻断事件日历图"
         },
         tooltip: {
           position: "top"
@@ -55,12 +61,13 @@ export default {
           max: 1400,
           calculable: true,
           orient: "horizontal",
-          top: "20%",
+          top: "5%",
           left: "60%"
         },
         calendar: [
           {
-            top: "40%",
+            top: "25%",
+            left:"5%",
             range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
             yearLabel: {
@@ -88,4 +95,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  
+</style>

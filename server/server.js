@@ -53,6 +53,13 @@ app.get("/monitor",(req,res)=>{
     })
 })
 
+//test
+app.get("/overview",(req,res)=>{
+    G5zd.find({"DETECT_TIME":{$ne:""}},{"_id":0,"DETECT_TIME":1,"BLOCK_REASON":1},(err,clo)=>{
+        res.send(clo);
+    })
+})
+
 /* 3000端口监听 */
 app.listen(3000,()=>{
     console.log('http://localhost:3000');

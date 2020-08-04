@@ -8,14 +8,17 @@
   <div id="app">
     <traffic></traffic>
     <tmap></tmap>
-    <control></control>
+    <!-- <control></control> -->
+    <calendar></calendar>
+    <overView></overView>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+// import HelloWorld from "./components/HelloWorld";
 import tmap from "./components/map";
 import OV from "./components/overView";
+import overView from "./components/overView2";
 import traffic from "./components/traffice";
 import control from "./components/control"
 import calendar from "./components/calendar";
@@ -30,10 +33,9 @@ export default {
   },
   mounted() {},
   components: {
-    HelloWorld,
     tmap,
     traffic,
-    OV,
+    overView,
     control,
     calendar
   }

@@ -154,9 +154,9 @@ export default {
 #tmap {
   position:absolute;
   left: 15%;
-  top: 3%;
+  top: 20%;
   height: 80%;
   width: 85%;
-  z-index: 0;
+  z-index: -1;
 }
 </style>

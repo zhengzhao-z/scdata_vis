@@ -150,9 +150,7 @@ export default {
                    a.push(0)
                }
                
-           }
-            let arr=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
-            
+           }    
             const svg = d3.select(this.$el)
                 .append("svg")
                 .attr("style","width:800px;height:400px")
@@ -236,7 +234,7 @@ export default {
     width: 600px;
     position:absolute;
     z-index: 99;
-    left: 15%;
+    left: 30%;
     top: 3%;
 }
 </style>
