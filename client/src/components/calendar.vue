@@ -5,7 +5,6 @@
  * @LastEditor: zhengzhao
 -->
 <template>
-<<<<<<< HEAD
   <div>
     <div
       ref="calendar"
@@ -13,13 +12,6 @@
       :style="{ width: '330px', height: '300px' }"
     ></div>
   </div>
-=======
-  <div
-    ref="calendar"
-    id="calendar"
-    :style="{ width: '700px', height: '200px' }"
-  ></div>
->>>>>>> 0c2953f94fe284329723947abde71aa13c7b53f4
 </template>
 
 <script>
@@ -122,6 +114,4 @@ export default {
 };
 </script>
 
-<style scoped>
-  
-</style>
+<style scoped></style>

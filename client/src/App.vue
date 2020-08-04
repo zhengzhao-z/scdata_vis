@@ -6,15 +6,12 @@
 -->
 <template>
   <div id="app">
-<<<<<<< HEAD
-    <calendarWrapper></calendarWrapper>
-=======
     <traffic></traffic>
     <tmap></tmap>
     <!-- <control></control> -->
     <calendar></calendar>
     <overView></overView>
->>>>>>> 0c2953f94fe284329723947abde71aa13c7b53f4
+    <calendarWrapper></calendarWrapper>
   </div>
 </template>
 
