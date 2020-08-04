@@ -6,9 +6,7 @@
 -->
 <template>
   <div id="app">
-    <traffic></traffic>
-    <tmap></tmap>
-    <control></control>
+    <calendarWrapper></calendarWrapper>
   </div>
 </template>
 
@@ -17,17 +15,15 @@ import HelloWorld from "./components/HelloWorld";
 import tmap from "./components/map";
 import OV from "./components/overView";
 import traffic from "./components/traffice";
-import control from "./components/control"
-import calendar from "./components/calendar";
+import control from "./components/control";
+import calendarWrapper from "./components/calendarWrapper";
 
 export default {
   name: "App",
   data() {
-   return{}
+    return {};
   },
-  methods: {
-    
-  },
+  methods: {},
   mounted() {},
   components: {
     HelloWorld,
@@ -35,7 +31,7 @@ export default {
     traffic,
     OV,
     control,
-    calendar
+    calendarWrapper
   }
 };
 </script>
