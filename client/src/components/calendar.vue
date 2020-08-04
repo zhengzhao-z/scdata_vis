@@ -1,4 +1,11 @@
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
+<<<<<<< HEAD
   <div>
     <div
       ref="calendar"
@@ -6,6 +13,13 @@
       :style="{ width: '330px', height: '300px' }"
     ></div>
   </div>
+=======
+  <div
+    ref="calendar"
+    id="calendar"
+    :style="{ width: '700px', height: '200px' }"
+  ></div>
+>>>>>>> 0c2953f94fe284329723947abde71aa13c7b53f4
 </template>
 
 <script>
@@ -49,9 +63,9 @@ export default {
     getOptions(month) {
       return {
         title: {
-          top: 30,
-          left: "center",
-          text: "2019上半年交通阻断事件"
+          top: 10,
+          left: 30,
+          text: "2019交通阻断事件日历图"
         },
         tooltip: {
           position: "top"
@@ -108,4 +122,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  
+</style>

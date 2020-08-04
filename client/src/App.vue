@@ -6,14 +6,23 @@
 -->
 <template>
   <div id="app">
+<<<<<<< HEAD
     <calendarWrapper></calendarWrapper>
+=======
+    <traffic></traffic>
+    <tmap></tmap>
+    <!-- <control></control> -->
+    <calendar></calendar>
+    <overView></overView>
+>>>>>>> 0c2953f94fe284329723947abde71aa13c7b53f4
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+// import HelloWorld from "./components/HelloWorld";
 import tmap from "./components/map";
 import OV from "./components/overView";
+import overView from "./components/overView2";
 import traffic from "./components/traffice";
 import control from "./components/control";
 import calendarWrapper from "./components/calendarWrapper";
@@ -26,10 +35,9 @@ export default {
   methods: {},
   mounted() {},
   components: {
-    HelloWorld,
     tmap,
     traffic,
-    OV,
+    overView,
     control,
     calendarWrapper
   }
