@@ -11,6 +11,7 @@
     <!-- <control></control> -->
     <calendar></calendar>
     <overView></overView>
+    <calendarWrapper></calendarWrapper>
   </div>
 </template>
 
@@ -20,24 +21,22 @@ import tmap from "./components/map";
 import OV from "./components/overView";
 import overView from "./components/overView2";
 import traffic from "./components/traffice";
-import control from "./components/control"
-import calendar from "./components/calendar";
+import control from "./components/control";
+import calendarWrapper from "./components/calendarWrapper";
 
 export default {
   name: "App",
   data() {
-   return{}
+    return {};
   },
-  methods: {
-    
-  },
+  methods: {},
   mounted() {},
   components: {
     tmap,
     traffic,
     overView,
     control,
-    calendar
+    calendarWrapper
   }
 };
 </script>
