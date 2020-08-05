@@ -139,9 +139,13 @@ export default {
 <style>
 #over{
     width: 300px;
-    height:70%;
+    height:68%;
     /* border: 1px solid black; */
     position: absolute;
+    box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+    0 0.5em 1em rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 #over #control{
     position: absolute;
