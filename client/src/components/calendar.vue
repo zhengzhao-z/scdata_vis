@@ -5,24 +5,18 @@
  * @LastEditor: zhengzhao
 -->
 <template>
-  <div>
-    <div
-      ref="calendar"
-      id="calendar"
-      :style="{ width: '330px', height: '300px' }"
-    ></div>
-  </div>
+  <div
+    ref="calendar"
+    id="calendar"
+    :style="{ width: '700px', height: '200px' }"
+  ></div>
 </template>
 
 <script>
 export default {
-  props: {
-    month: Array
-  },
   data() {
     return {
-      calendarData: [],
-      chart: null
+      calendarData: []
     };
   },
   mounted() {
@@ -32,12 +26,6 @@ export default {
   watch: {
     calendarData: {
       handler(newdata, olddata) {
-        this.chartInit();
-      },
-      deep: true
-    },
-    month: {
-      handler(newData, oldData) {
         this.chartInit();
       },
       deep: true
@@ -52,8 +40,13 @@ export default {
         }
       });
     },
-    getOptions(month) {
-      return {
+    chartInit() {
+      if (this.calendarData.length === 0) {
+        return;
+      }
+      const chartDom = this.$refs.calendar;
+      const chart = this.$echarts.init(chartDom);
+      chart.setOption({
         title: {
           top: 10,
           left: 30,
@@ -62,21 +55,20 @@ export default {
         tooltip: {
           position: "top"
         },
-
         visualMap: {
           show: true,
           min: 0,
           max: 1400,
           calculable: true,
           orient: "horizontal",
-          top: "20%",
-          left: "35%"
+          top: "5%",
+          left: "60%"
         },
         calendar: [
           {
-            top: "40%",
-            left: "12%",
-            range: month,
+            top: "25%",
+            left:"5%",
+            range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
             yearLabel: {
               show: false
@@ -97,21 +89,12 @@ export default {
             calendarIndex: 0
           }
         ]
-      };
-    },
-    chartInit() {
-      if (this.calendarData.length === 0) {
-        return;
-      }
-      if (this.chart) {
-        this.chart.dispose();
-      }
-      const chartDom = this.$refs.calendar;
-      this.chart = this.$echarts.init(chartDom);
-      this.chart.setOption(this.getOptions(this.month));
+      });
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  
+</style>
