@@ -11,7 +11,6 @@
     <!-- <control></control> -->
     <calendar></calendar>
     <overView></overView>
-    <calendarWrapper></calendarWrapper>
   </div>
 </template>
 
@@ -22,7 +21,7 @@ import OV from "./components/overView";
 import overView from "./components/overView2";
 import traffic from "./components/traffice";
 import control from "./components/control";
-import calendarWrapper from "./components/calendarWrapper";
+import calendar from "./components/calendar";
 
 export default {
   name: "App",
@@ -36,7 +35,7 @@ export default {
     traffic,
     overView,
     control,
-    calendarWrapper
+    calendar
   }
 };
 </script>
