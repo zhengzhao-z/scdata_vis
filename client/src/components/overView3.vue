@@ -25,7 +25,6 @@ export default {
   position: absolute;
   height: 75%;
   width: 600px;
-  border: 1px solid black;
   box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
     0 0.5em 1em rgba(0, 0, 0, 0.1);
   -webkit-backdrop-filter: blur(10px);

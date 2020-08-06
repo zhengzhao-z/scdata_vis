@@ -8,7 +8,7 @@
   <div
     ref="calendar"
     id="calendar"
-    :style="{ width: '700px', height: '200px' }"
+    :style="{ width: '600px', height: '248px' }"
   ></div>
 </template>
 
@@ -33,12 +33,18 @@ export default {
     }
   },
   methods: {
+    processData(data) {
+      for (let i = 0; i < data.length; i++) {
+        let obj = {
+          value: [data[i].time, data[i].count],
+          itemStyle: {}
+        };
+        this.calendarData.push(obj);
+      }
+    },
     getData() {
       this.$axios.get("../../static/calendarAll.json").then(res => {
-        let data = res.data;
-        for (let i = 0; i < data.length; i++) {
-          this.calendarData.push([data[i].time, data[i].count]);
-        }
+        this.processData(res.data);
       });
     },
     getOptions() {
@@ -57,13 +63,13 @@ export default {
           max: 1400,
           calculable: true,
           orient: "horizontal",
-          top: "5%",
-          left: "60%"
+          top: "3%",
+          left: "50%"
         },
         calendar: [
           {
-            top: "25%",
-            left: "5%",
+            top: "30%",
+            left: "8%",
             range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
             yearLabel: {
@@ -82,7 +88,13 @@ export default {
             type: "heatmap",
             coordinateSystem: "calendar",
             data: this.calendarData,
-            calendarIndex: 0
+            calendarIndex: 0,
+            dataIndex: 150,
+            emphasis: {
+              itemStyle: {
+                borderColor: "#000"
+              }
+            }
           }
         ]
       };
@@ -96,10 +108,30 @@ export default {
       }
       const chartDom = this.$refs.calendar;
       this.chart = this.$echarts.init(chartDom);
-      this.chart.setOption(this.getOptions());
+      let options = this.getOptions();
+      this.chart.setOption(options);
+      this.chart.on("click", params => {
+        options.series[0].data.forEach((data, index) => {
+          if (index === params.dataIndex) {
+            if (!data.isChecked) {
+              data.itemStyle.borderColor = "red";
+            }
+          } else {
+            data.itemStyle.borderColor = "none";
+          }
+        });
+        this.chart.setOption(options);
+      });
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#calendar {
+  box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+    0 0.5em 1em rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+</style>
