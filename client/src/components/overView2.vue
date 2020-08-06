@@ -156,19 +156,12 @@ export default {
 
 <style>
 #over {
-  width: 50%;
-  height: 100%;
-  border: 1px solid red;
-  position: absolute;
-  box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
-    0 0.5em 1em rgba(0, 0, 0, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  width: 100%;
 }
 #over #control {
   position: absolute;
-  right: -400px;
-  top: 0px;
+  right: 0px;
+  top: 30px;
 }
 .el-switch {
   display: block;

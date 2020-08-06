@@ -1,19 +1,21 @@
 <template>
   <div class="overView" id="scrollbar">
-    <div id="scollbar">
-      <div class="roadAccident">
-        <overview></overview>
-      </div>
-      <div class="roadSpeed"></div>
+    <div class="roadAccident">
+      <overview></overview>
+    </div>
+    <div class="roadSpeed">
+      <babelChart></babelChart>
     </div>
   </div>
 </template>
 
 <script>
 import overview from "./overView2";
+import babelChart from "./babelChart";
 export default {
   components: {
-    overview
+    overview,
+    babelChart
   }
 };
 </script>
@@ -28,8 +30,14 @@ export default {
     0 0.5em 1em rgba(0, 0, 0, 0.1);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  display: flex;
 }
-
+.roadAccident {
+  flex: 1;
+}
+.roadSpeed {
+  flex: 1;
+}
 #scrollbar {
   height: 75%;
   overflow: scroll;
