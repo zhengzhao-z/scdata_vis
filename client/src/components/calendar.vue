@@ -16,7 +16,8 @@
 export default {
   data() {
     return {
-      calendarData: []
+      calendarData: [],
+      chart: null
     };
   },
   mounted() {
@@ -40,13 +41,8 @@ export default {
         }
       });
     },
-    chartInit() {
-      if (this.calendarData.length === 0) {
-        return;
-      }
-      const chartDom = this.$refs.calendar;
-      const chart = this.$echarts.init(chartDom);
-      chart.setOption({
+    getOptions() {
+      return {
         title: {
           top: 10,
           left: 30,
@@ -67,7 +63,7 @@ export default {
         calendar: [
           {
             top: "25%",
-            left:"5%",
+            left: "5%",
             range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
             yearLabel: {
@@ -89,12 +85,21 @@ export default {
             calendarIndex: 0
           }
         ]
-      });
+      };
+    },
+    chartInit() {
+      if (this.calendarData.length === 0) {
+        return;
+      }
+      if (this.chart) {
+        this.chart.dispose();
+      }
+      const chartDom = this.$refs.calendar;
+      this.chart = this.$echarts.init(chartDom);
+      this.chart.setOption(this.getOptions());
     }
   }
 };
 </script>
 
-<style scoped>
-  
-</style>
+<style scoped></style>
