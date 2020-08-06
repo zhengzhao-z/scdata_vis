@@ -6,13 +6,8 @@
 export default {
   data() {
     return {
-      data: [
-        { id: "speed0_60", value: 0.0366937289958508 },
-        { id: "speed61_80", value: 0.44948946339343904 },
-        { id: "speed81_100", value: 0.35871130744039714 },
-        { id: "speed101_120", value: 0.10951526513840946 },
-        { id: "speed121", value: 0.04559023503190351 }
-      ],
+      data: null,
+      road: ["G5", "G42", "G76", "G85", "G93", "G0512", "G4215"],
       legendName: [
         "speed0_60",
         "speed61_80",
@@ -56,7 +51,7 @@ export default {
         classes["columns"] = ["id", "value"];
         let g = svg
           .append("g")
-          .attr("transform", "translate(-80," + index * 150 + ")");
+          .attr("transform", "translate(-70," + index * 150 + ")");
         var root = d3
           .hierarchy({ children: classes })
           .sum(function(d) {
@@ -71,6 +66,13 @@ export default {
               d.class = id.slice(i + 1);
             }
           });
+        g.append("text")
+          .attr("x", 80)
+          .attr("y", 45)
+          .attr("dx", -10)
+          .attr("fill", "#409EFF")
+          .text(this.road[index])
+          .style("cursor", "pointer");
         var node = g
           .selectAll(".node")
           .data(pack(root).leaves())
@@ -78,7 +80,7 @@ export default {
           .append("g")
           .attr("class", "node")
           .attr("transform", function(d) {
-            return "translate(" + d.x + "," + (d.y + 20) + ")";
+            return "translate(" + (d.x + 10) + "," + (d.y + 20) + ")";
           });
 
         node
