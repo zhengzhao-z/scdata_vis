@@ -1,5 +1,5 @@
 <template>
-  <div class="overView" id="scrollbar">
+  <div id="scrollbar">
     <div class="roadAccident">
       <overview></overview>
     </div>
@@ -21,16 +21,6 @@ export default {
 </script>
 
 <style scoped>
-.overView {
-  position: absolute;
-  height: 75%;
-  width: 600px;
-  box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
-    0 0.5em 1em rgba(0, 0, 0, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  display: flex;
-}
 .roadAccident {
   flex: 1;
 }
