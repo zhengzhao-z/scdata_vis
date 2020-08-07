@@ -16,7 +16,7 @@
       {{ this.arrow }}
     </span>
   </div>
-</template>
+</template> 
 
 <script>
 // import HelloWorld from "./components/HelloWorld";

@@ -63,13 +63,13 @@ export default {
           max: 1400,
           calculable: true,
           orient: "horizontal",
-          top: "3%",
+          top: "10%",
           left: "50%"
         },
         calendar: [
           {
-            top: "30%",
-            left: "8%",
+            top: "40%",
+            // left: "8%",
             range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
             yearLabel: {
@@ -80,7 +80,8 @@ export default {
             },
             monthLabel: {
               nameMap: "cn"
-            }
+            },
+            cellSize: [15, 15]
           }
         ],
         series: [

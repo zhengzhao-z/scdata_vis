@@ -1,5 +1,5 @@
 <template>
-  <div class="babelChart"></div>
+  <div class="bubbleChart"></div>
 </template>
 
 <script>
@@ -33,7 +33,7 @@ export default {
       var height = 1850; //画布的高度
 
       const svg = d3
-        .select(".babelChart") //选择文档中的body元素
+        .select(".bubbleChart") //选择文档中的body元素
         .append("svg") //添加一个svg元素
         .attr("width", "100%") //设定宽度
         .attr("height", height); //设定高度
@@ -167,7 +167,7 @@ export default {
 </script>
 
 <style scoped>
-.babelChart {
+.bubbleChart {
   width: 100%;
   height: 1850px;
 }
