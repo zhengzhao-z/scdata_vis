@@ -174,8 +174,10 @@ export default {
 
 <style>
 #detail {
-  width: 650px;
-  height: 68%;
+  height: 100%;
+  width: 100%;
   position: absolute;
+  left: 100%;
+  transition: all 500ms;
 }
 </style>

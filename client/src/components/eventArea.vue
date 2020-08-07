@@ -5,29 +5,8 @@
  * @LastEditor: zhengzhao
 -->
 <template>
-  <div id="over">
+  <div id="area">
     <div ref="charts" class="charts"></div>
-    <div id="control">
-      <el-switch v-model="value" active-text="全部"> </el-switch>
-      <el-switch
-        v-model="value"
-        active-text="车辆交通事故"
-        :active-color="color[0]"
-      >
-      </el-switch>
-      <el-switch
-        v-model="value"
-        active-text="车流量大"
-        :active-color="color[1]"
-      >
-      </el-switch>
-      <el-switch
-        v-model="value"
-        active-text="降雨（积水）"
-        :active-color="color[2]"
-      >
-      </el-switch>
-    </div>
   </div>
 </template>
 
@@ -86,16 +65,16 @@ export default {
         .select(this.$refs.charts)
         .append("svg")
         .attr("width", "100%")
-        .attr("height", 1850); //根据道路数量自动计算
+        .attr("height", 12*142); //根据道路数量自动计算
       let scale = d3
         .scaleLinear()
         .domain([0, 161])
-        .range([150, 0]);
+        .range([130, 0]);  //算最大值
       let area = d3
         .area()
         .curve(d3.curveCardinal)
         .x((d, i) => {
-          return i * 10 + 10;
+          return i * 10 + 15;
         })
         .y0(d => scale(d[0]))
         .y1(d => scale(d[1]));
@@ -103,7 +82,7 @@ export default {
         let arr = data[i];
         let g = svg
           .append("g")
-          .attr("transform", "translate(0," + (i * 140+20) + ")");
+          .attr("transform", "translate(0," + (i * 142) + ")");
         g.selectAll("path")
           .data(arr)
           .join("path")
@@ -112,18 +91,22 @@ export default {
             return d3.schemeCategory10[i];
           });
         g.append("text")
-          .attr("x", 10)
-          .attr("y", 50)
+          .attr("x", 20)
+          .attr("y", 30)
           .attr("fill", "#409EFF")
           .text(this.road[i])
-          .style("cursor", "pointer");
+          .on("click",d=>{
+            //todo 
+            this.$store.commit("setOver", false);
+          })
+          .style("cursor", "pointer")
         g.append("g")
           .selectAll("text")
           .data([0, 8, 16])
           .enter()
           .append("text")
-          .attr("x", d => d * 10 + 10)
-          .attr("y", 162)
+          .attr("x", d => d * 10 + 15)
+          .attr("y", 142)
           .attr("font-size", "12")
           .text(d => d);
       }
@@ -141,16 +124,13 @@ export default {
 </script>
 
 <style>
-#over {
+#area {
   width: 100%;
 }
-#over #control {
+#area #control {
   position: absolute;
   right: 0px;
   top: 30px;
 }
-.el-switch {
-  display: block;
-  margin-top: 5px;
-}
+
 </style>

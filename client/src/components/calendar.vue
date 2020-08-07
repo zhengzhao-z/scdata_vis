@@ -8,7 +8,7 @@
   <div
     ref="calendar"
     id="calendar"
-    :style="{ width: '600px', height: '248px' }"
+    :style="{ width: '500px', height: '200px' }"
   ></div>
 </template>
 
@@ -63,13 +63,13 @@ export default {
           max: 1400,
           calculable: true,
           orient: "horizontal",
-          top: "10%",
-          left: "50%"
+          top: "2%",
+          left: "55%"
         },
         calendar: [
           {
-            top: "40%",
-            // left: "8%",
+            top: "30%",
+            left: "7%",
             range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
             yearLabel: {
@@ -81,7 +81,7 @@ export default {
             monthLabel: {
               nameMap: "cn"
             },
-            cellSize: [15, 15]
+            cellSize: [16, 18]
           }
         ],
         series: [

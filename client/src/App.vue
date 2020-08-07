@@ -8,10 +8,13 @@
   <div id="app">
     <!-- <traffic></traffic> -->
     <tmap></tmap>
-    <!-- <control></control> -->
     <calendar></calendar>
 
-    <overView class="overView" ref="overView"></overView>
+    <div id="container">
+      <overView ref="overView"></overView>
+      <detail ref="detail"></detail>
+    </div>
+
     <span class="button" @click="change" ref="button">
       {{ this.arrow }}
     </span>
@@ -21,8 +24,7 @@
 <script>
 // import HelloWorld from "./components/HelloWorld";
 import tmap from "./components/map";
-import OV from "./components/overView";
-import overView from "./components/overView3";
+import overView from "./components/overView";
 import traffic from "./components/traffice";
 import control from "./components/control";
 import calendar from "./components/calendar";
@@ -52,7 +54,27 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    console.log(this.over)
+  },
+  computed:{
+    over(){
+      return this.$store.state.over;
+    }
+  },
+  watch:{
+    over(val,nval){
+      console.log(val,nval)
+      if(val==false){
+        //隐藏
+        this.$refs.overView.$el.style.transform = "translateX(-600px)";
+        this.$refs.detail.$el.style.transform = "translateX(-600px)";
+      }else{
+        //显示
+        this.$refs.overView.$el.style.transform = "translateX(-600px)";
+      }
+    }
+  },
   components: {
     tmap,
     traffic,
@@ -74,17 +96,11 @@ body,
 #app {
   position: relative;
 }
-
-.overView {
-  position: absolute;
-  height: 75%;
-  width: 500px;
-  box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+.bg{
+   box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
     0 0.5em 1em rgba(0, 0, 0, 0.1);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  display: flex;
-  transition: all 500ms;
 }
 .button {
   position: absolute;
@@ -108,5 +124,11 @@ body,
   color: black;
   width: 32px;
   height: 32px;
+}
+#container{
+  height: 75%;
+  width: 500px;
+  position:absolute;
+  overflow: hidden;
 }
 </style>
