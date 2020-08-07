@@ -9,6 +9,7 @@
     <traffic></traffic>
     <tmap></tmap>
     <control></control>
+    <!-- <overView></overView>   -->
   </div>
 </template>
 
@@ -19,7 +20,7 @@ import OV from "./components/overView";
 import traffic from "./components/traffice";
 import control from "./components/control"
 import calendar from "./components/calendar";
-
+import overView from "./components/overView"
 export default {
   name: "App",
   data() {
@@ -35,7 +36,8 @@ export default {
     traffic,
     OV,
     control,
-    calendar
+    calendar,
+    overView
   }
 };
 </script>
