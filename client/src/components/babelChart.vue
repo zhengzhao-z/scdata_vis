@@ -29,7 +29,7 @@ export default {
     },
     initChart() {
       // Add Container
-      var width = 300; //画布的宽度
+      var width = 200; //画布的宽度
       var height = 1850; //画布的高度
 
       const svg = d3
@@ -51,7 +51,7 @@ export default {
         classes["columns"] = ["id", "value"];
         let g = svg
           .append("g")
-          .attr("transform", "translate(-70," + index * 150 + ")");
+          .attr("transform", "translate(0," + (index * 140+20) + ")");
         var root = d3
           .hierarchy({ children: classes })
           .sum(function(d) {
@@ -66,13 +66,6 @@ export default {
               d.class = id.slice(i + 1);
             }
           });
-        g.append("text")
-          .attr("x", 80)
-          .attr("y", 45)
-          .attr("dx", -10)
-          .attr("fill", "#409EFF")
-          .text(this.road[index])
-          .style("cursor", "pointer");
         var node = g
           .selectAll(".node")
           .data(pack(root).leaves())

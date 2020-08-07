@@ -37,20 +37,7 @@ export default {
     return {
       value: true,
       color: d3.schemeCategory10,
-      road: [
-        "G5",
-        "G0512",
-        "G4215",
-        "S40",
-        "G93",
-        "S1",
-        "S4202",
-        "G85",
-        "G76",
-        "S2",
-        "G42",
-        "G75"
-      ], //道路的排列顺序
+      road: ["G5", "G42", "G76", "G85", "G93", "G0512", "G4215","S40","S1","S4202","S2","G75"], //道路的排列顺序
       order: [
         "车辆交通事故",
         "车流量大",
@@ -95,7 +82,6 @@ export default {
     },
     //绘制
     draw(data) {
-      console.log(this.$refs.charts);
       let svg = d3
         .select(this.$refs.charts)
         .append("svg")
@@ -117,7 +103,7 @@ export default {
         let arr = data[i];
         let g = svg
           .append("g")
-          .attr("transform", "translate(0," + i * 140 + ")");
+          .attr("transform", "translate(0," + (i * 140+20) + ")");
         g.selectAll("path")
           .data(arr)
           .join("path")

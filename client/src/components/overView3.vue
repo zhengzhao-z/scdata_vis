@@ -1,3 +1,9 @@
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
   <div id="scrollbar">
     <div class="roadAccident">
