@@ -4,18 +4,18 @@
       <overview></overview>
     </div>
     <div class="roadSpeed">
-      <babelChart></babelChart>
+      <bubbleChart></bubbleChart>
     </div>
   </div>
 </template>
 
 <script>
 import overview from "./overView2";
-import babelChart from "./babelChart";
+import bubbleChart from "./bubbleChart";
 export default {
   components: {
     overview,
-    babelChart
+    bubbleChart
   }
 };
 </script>

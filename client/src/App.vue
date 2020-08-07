@@ -8,10 +8,6 @@
   <div id="app">
     <!-- <traffic></traffic> -->
     <tmap></tmap>
-<<<<<<< HEAD
-    <control></control>
-    <!-- <overView></overView>   -->
-=======
     <!-- <control></control> -->
     <calendar></calendar>
 
@@ -19,9 +15,8 @@
     <span class="button" @click="change" ref="button">
       {{ this.arrow }}
     </span>
->>>>>>> be0b574407b3117b03d46a6e5b0b0c942d9c3a1d
   </div>
-</template>
+</template> 
 
 <script>
 // import HelloWorld from "./components/HelloWorld";
