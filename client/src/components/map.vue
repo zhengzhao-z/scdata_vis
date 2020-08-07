@@ -56,7 +56,7 @@ export default {
     },
     mapInit() {
       let map = new T.Map("tmap");
-      map.centerAndZoom(new T.LngLat(104.07, 30.67), 7);
+      map.centerAndZoom(new T.LngLat(99.902684, 30.570922), 7);
       this.map = map;
       this.map.enableScrollWheelZoom();
       this.map.setMinZoom(7);
@@ -87,8 +87,6 @@ export default {
       }
 
       this.map.addOverLay(this.heatmapOverlay);
-      console.log(this.map);
-      console.log("绘制", points.length);
       this.heatmapOverlay.setDataSet({ data: points, max: 300 });
     },
     mapOutlineInit() {
@@ -120,29 +118,35 @@ export default {
       this.map.addOverLay(line); // 绘制线到地图上
     },
     // 在地图上添加监测点
-    // 检查点 与 热力图 应互斥出行 
-    drawMonitor(){
-      this.$axios.get("http://localhost:3000/monitor").then(res=>{
+    // 检查点 与 热力图 应互斥出行
+    drawMonitor() {
+      this.$axios.get("http://localhost:3000/monitor").then(res => {
         let data = res.data;
         let icon = new T.Icon({
-          iconUrl:"../../static/monitor.png",
-           iconSize: new T.Point(30, 30),
+          iconUrl: "../../static/monitor.png",
+          iconSize: new T.Point(30, 30)
         });
-        for(let i=0;i<res.data.length;i++){
-          let marker = new T.Marker(new T.LngLat(res.data[i].longitude,res.data[i].latitude), {icon: icon});
+        for (let i = 0; i < res.data.length; i++) {
+          let marker = new T.Marker(
+            new T.LngLat(res.data[i].longitude, res.data[i].latitude),
+            { icon: icon }
+          );
           marker.name = res.data[i].GCZMC;
           marker.id = res.data[i].GZCBS;
-          marker.addEventListener("click",(e)=>{
+          marker.addEventListener("click", e => {
             //点击事件 todo
             // 放大 中心
-            this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 15);
+            this.map.centerAndZoom(
+              new T.LngLat(e.lnglat.lng, e.lnglat.lat),
+              15
+            );
             //显示traffic
           });
           this.map.addOverLay(marker);
         }
-      })
+      });
     }
-  },
+  }
 };
 </script>
 
@@ -152,11 +156,9 @@ export default {
   padding: 0;
 }
 #tmap {
-  position:absolute;
-  left: 15%;
-  top: 3%;
-  height: 80%;
-  width: 85%;
+  position: absolute;
+  height: 100%;
+  width: 100%;
   z-index: 0;
 }
 </style>
