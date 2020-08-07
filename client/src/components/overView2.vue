@@ -5,7 +5,7 @@
  * @LastEditor: zhengzhao
 --> 
 <template>
-  <div id="over">
+  <div id="over" class="bg">
       <div id="control">
           <el-switch
             v-model="value"
@@ -138,18 +138,18 @@ export default {
 
 <style>
 #over{
-    width: 300px;
+    width: 650px;
     height:68%;
     /* border: 1px solid black; */
     position: absolute;
-    box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+    /* box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
     0 0.5em 1em rgba(0, 0, 0, 0.1);
     -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); */
 }
 #over #control{
     position: absolute;
-    right: -90px;
+    right: 0px;
     top: 0px;
 }
 .el-switch{
@@ -157,7 +157,7 @@ export default {
     margin-top:5px ;
 }
 #scrollbar{
-    width: 100%;
+    width: 250px;
     height: 100%;
     overflow: scroll;
     overflow-x:hidden;

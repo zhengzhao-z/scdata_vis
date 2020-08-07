@@ -53,9 +53,9 @@ app.get("/monitor",(req,res)=>{
     })
 })
 
-//test
-app.get("/overview",(req,res)=>{
-    G5zd.find({"DETECT_TIME":{$ne:""}},{"_id":0,"DETECT_TIME":1,"BLOCK_REASON":1},(err,clo)=>{
+//某条路的详细信息
+app.post("/detail",(req,res)=>{
+    G5zd.find({},{"_id":0,"START_STAKE":1,"BLOCK_REASON":1,"MEASURES_NAME":1,"DETECT_TIME":1,"RESUME_TIME":1},(err,clo)=>{
         res.send(clo);
     })
 })

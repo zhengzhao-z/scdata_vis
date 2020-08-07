@@ -18,8 +18,8 @@ export default {
     },
     mounted(){
         this.$axios.post("http://localhost:3000/traffic",{
-            "id":"51000020160416172821205SpZ3O8tEy",
-            "date":"2019-06-02 00:00:00"
+            "id":"51000020160508E7AE547BFDE3890F30",
+            "date":"2019-04-30 00:00:00"
         }).then(res=>{
             let data = res.data;
             this.process(data);

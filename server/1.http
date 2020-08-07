@@ -7,4 +7,4 @@ content-type: application/json
     "date":"2019-06-01 00:00:00"
 }
 ###
-GET http://localhost:3000/overview
+POST http://localhost:3000/detail

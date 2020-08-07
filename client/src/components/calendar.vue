@@ -8,7 +8,8 @@
   <div
     ref="calendar"
     id="calendar"
-    :style="{ width: '700px', height: '200px' }"
+    class="bg"
+    :style="{ width: '650px', height: '250px' }"
   ></div>
 </template>
 
@@ -66,7 +67,7 @@ export default {
         },
         calendar: [
           {
-            top: "25%",
+            top: "30%",
             left:"5%",
             range: ["2019-01-01", "2019-06-30"],
             orient: "horizontal",
