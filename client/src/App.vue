@@ -43,8 +43,11 @@ export default {
   methods: {
     getCalendarData() {
       this.$store.dispatch("changeCalendarData", {
-        eventName: "all",
-        color: ["#ABDCFF", "#0396FF"]
+        all: {
+          eventName: "all",
+          color: ["#ABDCFF", "#0396FF"],
+          flag: true
+        }
       });
     },
 

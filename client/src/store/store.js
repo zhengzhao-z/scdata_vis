@@ -26,31 +26,35 @@ const store = new Vuex.Store({
   actions: {
     changeCalendarData(context, payload) {
       axios.get("../../static/calendar.json").then(res => {
-        let data;
-        console.log(payload.eventName);
-        switch (payload.eventName) {
-          case "vehicleAccident":
-            data = res.data.vehicleAccident;
-            break;
-          case "traffic":
-            data = res.data.traffic;
-            break;
-          case "rainfall":
-            data = res.data.rainfall;
-            break;
-          case "snowfall":
-            data = res.data.snowfall;
-            break;
-          case "smog":
-            data = res.data.smog;
-            break;
-          default:
-            data = res.data.all;
-            break;
+        let dataAll = null;
+        let dataArr = [];
+        let colorAll = null;
+        let colorArr = [];
+        let color = null;
+        for (const key in payload) {
+          if (payload.hasOwnProperty(key)) {
+            const element = payload[key];
+            if (key === "all" && element.flag === true) {
+              dataAll = res.data.all;
+              colorAll = element.color;
+              break;
+            } else {
+              if (element.flag === true) {
+                dataArr.push(...res.data[key]);
+                colorArr.push(element.color);
+              }
+            }
+          }
         }
+        if (colorArr.length === 1) {
+          color = colorArr[0];
+        } else {
+          color = ["#FFAA85", "#B3315F"];
+        }
+
         context.commit("changeCalendarData", {
-          data: data,
-          color: payload.color
+          data: dataAll || dataArr,
+          color: colorAll || color
         });
       });
     }
