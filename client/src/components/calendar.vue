@@ -16,36 +16,56 @@
 export default {
   data() {
     return {
-      calendarData: [],
-      chart: null
+      chart: null,
+      min: 0,
+      max: 0
     };
   },
   mounted() {
-    this.getData();
     this.chartInit();
   },
   watch: {
     calendarData: {
       handler(newdata, olddata) {
+        console.log(1);
         this.chartInit();
       },
       deep: true
     }
   },
+  computed: {
+    calendarData() {
+      const calendarData = this.processCalendarData(
+        this.$store.state.calendarData.data
+      );
+      console.log(this.$store.state.calendarData.color);
+      return calendarData;
+    }
+  },
   methods: {
-    processData(data) {
+    processCalendarData(data) {
+      let calendarData = [];
+      let min = 9999999;
+      let max = -1;
       for (let i = 0; i < data.length; i++) {
+        const count = parseInt(data[i].count);
+        if (min > count) {
+          min = count;
+        }
+        if (max < count) {
+          max = count;
+        }
         let obj = {
-          value: [data[i].time, data[i].count],
+          value: [data[i].time, count],
           itemStyle: {}
         };
-        this.calendarData.push(obj);
+
+        calendarData.push(obj);
+        // this.calendarData.push(obj);
       }
-    },
-    getData() {
-      this.$axios.get("../../static/calendarAll.json").then(res => {
-        this.processData(res.data);
-      });
+      this.min = min;
+      this.max = max;
+      return calendarData;
     },
     getOptions() {
       return {
@@ -59,12 +79,15 @@ export default {
         },
         visualMap: {
           show: true,
-          min: 0,
-          max: 1400,
+          min: this.min,
+          max: this.max,
           calculable: true,
           orient: "horizontal",
           top: "2%",
-          left: "55%"
+          left: "55%",
+          inRange: {
+            color: this.$store.state.calendarData.color
+          }
         },
         calendar: [
           {
