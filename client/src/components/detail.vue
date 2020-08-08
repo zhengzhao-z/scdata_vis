@@ -5,7 +5,16 @@
  * @LastEditor: zhengzhao
 --> 
 <template>
-  <div id="detail" class="bg"></div>
+  <div id="detail" class="bg">
+    <div id="control">
+      <el-switch v-model="value" active-text="全部" ></el-switch>
+      <el-switch v-model="value" active-text="车辆交通事故" :active-color="color[0]"></el-switch>
+      <el-switch v-model="value" active-text="车流量大" :active-color="color[1]"></el-switch>
+      <el-switch v-model="value" active-text="降雨（积水）" :active-color="color[2]"></el-switch>
+      <el-switch v-model="value" active-text="降雪（积雪）" :active-color="color[3]"></el-switch>
+      <el-switch v-model="value" active-text="雾霾" :active-color="color[4]"></el-switch>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -13,11 +22,11 @@ export default {
   data() {
     return {
       color: d3.schemeCategory10,
-      order:["车辆交通事故","车流量大","降雨（积水）","降雪（积雪）","雾霾"]
+      order:["车辆交通事故","车流量大","降雨（积水）","降雪（积雪）","雾霾"],
+      value:true
     };
   },
   mounted() {
-    // var sankey = d3.sankeyCircular();
     this.$axios
       .post("http://localhost:3000/detail", {
         road: "G5",
@@ -126,7 +135,7 @@ export default {
         .sankey()
         .nodeId((d) => d.name)
         .nodeWidth(12)
-        .nodePadding(10)
+        .nodePadding(20)
         .size([400, 250]);
       let { nodes, links } = sankey(data1);
       let g=svg.append("g")
@@ -179,5 +188,10 @@ export default {
   position: absolute;
   left: 100%;
   transition: all 500ms;
+}
+.el-switch {
+  /* display: block; */
+  margin-top: 5px;
+  width: 150px;
 }
 </style>

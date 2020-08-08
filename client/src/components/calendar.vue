@@ -27,7 +27,6 @@ export default {
   watch: {
     calendarData: {
       handler(newdata, olddata) {
-        console.log(1);
         this.chartInit();
       },
       deep: true
@@ -38,7 +37,6 @@ export default {
       const calendarData = this.processCalendarData(
         this.$store.state.calendarData.data
       );
-      console.log(this.$store.state.calendarData.color);
       return calendarData;
     }
   },

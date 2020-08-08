@@ -52,18 +52,7 @@ export default {
     },
 
     change() {
-      console.dir(this.$refs.button);
-      if (!this.flag) {
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
-        this.$refs.button.style.transform = "translateX(-570px)";
-        this.flag = true;
-        this.arrow = ">";
-      } else {
-        this.$refs.overView.$el.style.transform = "translateX(0)";
-        this.$refs.button.style.transform = "translateX(0)";
-        this.flag = false;
-        this.arrow = "<";
-      }
+      this.$store.commit("setOver",true);
     }
   },
   mounted() {
@@ -84,7 +73,8 @@ export default {
         this.$refs.detail.$el.style.transform = "translateX(-600px)";
       } else {
         //显示
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
+        this.$refs.overView.$el.style.transform = "translateX(0px)";
+        this.$refs.detail.$el.style.transform = "translateX(0px)";
       }
     }
   },
