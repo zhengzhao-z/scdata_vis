@@ -40,18 +40,7 @@ export default {
   },
   methods: {
     change() {
-      console.dir(this.$refs.button);
-      if (!this.flag) {
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
-        this.$refs.button.style.transform = "translateX(-570px)";
-        this.flag = true;
-        this.arrow = ">";
-      } else {
-        this.$refs.overView.$el.style.transform = "translateX(0)";
-        this.$refs.button.style.transform = "translateX(0)";
-        this.flag = false;
-        this.arrow = "<";
-      }
+      this.$store.commit("setOver",true);
     }
   },
   mounted() {
@@ -64,14 +53,14 @@ export default {
   },
   watch:{
     over(val,nval){
-      console.log(val,nval)
       if(val==false){
         //隐藏
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
-        this.$refs.detail.$el.style.transform = "translateX(-600px)";
+        this.$refs.overView.$el.style.transform = "translateX(-500px)";
+        this.$refs.detail.$el.style.transform = "translateX(-500px)";
       }else{
         //显示
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
+        this.$refs.overView.$el.style.transform = "translateX(0px)";
+        this.$refs.detail.$el.style.transform = "translateX(0px)";
       }
     }
   },
