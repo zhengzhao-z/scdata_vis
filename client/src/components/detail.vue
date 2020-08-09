@@ -7,13 +7,14 @@
 <template>
   <div id="detail" class="bg">
     <div id="control">
-      <el-switch v-model="value" active-text="全部" ></el-switch>
-      <el-switch v-model="value" active-text="车辆交通事故" :active-color="color[0]"></el-switch>
-      <el-switch v-model="value" active-text="车流量大" :active-color="color[1]"></el-switch>
-      <el-switch v-model="value" active-text="降雨（积水）" :active-color="color[2]"></el-switch>
-      <el-switch v-model="value" active-text="降雪（积雪）" :active-color="color[3]"></el-switch>
-      <el-switch v-model="value" active-text="雾霾" :active-color="color[4]"></el-switch>
+      <el-switch v-model="value" active-text="全部"></el-switch>
+      <el-switch v-model="value" active-text="车辆交通事故" :active-color="color1[0]"></el-switch>
+      <el-switch v-model="value" active-text="车流量大" :active-color="color1[1]"></el-switch>
+      <el-switch v-model="value" active-text="降雨（积水）" :active-color="color1[2]"></el-switch>
+      <el-switch v-model="value" active-text="降雪（积雪）" :active-color="color1[3]"></el-switch>
+      <el-switch v-model="value" active-text="雾霾" :active-color="color1[4]"></el-switch>
     </div>
+    <div ref="jam" id="jam"></div>
   </div>
 </template>
 
@@ -21,9 +22,22 @@
 export default {
   data() {
     return {
-      color: d3.schemeCategory10,
-      order:["车辆交通事故","车流量大","降雨（积水）","降雪（积雪）","雾霾"],
-      value:true
+      color1: d3.schemeCategory10,
+      order: [
+        "车辆交通事故",
+        "车流量大",
+        "降雨（积水）",
+        "降雪（积雪）",
+        "雾霾",
+      ],
+      color: {
+        车辆交通事故: "#1D6FA3",
+        车流量大: "#49C628",
+        "降雨（积水）": "#FCCF31",
+        "降雪（积雪）": "#C346C2",
+        雾霾: "#F6416C",
+      },
+      value: true,
     };
   },
   mounted() {
@@ -34,6 +48,11 @@ export default {
       .then((res) => {
         this.process(res.data);
       });
+    this.$axios
+      .get("./static/block_51000020120412204940202000110105.json")
+      .then(res=>{
+        this.chartInit(res.data);
+      })
   },
   methods: {
     //数据处理
@@ -55,8 +74,7 @@ export default {
           road[stake][reason] += 1;
         }
         // sankey
-        if(this.order.includes(reason)){
-         
+        if (this.order.includes(reason)) {
           let key = reason + "-" + measure;
           if (edges[key]) {
             edges[key] += 1;
@@ -88,47 +106,36 @@ export default {
         .append("svg")
         .attr("width", 500)
         .attr("height", 600);
-      let scale = d3
-        .scaleLinear()
-        .domain([1464, 2500]) //道路的起止桩号
-        .range([0, 400]);
-      let scale1 = d3.scaleLinear().domain([0, 300]).range([200, 50]);
-      svg
-        .append("g")
-        .append("line")
-        .attr("x1", 10)
-        .attr("y1", 200)
-        .attr("x2", 410)
-        .attr("y2", 200)
-        .attr("stroke", "black");
-      svg
-        .append("g")
-        .selectAll("rect")
-        .data(Object.entries(data))
-        .enter()
-        .append("rect")
-        .attr("x", (d) => {
-          // let stake=parseInt(d[0].replace(/,/g,""));
-          return scale(d[0]);
-        })
-        .attr("y", (d) => {
-          return scale1(this.sum(Object.values(d[1])));
-          // if(d[1]["车辆交通事故"]){
-          //   return scale1(d[1]["车辆交通事故"]);
-          // }else{
-          //   return 200
-          // }
-        })
-        .attr("width", 2.5)
-        .attr("height", (d) => {
-          // if(d[1]["车辆交通事故"]){
-          //   return 200-scale1(d[1]["车辆交通事故"]);
-          // }else{
-          //   return 0
-          // }
-          return 200 - scale1(this.sum(Object.values(d[1])));
-        })
-        .attr("fill", "#409EFF");
+      // let scale = d3
+      //   .scaleLinear()
+      //   .domain([1464, 2500]) //道路的起止桩号
+      //   .range([0, 400]);
+      // let scale1 = d3.scaleLinear().domain([0, 300]).range([200, 50]);
+      // svg
+      //   .append("g")
+      //   .append("line")
+      //   .attr("x1", 10)
+      //   .attr("y1", 200)
+      //   .attr("x2", 410)
+      //   .attr("y2", 200)
+      //   .attr("stroke", "black");
+      // svg
+      //   .append("g")
+      //   .selectAll("rect")
+      //   .data(Object.entries(data))
+      //   .enter()
+      //   .append("rect")
+      //   .attr("x", (d) => {
+      //     return scale(d[0]);
+      //   })
+      //   .attr("y", (d) => {
+      //     return scale1(this.sum(Object.values(d[1])));
+      //   })
+      //   .attr("width", 2.5)
+      //   .attr("height", (d) => {
+      //     return 200 - scale1(this.sum(Object.values(d[1])));
+      //   })
+      //   .attr("fill", "#409EFF");
 
       //sankey
       let sankey = d3
@@ -138,8 +145,7 @@ export default {
         .nodePadding(20)
         .size([400, 250]);
       let { nodes, links } = sankey(data1);
-      let g=svg.append("g")
-        .attr("transform","translate(10,300)");
+      let g = svg.append("g").attr("transform", "translate(10,30)");
       const node = g.append("g").selectAll("rect").data(nodes);
       node
         .join("rect")
@@ -147,7 +153,7 @@ export default {
         .attr("y", (d) => d.y0)
         .attr("height", (d) => d.y1 - d.y0)
         .attr("width", (d) => d.x1 - d.x0)
-        .attr("fill", (d) => d.color)
+        .attr("fill", (d) => this.color[d.name])
         .attr("stroke", "none");
       node
         .join("text")
@@ -158,7 +164,7 @@ export default {
       const link = g
         .append("g")
         .attr("fill", "none")
-        .attr("stroke-opacity", 0.8)
+        .attr("stroke-opacity", 0.3)
         .selectAll("g")
         .data(links)
         .join("g")
@@ -167,7 +173,7 @@ export default {
       link
         .append("path")
         .attr("d", d3.sankeyLinkHorizontal())
-        .attr("stroke", "#ccc")
+        .attr("stroke", (d) => this.color[d.source.name])
         .attr("stroke-width", (d) => Math.max(1, d.width));
     },
     sum(arr) {
@@ -176,6 +182,110 @@ export default {
         sum += d;
       });
       return sum;
+    },
+    chartInit(data) {
+      const chartDom = this.$refs.jam;
+      this.chart = this.$echarts.init(chartDom);
+      let option;
+      this.chart.setOption(
+        (option = {
+          title: {
+            text: "拥堵曲线",
+          },
+          tooltip: {
+            trigger: "axis",
+          },
+          xAxis: {
+            data: data[1]
+          },
+          yAxis: {
+            splitLine: {
+              show: false,
+            },
+          },
+          toolbox: {
+            left: "center",
+            feature: {
+              dataZoom: {
+                yAxisIndex: "none",
+              },
+              restore: {},
+              saveAsImage: {},
+            },
+          },
+          dataZoom: [
+            {
+              startValue: "2014-06-01",
+            },
+            {
+              type: "inside",
+            },
+          ],
+          visualMap: {
+            top: 10,
+            right: 10,
+            pieces: [
+              {
+                gt: 0,
+                lte: 50,
+                color: "#096",
+              },
+              {
+                gt: 50,
+                lte: 100,
+                color: "#ffde33",
+              },
+              {
+                gt: 100,
+                lte: 150,
+                color: "#ff9933",
+              },
+              {
+                gt: 150,
+                lte: 200,
+                color: "#cc0033",
+              },
+              {
+                gt: 200,
+                lte: 300,
+                color: "#660099",
+              },
+              {
+                gt: 300,
+                color: "#7e0023",
+              },
+            ],
+            outOfRange: {
+              color: "#999",
+            },
+          },
+          series: {
+            name: "Beijing AQI",
+            type: "line",
+            data: data[0],
+            markLine: {
+              silent: true,
+              data: [
+                {
+                  yAxis: 50,
+                },
+                {
+                  yAxis: 100,
+                },
+                {
+                  yAxis: 150,
+                },
+                {
+                  yAxis: 200,
+                },
+                {
+                  yAxis: 300,
+                },
+              ],
+            },
+          },
+        })
+      );
     },
   },
 };
@@ -188,6 +298,10 @@ export default {
   position: absolute;
   left: 100%;
   transition: all 500ms;
+}
+#jam {
+  width: 100%;
+  height: 400px;
 }
 .el-switch {
   /* display: block; */
