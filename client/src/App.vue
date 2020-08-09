@@ -42,17 +42,11 @@ export default {
   },
   methods: {
     getCalendarData() {
-      this.$store.dispatch("changeCalendarData", {
-        all: {
-          eventName: "all",
-          color: ["#ABDCFF", "#0396FF"],
-          flag: true
-        }
-      });
+      this.$store.dispatch("changeCalendarAllData");
     },
 
     change() {
-      this.$store.commit("setOver",true);
+      this.$store.commit("setOver", true);
     }
   },
   mounted() {
@@ -105,7 +99,7 @@ body,
 }
 .button {
   position: absolute;
-  left: 570px;
+  left: 470px;
   top: 600px;
   width: 30px;
   height: 30px;
