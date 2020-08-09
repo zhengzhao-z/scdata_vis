@@ -19,7 +19,7 @@
       {{ this.arrow }}
     </span>
   </div>
-</template> 
+</template>
 
 <script>
 // import HelloWorld from "./components/HelloWorld";
@@ -35,29 +35,43 @@ export default {
   data() {
     return {
       flag: false,
-      arrow: "<"
+      arrow: "<",
+      calendarMin: 0,
+      calendarMax: 0
     };
   },
   methods: {
+    getCalendarData() {
+      this.$store.dispatch("changeCalendarData", {
+        all: {
+          eventName: "all",
+          color: ["#ABDCFF", "#0396FF"],
+          flag: true
+        }
+      });
+    },
+
     change() {
       this.$store.commit("setOver",true);
     }
   },
   mounted() {
-    console.log(this.over)
+    this.getCalendarData();
+    console.log(this.over);
   },
-  computed:{
-    over(){
+  computed: {
+    over() {
       return this.$store.state.over;
     }
   },
-  watch:{
-    over(val,nval){
-      if(val==false){
+  watch: {
+    over(val, nval) {
+      console.log(val, nval);
+      if (val == false) {
         //隐藏
-        this.$refs.overView.$el.style.transform = "translateX(-500px)";
-        this.$refs.detail.$el.style.transform = "translateX(-500px)";
-      }else{
+        this.$refs.overView.$el.style.transform = "translateX(-600px)";
+        this.$refs.detail.$el.style.transform = "translateX(-600px)";
+      } else {
         //显示
         this.$refs.overView.$el.style.transform = "translateX(0px)";
         this.$refs.detail.$el.style.transform = "translateX(0px)";
@@ -85,8 +99,8 @@ body,
 #app {
   position: relative;
 }
-.bg{
-   box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+.bg {
+  box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
     0 0.5em 1em rgba(0, 0, 0, 0.1);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -114,10 +128,10 @@ body,
   width: 32px;
   height: 32px;
 }
-#container{
+#container {
   height: 75%;
   width: 500px;
-  position:absolute;
+  position: absolute;
   overflow: hidden;
 }
 </style>
