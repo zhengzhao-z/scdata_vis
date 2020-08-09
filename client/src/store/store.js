@@ -87,9 +87,13 @@ const store = new Vuex.Store({
           all: {
             eventName: "all",
             color: ["#ABDCFF", "#0396FF"],
-            flag: true
+            flag: true,
+            road: "all"
           }
         });
+      });
+      axios.get("../../static/calendarAll.json").then(res => {
+        console.log(res);
       });
     }
   }
