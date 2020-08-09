@@ -15,19 +15,34 @@ export default {
   data() {
     return {
       value: true,
-      color: ["#1D6FA3","#49C628","#FCCF31","#C346C2","#F6416C","#00EAFF"],
-      road: ["G5", "G42", "G76", "G85", "G93", "G0512", "G4215","S40","S1","S4202","S2","G75"], //道路的排列顺序
+      color: ["#1D6FA3", "#49C628", "#FCCF31", "#C346C2", "#F6416C", "#00EAFF"],
+      road: [
+        "G5",
+        "G42",
+        "G76",
+        "G85",
+        "G93",
+        "G0512",
+        "G4215",
+        "S40",
+        "S1",
+        "S4202",
+        "S2",
+        "G75"
+      ], //道路的排列顺序
       order: {
-        "车辆交通事故":"#1D6FA3",
-        "车流量大":"#49C628",
-        "降雨（积水）":"#FCCF31",
-        "降雪（积雪）":"#C346C2",
-        "雾霾":"#F6416C"
+        车辆交通事故: "#1D6FA3",
+        车流量大: "#49C628",
+        "降雨（积水）": "#FCCF31",
+        "降雪（积雪）": "#C346C2",
+        雾霾: "#F6416C"
       } //事件顺序
     };
   },
   mounted() {
-    console.log(this.order)
+    console.log(this.$store.state.eventArea);
+
+    console.log(this.order);
     this.$axios.get("../static/road.json").then(res => {
       this.process(res.data);
     });
@@ -66,11 +81,11 @@ export default {
         .select(this.$refs.charts)
         .append("svg")
         .attr("width", "100%")
-        .attr("height", 12*142); //根据道路数量自动计算
+        .attr("height", 12 * 142); //根据道路数量自动计算
       let scale = d3
         .scaleLinear()
         .domain([0, 161])
-        .range([130, 0]);  //算最大值
+        .range([130, 0]); //算最大值
       let area = d3
         .area()
         .curve(d3.curveCardinal)
@@ -83,7 +98,7 @@ export default {
         let arr = data[i];
         let g = svg
           .append("g")
-          .attr("transform", "translate(0," + (i * 142) + ")");
+          .attr("transform", "translate(0," + i * 142 + ")");
         g.selectAll("path")
           .data(arr)
           .join("path")
@@ -96,11 +111,12 @@ export default {
           .attr("y", 30)
           .attr("fill", "#409EFF")
           .text(this.road[i])
-          .on("click",d=>{
-            //todo 
+          .on("click", d => {
+            //todo
             this.$store.commit("setOver", false);
+            this.$store.commit("changeRoadName", this.road[i]);
           })
-          .style("cursor", "pointer")
+          .style("cursor", "pointer");
         g.append("g")
           .selectAll("text")
           .data([0, 8, 16])
@@ -133,5 +149,4 @@ export default {
   right: 0px;
   top: 30px;
 }
-
 </style>

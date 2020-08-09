@@ -11,8 +11,9 @@ const store = new Vuex.Store({
       data: [],
       color: []
     },
+    roadName: "all",
     calendarAllData: null,
-    eventData: {}
+    eventArea: ["all"]
   },
   mutations: {
     changeEventLieBie(state, value) {
@@ -24,6 +25,10 @@ const store = new Vuex.Store({
     changeCalendarAllData(state, value) {
       state.calendarAllData = value;
       console.log(this);
+    },
+    changeRoadName(state, road) {
+      state.roadName = road;
+      console.log(state.roadName);
     },
     changeCalendarData(state, params) {
       if (state.calendarAllData) {
@@ -55,6 +60,23 @@ const store = new Vuex.Store({
         state.calendarData.data = dataAll || dataArr;
         state.calendarData.color = colorAll || color;
       }
+    },
+    changeEventArea(state, params) {
+      let eventArea = [];
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const element = params[key];
+          if (key === "all" && element.flag === true) {
+            eventArea = ["all"];
+            break;
+          } else {
+            if (element.flag === true) {
+              eventArea.push(key);
+            }
+          }
+        }
+      }
+      state.eventArea = eventArea;
     }
   },
   actions: {
