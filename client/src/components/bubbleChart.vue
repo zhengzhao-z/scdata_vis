@@ -30,7 +30,7 @@ export default {
     initChart() {
       // Add Container
       var width = 200; //画布的宽度
-      var height = 5 * 142; //画布的高度
+      var height = 7 * 142; //画布的高度
 
       const svg = d3
         .select(".bubbleChart") //选择文档中的body元素
@@ -147,6 +147,6 @@ export default {
 <style scoped>
 .bubbleChart {
   width: 100%;
-  height: 710px;
+  height: 994px;
 }
 </style>

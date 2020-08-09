@@ -51,7 +51,6 @@ export default {
   },
   mounted() {
     this.getCalendarData();
-    console.log(this.over);
   },
   computed: {
     over() {
@@ -60,7 +59,6 @@ export default {
   },
   watch: {
     over(val, nval) {
-      console.log(val, nval);
       if (val == false) {
         //隐藏
         this.$refs.overView.$el.style.transform = "translateX(-500px)";

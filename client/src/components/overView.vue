@@ -85,7 +85,6 @@ export default {
           color: ["#97ABFF", "#123597"],
           flag: false
         },
-
         traffic: {
           eventName: "traffic",
           color: ["#70F570", "#49C628"],
@@ -140,6 +139,7 @@ export default {
       this.all = this.eventObj.all.flag = true;
     },
     trigger() {
+      // return
       this.eventObj.all.flag = this.all;
       this.eventObj.vehicleAccident.flag = this.vehicleAccident;
       this.eventObj.traffic.flag = this.traffic;
