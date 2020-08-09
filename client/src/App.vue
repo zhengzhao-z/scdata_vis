@@ -42,17 +42,11 @@ export default {
   },
   methods: {
     getCalendarData() {
-      this.$store.dispatch("changeCalendarData", {
-        all: {
-          eventName: "all",
-          color: ["#ABDCFF", "#0396FF"],
-          flag: true
-        }
-      });
+      this.$store.dispatch("changeCalendarAllData");
     },
 
     change() {
-      this.$store.commit("setOver",true);
+      this.$store.commit("setOver", true);
     }
   },
   mounted() {
@@ -69,8 +63,8 @@ export default {
       console.log(val, nval);
       if (val == false) {
         //隐藏
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
-        this.$refs.detail.$el.style.transform = "translateX(-600px)";
+        this.$refs.overView.$el.style.transform = "translateX(-500px)";
+        this.$refs.detail.$el.style.transform = "translateX(-500px)";
       } else {
         //显示
         this.$refs.overView.$el.style.transform = "translateX(0px)";
@@ -107,7 +101,7 @@ body,
 }
 .button {
   position: absolute;
-  left: 570px;
+  left: 470px;
   top: 600px;
   width: 30px;
   height: 30px;

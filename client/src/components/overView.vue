@@ -124,7 +124,8 @@ export default {
   },
   methods: {
     change(event) {
-      this.$store.dispatch("changeCalendarData", event);
+      this.$store.commit("changeCalendarData", event);
+      this.$store.commit("eventDetail", event);
     },
     trigger() {
       this.eventObj.all.flag = this.all;

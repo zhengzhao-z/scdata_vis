@@ -10,7 +10,9 @@ const store = new Vuex.Store({
     calendarData: {
       data: [],
       color: []
-    }
+    },
+    calendarAllData: null,
+    eventData: {}
   },
   mutations: {
     changeEventLieBie(state, value) {
@@ -19,28 +21,27 @@ const store = new Vuex.Store({
     setOver(state, value) {
       state.over = value;
     },
-    changeCalendarData(state, obj) {
-      state.calendarData = obj;
-    }
-  },
-  actions: {
-    changeCalendarData(context, payload) {
-      axios.get("../../static/calendar.json").then(res => {
+    changeCalendarAllData(state, value) {
+      state.calendarAllData = value;
+      console.log(this);
+    },
+    changeCalendarData(state, params) {
+      if (state.calendarAllData) {
         let dataAll = null;
         let dataArr = [];
         let colorAll = null;
         let colorArr = [];
         let color = null;
-        for (const key in payload) {
-          if (payload.hasOwnProperty(key)) {
-            const element = payload[key];
+        for (const key in params) {
+          if (params.hasOwnProperty(key)) {
+            const element = params[key];
             if (key === "all" && element.flag === true) {
-              dataAll = res.data.all;
+              dataAll = state.calendarAllData.all;
               colorAll = element.color;
               break;
             } else {
               if (element.flag === true) {
-                dataArr.push(...res.data[key]);
+                dataArr.push(...state.calendarAllData[key]);
                 colorArr.push(element.color);
               }
             }
@@ -51,10 +52,21 @@ const store = new Vuex.Store({
         } else {
           color = ["#FFAA85", "#B3315F"];
         }
-
+        state.calendarData.data = dataAll || dataArr;
+        state.calendarData.color = colorAll || color;
+      }
+    }
+  },
+  actions: {
+    changeCalendarAllData(context) {
+      axios.get("../../static/calendar.json").then(res => {
+        context.commit("changeCalendarAllData", res.data);
         context.commit("changeCalendarData", {
-          data: dataAll || dataArr,
-          color: colorAll || color
+          all: {
+            eventName: "all",
+            color: ["#ABDCFF", "#0396FF"],
+            flag: true
+          }
         });
       });
     }
