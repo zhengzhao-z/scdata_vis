@@ -9,7 +9,7 @@
   <div id="overview" class="bg">
     <div id="control">
       <div style="height:40px;font-size:20px;font-weight:200">道路阻断事件面积图/速度比例图</div>
-      <el-switch v-model="value" active-text="全部" ></el-switch>
+      <el-switch v-model="value" active-text="全部" @change="test" ></el-switch>
       <el-switch v-model="value" active-text="车辆交通事故" :active-color="color[0]"></el-switch>
       <el-switch v-model="value" active-text="车流量大" :active-color="color[1]"></el-switch>
       <el-switch v-model="value" active-text="降雨（积水）" :active-color="color[2]"></el-switch>
@@ -93,6 +93,11 @@ export default {
       .attr("font-size", "13px")
       .text(d=>d)
       .attr("fill","white")
+  },
+  methods:{
+    test(){
+      console.log("car")
+    }
   }
 };
 </script>

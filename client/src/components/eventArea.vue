@@ -15,18 +15,19 @@ export default {
   data() {
     return {
       value: true,
-      color: d3.schemeCategory10,
+      color: ["#1D6FA3","#49C628","#FCCF31","#C346C2","#F6416C","#00EAFF"],
       road: ["G5", "G42", "G76", "G85", "G93", "G0512", "G4215","S40","S1","S4202","S2","G75"], //道路的排列顺序
-      order: [
-        "车辆交通事故",
-        "车流量大",
-        "降雨（积水）",
-        "降雪（积雪）",
-        "雾霾"
-      ] //事件顺序
+      order: {
+        "车辆交通事故":"#1D6FA3",
+        "车流量大":"#49C628",
+        "降雨（积水）":"#FCCF31",
+        "降雪（积雪）":"#C346C2",
+        "雾霾":"#F6416C"
+      } //事件顺序
     };
   },
   mounted() {
+    console.log(this.order)
     this.$axios.get("../static/road.json").then(res => {
       this.process(res.data);
     });
@@ -88,7 +89,7 @@ export default {
           .join("path")
           .attr("d", area)
           .attr("fill", (d, i) => {
-            return d3.schemeCategory10[i];
+            return this.color[i];
           });
         g.append("text")
           .attr("x", 20)

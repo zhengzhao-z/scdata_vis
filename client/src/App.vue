@@ -6,7 +6,7 @@
 -->
 <template>
   <div id="app">
-    <!-- <traffic></traffic> -->
+    <traffic></traffic>
     <tmap></tmap>
     <calendar></calendar>
 
