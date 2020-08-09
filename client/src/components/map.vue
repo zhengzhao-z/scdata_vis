@@ -26,7 +26,7 @@ export default {
   computed: {
     G() {
       if (this.$store.state.eventLieBie) {
-        console.log(this.$store.state.eventLieBie);
+
         if (this.eventData) {
           let leibie = [];
           let dataFilter = this.eventData.filter(item => {

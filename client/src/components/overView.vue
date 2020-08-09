@@ -12,7 +12,11 @@
         道路阻断事件面积图/速度比例图
       </div>
 
-      <el-switch v-model="all" active-text="全部" @change="trigger"></el-switch>
+      <el-switch
+        v-model="all"
+        active-text="全部"
+        @change="trigger1"
+      ></el-switch>
       <el-switch
         v-model="vehicleAccident"
         active-text="车辆交通事故"
@@ -126,6 +130,14 @@ export default {
     change(event) {
       this.$store.commit("changeCalendarData", event);
       this.$store.commit("changeEventArea", event);
+    },
+    trigger1() {
+      this.vehicleAccident = this.eventObj.vehicleAccident.flag = false;
+      this.traffic = this.eventObj.traffic.flag = false;
+      this.rainfall = this.eventObj.rainfall.flag = false;
+      this.snowfall = this.eventObj.snowfall.flag = false;
+      this.smog = this.eventObj.smog.flag = false;
+      this.all = this.eventObj.all.flag = true;
     },
     trigger() {
       this.eventObj.all.flag = this.all;

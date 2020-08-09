@@ -39,9 +39,20 @@ export default {
       } //事件顺序
     };
   },
+  computed: {
+    event() {
+      return this.$store.state.eventArea;
+    }
+  },
+  watch: {
+    event: {
+      handler(newdata, olddata) {
+        console.log(newdata);
+      },
+      deep: true
+    }
+  },
   mounted() {
-    console.log(this.$store.state.eventArea);
-
     console.log(this.order);
     this.$axios.get("../static/road.json").then(res => {
       this.process(res.data);
