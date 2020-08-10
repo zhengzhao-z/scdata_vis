@@ -14,6 +14,25 @@ const deduplicate = arr => {
   }
   return arr;
 };
+const dateCount = (dateArr, arr) => {
+  const result = [];
+  for (let i = 0; i < dateArr.length; i++) {
+    let date = dateArr[i];
+    let singleDateArr = [];
+    let count = 0;
+    for (let j = 0; j < arr.length; j++) {
+      if (arr[j].time === date) {
+        singleDateArr.push(arr[j]);
+      }
+    }
+    count = singleDateArr.length;
+    result.push({
+      count,
+      time: date
+    });
+  }
+  return result;
+};
 const store = new Vuex.Store({
   state: {
     eventLieBie: null,
@@ -81,7 +100,6 @@ const store = new Vuex.Store({
             color = ["#FFAA85", "#B3315F"];
           }
           state.calendarData.data = dataAll || dataArr;
-          console.log(state.calendarData.data);
           state.calendarData.color = colorAll || color;
         } else {
           console.log(state.roadName);
@@ -93,34 +111,16 @@ const store = new Vuex.Store({
           const dateArr = deduplicate(arr);
           for (const key in params) {
             if (params.hasOwnProperty(key)) {
-              console.log(key);
               const element = params[key];
               if (key === "all" && element.flag === true) {
-                const result = [];
-                const arr = [];
-                for (let i = 0; i < state.calendarAllRawData.length; i++) {
-                  const item = state.calendarAllRawData[i];
+                const arr = state.calendarAllRawData.filter(item => {
                   if (item.road === state.roadName) {
-                    arr.push(item);
+                    return true;
                   }
-                }
-                for (let i = 0; i < dateArr.length; i++) {
-                  let date = dateArr[i];
-                  let singleDateArr = [];
-                  let count = 0;
-                  for (let j = 0; j < arr.length; j++) {
-                    if (arr[j].time === date) {
-                      singleDateArr.push(arr[j]);
-                    }
-                  }
-                  count = singleDateArr.length;
-                  result.push({
-                    count,
-                    time: date
-                  });
-                }
-                console.log(result);
+                });
+                const result = dateCount(dateArr, arr);
                 state.calendarData.data = result;
+                state.calendarData.color = element.color;
                 break;
               } else {
                 if (element.flag === true) {
