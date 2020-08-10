@@ -109,26 +109,52 @@ const store = new Vuex.Store({
             arr.push(state.calendarAllRawData[i].time);
           }
           const dateArr = deduplicate(arr);
+          let dataArr = [];
+          let dataArrRaw = [];
+          let colorArr = [];
+          let dataAll = null;
+          let colorAll = null;
+          let color = null;
           for (const key in params) {
             if (params.hasOwnProperty(key)) {
               const element = params[key];
               if (key === "all" && element.flag === true) {
+                console.log(element.eventNameCN);
                 const arr = state.calendarAllRawData.filter(item => {
                   if (item.road === state.roadName) {
                     return true;
                   }
                 });
-                const result = dateCount(dateArr, arr);
-                state.calendarData.data = result;
-                state.calendarData.color = element.color;
+                dataAll = dateCount(dateArr, arr);
+                colorAll = element.color;
                 break;
               } else {
                 if (element.flag === true) {
-                  console.log(key);
+                  const arr = state.calendarAllRawData.filter(item => {
+                    if (
+                      item.road === state.roadName &&
+                      item.reason === element.eventNameCN
+                    ) {
+                      return true;
+                    }
+                  });
+                  dataArrRaw.push(...arr);
+                  colorArr.push(element.color);
                 }
               }
             }
           }
+          if (colorArr.length === 1) {
+            color = colorArr[0];
+          } else {
+            color = ["#FFAA85", "#B3315F"];
+          }
+          if (dataArrRaw.length) {
+            dataArr = dateCount(dateArr, dataArrRaw);
+          }
+
+          state.calendarData.data = dataAll || dataArr;
+          state.calendarData.color = colorAll || color;
         }
       }
     },
