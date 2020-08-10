@@ -4,14 +4,10 @@
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
 -->
-
 <template>
-  <div id="overview" class="bg">
-    <div id="control">
-      <div style="height:40px;font-size:20px;font-weight:200">
-        道路阻断事件面积图/速度比例图
-      </div>
-      <mySwitch />
+  <div id="overview">
+    <div id="charName">
+      道路阻断事件面积图/速度比例图
     </div>
     <div id="scrollbar">
       <div id="roadAccident">
@@ -28,12 +24,11 @@
 <script>
 import eventArea from "./eventArea";
 import bubbleChart from "./bubbleChart";
-import mySwitch from "./mySwitch";
+
 export default {
   components: {
     eventArea,
-    bubbleChart,
-    mySwitch
+    bubbleChart
   },
   data() {
     return {
@@ -143,6 +138,6 @@ export default {
   width: 80px;
   height: 200px;
   right: 0;
-  top: 60px;
+  top: 20px;
 }
 </style>
