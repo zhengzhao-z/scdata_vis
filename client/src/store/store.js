@@ -47,8 +47,17 @@ const store = new Vuex.Store({
     eventArea: ["all"]
   },
   mutations: {
-    changeEventLieBie(state, value) {
-      state.eventLieBie = value;
+    changeEventLieBie(state, events) {
+      const arr = [];
+      for (const key in events) {
+        if (events.hasOwnProperty(key)) {
+          const element = events[key];
+          if (element.flag === true) {
+            arr.push(element.eventNameCN);
+          }
+        }
+      }
+      state.eventLieBie = arr;
     },
     setOver(state, value) {
       state.over = value;
@@ -72,6 +81,13 @@ const store = new Vuex.Store({
       });
     },
     changeCalendarData(state, params) {
+      const arr = [];
+      if (state.calendarAllRawData) {
+        for (let i = 0; i < state.calendarAllRawData.length; i++) {
+          arr.push(state.calendarAllRawData[i].time);
+        }
+      }
+      const dateArr = deduplicate(arr);
       if (state.calendarAllData) {
         let dataAll = null;
         let dataArr = [];
@@ -103,12 +119,6 @@ const store = new Vuex.Store({
           state.calendarData.color = colorAll || color;
         } else {
           console.log(state.roadName);
-
-          const arr = [];
-          for (let i = 0; i < state.calendarAllRawData.length; i++) {
-            arr.push(state.calendarAllRawData[i].time);
-          }
-          const dateArr = deduplicate(arr);
           let dataArr = [];
           let dataArrRaw = [];
           let colorArr = [];

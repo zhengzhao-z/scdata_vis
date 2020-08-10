@@ -101,6 +101,8 @@ export default {
     change(event) {
       this.$store.commit("changeCalendarData", event);
       this.$store.commit("changeEventArea", event);
+      this.$store.commit("changeEventLieBie", event);
+
     },
     trigger1() {
       this.vehicleAccident = this.eventObj.vehicleAccident.flag = false;
