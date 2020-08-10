@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import mySwitch from "./switch";
+import mySwitch from "./mySwitch";
 export default {
   components: {
     mySwitch

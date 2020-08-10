@@ -28,7 +28,7 @@
 <script>
 import eventArea from "./eventArea";
 import bubbleChart from "./bubbleChart";
-import mySwitch from "./switch";
+import mySwitch from "./mySwitch";
 export default {
   components: {
     eventArea,

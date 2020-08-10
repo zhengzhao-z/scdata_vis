@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <el-switch v-model="all" active-text="全部" @change="trigger1"></el-switch>
     <el-switch
       v-model="vehicleAccident"
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: "Switch",
+  name: "mySwitch",
   data() {
     return {
       color: ["#123597", "#49C628", "#F8D800", "#9F44D3", "#F6416C", "#00EAFF"],
