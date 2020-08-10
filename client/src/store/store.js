@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     },
     roadName: "all",
     calendarAllData: null,
+    calendarAllRawData: null,
     eventArea: ["all"]
   },
   mutations: {
@@ -24,7 +25,9 @@ const store = new Vuex.Store({
     },
     changeCalendarAllData(state, value) {
       state.calendarAllData = value;
-      console.log(this);
+    },
+    changeCalendarAllRawData(state, value) {
+      state.calendarAllRawData = value;
     },
     changeRoadName(state, road) {
       state.roadName = road;
@@ -40,15 +43,19 @@ const store = new Vuex.Store({
         for (const key in params) {
           if (params.hasOwnProperty(key)) {
             const element = params[key];
-            if (key === "all" && element.flag === true) {
-              dataAll = state.calendarAllData.all;
-              colorAll = element.color;
-              break;
-            } else {
-              if (element.flag === true) {
-                dataArr.push(...state.calendarAllData[key]);
-                colorArr.push(element.color);
+            if (state.roadName === "all") {
+              if (key === "all" && element.flag === true) {
+                dataAll = state.calendarAllData.all;
+                colorAll = element.color;
+                break;
+              } else {
+                if (element.flag === true) {
+                  dataArr.push(...state.calendarAllData[key]);
+                  colorArr.push(element.color);
+                }
               }
+            } else {
+              console.log(state.calendarAllRawData);
             }
           }
         }
@@ -83,17 +90,20 @@ const store = new Vuex.Store({
     changeCalendarAllData(context) {
       axios.get("../../static/calendar.json").then(res => {
         context.commit("changeCalendarAllData", res.data);
+
         context.commit("changeCalendarData", {
           all: {
             eventName: "all",
+            eventName: "全部",
             color: ["#ABDCFF", "#0396FF"],
-            flag: true,
-            road: "all"
+            flag: true
           }
         });
       });
       axios.get("../../static/calendarAll.json").then(res => {
-        console.log(res);
+        const array = res.data;
+
+        context.commit("changeCalendarAllRawData", res.data);
       });
     }
   }

@@ -3,23 +3,22 @@
  * @version: 0.1
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
---> 
+-->
 <template>
   <div id="detail" class="bg">
     <div id="control">
-      <el-switch v-model="value" active-text="全部"></el-switch>
-      <el-switch v-model="value" active-text="车辆交通事故" :active-color="color1[0]"></el-switch>
-      <el-switch v-model="value" active-text="车流量大" :active-color="color1[1]"></el-switch>
-      <el-switch v-model="value" active-text="降雨（积水）" :active-color="color1[2]"></el-switch>
-      <el-switch v-model="value" active-text="降雪（积雪）" :active-color="color1[3]"></el-switch>
-      <el-switch v-model="value" active-text="雾霾" :active-color="color1[4]"></el-switch>
+      <mySwitch />
     </div>
     <div ref="jam" id="jam"></div>
   </div>
 </template>
 
 <script>
+import mySwitch from "./switch";
 export default {
+  components: {
+    mySwitch
+  },
   data() {
     return {
       color1: d3.schemeCategory10,
@@ -28,31 +27,31 @@ export default {
         "车流量大",
         "降雨（积水）",
         "降雪（积雪）",
-        "雾霾",
+        "雾霾"
       ],
       color: {
         车辆交通事故: "#1D6FA3",
         车流量大: "#49C628",
         "降雨（积水）": "#FCCF31",
         "降雪（积雪）": "#C346C2",
-        雾霾: "#F6416C",
+        雾霾: "#F6416C"
       },
-      value: true,
+      value: true
     };
   },
   mounted() {
     this.$axios
       .post("http://localhost:3000/detail", {
-        road: "G5",
+        road: "G5"
       })
-      .then((res) => {
+      .then(res => {
         this.process(res.data);
       });
     this.$axios
       .get("./static/block_51000020120412204940202000110105.json")
-      .then(res=>{
+      .then(res => {
         this.chartInit(res.data);
-      })
+      });
   },
   methods: {
     //数据处理
@@ -93,10 +92,10 @@ export default {
       }
       node = Array.from(new Set(node));
       this.draw(road, {
-        nodes: node.map((d) => {
+        nodes: node.map(d => {
           return { name: d };
         }),
-        links: edge,
+        links: edge
       });
     },
     //绘制
@@ -140,26 +139,29 @@ export default {
       //sankey
       let sankey = d3
         .sankey()
-        .nodeId((d) => d.name)
+        .nodeId(d => d.name)
         .nodeWidth(12)
         .nodePadding(20)
         .size([400, 250]);
       let { nodes, links } = sankey(data1);
       let g = svg.append("g").attr("transform", "translate(10,30)");
-      const node = g.append("g").selectAll("rect").data(nodes);
+      const node = g
+        .append("g")
+        .selectAll("rect")
+        .data(nodes);
       node
         .join("rect")
-        .attr("x", (d) => d.x0)
-        .attr("y", (d) => d.y0)
-        .attr("height", (d) => d.y1 - d.y0)
-        .attr("width", (d) => d.x1 - d.x0)
-        .attr("fill", (d) => this.color[d.name])
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("fill", d => this.color[d.name])
         .attr("stroke", "none");
       node
         .join("text")
-        .attr("x", (d) => d.x0 + 15)
-        .attr("y", (d) => d.y0 + (d.y1 - d.y0) / 2 + 5)
-        .text((d) => d.name)
+        .attr("x", d => d.x0 + 15)
+        .attr("y", d => d.y0 + (d.y1 - d.y0) / 2 + 5)
+        .text(d => d.name)
         .attr("font-size", "14px");
       const link = g
         .append("g")
@@ -173,12 +175,12 @@ export default {
       link
         .append("path")
         .attr("d", d3.sankeyLinkHorizontal())
-        .attr("stroke", (d) => this.color[d.source.name])
-        .attr("stroke-width", (d) => Math.max(1, d.width));
+        .attr("stroke", d => this.color[d.source.name])
+        .attr("stroke-width", d => Math.max(1, d.width));
     },
     sum(arr) {
       let sum = 0;
-      arr.forEach((d) => {
+      arr.forEach(d => {
         sum += d;
       });
       return sum;
@@ -190,36 +192,36 @@ export default {
       this.chart.setOption(
         (option = {
           title: {
-            text: "拥堵曲线",
+            text: "拥堵曲线"
           },
           tooltip: {
-            trigger: "axis",
+            trigger: "axis"
           },
           xAxis: {
             data: data[1]
           },
           yAxis: {
             splitLine: {
-              show: false,
-            },
+              show: false
+            }
           },
           toolbox: {
             left: "center",
             feature: {
               dataZoom: {
-                yAxisIndex: "none",
+                yAxisIndex: "none"
               },
               restore: {},
-              saveAsImage: {},
-            },
+              saveAsImage: {}
+            }
           },
           dataZoom: [
             {
-              startValue: "2014-06-01",
+              startValue: "2014-06-01"
             },
             {
-              type: "inside",
-            },
+              type: "inside"
+            }
           ],
           visualMap: {
             top: 10,
@@ -228,36 +230,36 @@ export default {
               {
                 gt: 0,
                 lte: 50,
-                color: "#096",
+                color: "#096"
               },
               {
                 gt: 50,
                 lte: 100,
-                color: "#ffde33",
+                color: "#ffde33"
               },
               {
                 gt: 100,
                 lte: 150,
-                color: "#ff9933",
+                color: "#ff9933"
               },
               {
                 gt: 150,
                 lte: 200,
-                color: "#cc0033",
+                color: "#cc0033"
               },
               {
                 gt: 200,
                 lte: 300,
-                color: "#660099",
+                color: "#660099"
               },
               {
                 gt: 300,
-                color: "#7e0023",
-              },
+                color: "#7e0023"
+              }
             ],
             outOfRange: {
-              color: "#999",
-            },
+              color: "#999"
+            }
           },
           series: {
             name: "Beijing AQI",
@@ -267,27 +269,27 @@ export default {
               silent: true,
               data: [
                 {
-                  yAxis: 50,
+                  yAxis: 50
                 },
                 {
-                  yAxis: 100,
+                  yAxis: 100
                 },
                 {
-                  yAxis: 150,
+                  yAxis: 150
                 },
                 {
-                  yAxis: 200,
+                  yAxis: 200
                 },
                 {
-                  yAxis: 300,
-                },
-              ],
-            },
-          },
+                  yAxis: 300
+                }
+              ]
+            }
+          }
         })
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
