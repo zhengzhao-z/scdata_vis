@@ -1,7 +1,7 @@
 <template>
   <div id="container" class="bg">
 		<mySwitch></mySwitch>
-    <!-- <overView ref="overView"></overView> -->
+    <overView ref="overView"></overView>
     <detail ref="detail"></detail>
   </div>
 </template>

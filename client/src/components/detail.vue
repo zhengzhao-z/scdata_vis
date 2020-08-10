@@ -10,10 +10,10 @@
     <div id="jam">
       <div id="monitors">
         <div class="item" v-for="(item,i) in monitors" v-bind:key="i" @click="test(item.GCZBS)">
-          <span>{{ item.name }}</span>
+          <span>{{ item.GCZMC }}</span>
         </div>
       </div>
-      <div id="chart"></div>
+      <div id="chart" ref="chart"></div>
     </div>
   </div>
 </template>
@@ -37,7 +37,7 @@ export default {
         "降雪（积雪）": "#C346C2",
         "雾霾": "#F6416C",
       },
-      monitors:[{"name":"资中","GCZBS":"xxxxxxx"},{"name":"资中","GCZBS":"xxxxxxx"}]
+      monitors:[]
     };
   },
   mounted() {
@@ -66,6 +66,36 @@ export default {
     //   .then(res => {
     //     this.chartInit(res.data);
     //   });
+  },
+  computed: {
+    road() {
+      return this.$store.state.roadName;
+    },
+  },
+  watch:{
+    road(n,o){
+      if(n=="all"){
+        return;
+      }else{
+        let arr = this.$store.state.monitors;
+        this.monitors=[];
+        arr.forEach(d=>{
+          if(d.ROADCODE==n){
+            this.monitors.push(d);
+          }
+        });
+        if(this.monitors.length!=0){
+          //默认显示第一个监测站数据
+          this.$axios.post("http://localhost:3000/traffic",{
+            "id":this.monitors[0].GCZBS,
+            "date":"2019-04-30 00:00:00"
+          }).then(res=>{
+            // console.log(res.data)
+            this.chartInit(res.data[0])
+          })
+        }
+      }
+    }
   },
   methods: {
     test(e){
@@ -118,7 +148,6 @@ export default {
       });
     },
     //绘制
-    draw(data, data1) {},
     sum(arr) {
       let sum = 0;
       arr.forEach((d) => {
@@ -213,19 +242,43 @@ export default {
     },
     //echarts -- 拥堵曲线
     chartInit(data) {
-      const chartDom = this.$refs.jam;
+      console.log(data)
+      let date=[],arr=[];
+      data.forEach((d,i)=>{
+        date[i]=i;
+        let speed,gcbfb,jj,zyl;
+        speed=d.speed-40;
+        if(speed<0){
+          speed=0;
+        }else if(speed>50){
+          speed=50;
+        }
+        speed=(1-speed/50);
+        jj=d.jj;
+        if(jj>200){
+          jj=200;
+        }
+        jj=1-jj/200;
+        gcbfb=d.gcbfb/100;
+        zyl=d.zyl/10;
+        console.log(jj,gcbfb,speed,zyl)
+        arr[i]=jj*gcbfb*speed*zyl;
+      })
+      console.log(arr);
+      const chartDom = this.$refs.chart;
       this.chart = this.$echarts.init(chartDom);
       let option;
       this.chart.setOption(
         (option = {
           title: {
             text: "拥堵曲线",
+            left:20
           },
           tooltip: {
             trigger: "axis",
           },
           xAxis: {
-            data: data[1],
+            data: date,
           },
           yAxis: {
             splitLine: {
@@ -256,33 +309,29 @@ export default {
             pieces: [
               {
                 gt: 0,
-                lte: 50,
+                lte: 0.2,
                 color: "#096",
               },
               {
-                gt: 50,
-                lte: 100,
+                gt: 0.2,
+                lte: 0.4,
                 color: "#ffde33",
               },
               {
-                gt: 100,
-                lte: 150,
+                gt: 0.4,
+                lte: 0.6,
                 color: "#ff9933",
               },
               {
-                gt: 150,
-                lte: 200,
+                gt: 0.6,
+                lte: 0.8,
                 color: "#cc0033",
               },
               {
-                gt: 200,
-                lte: 300,
+                gt: 0.8,
+                lte: 1,
                 color: "#660099",
-              },
-              {
-                gt: 300,
-                color: "#7e0023",
-              },
+              }
             ],
             outOfRange: {
               color: "#999",
@@ -291,7 +340,7 @@ export default {
           series: {
             name: "Beijing AQI",
             type: "line",
-            data: data[0],
+            data: arr,
             markLine: {
               silent: true,
               data: [
@@ -316,7 +365,7 @@ export default {
         })
       );
     },
-  },
+  }
 };
 </script>
 
@@ -325,7 +374,7 @@ export default {
   height: 100%;
   width: 100%;
   position: absolute;
-  /* left: 100%; */
+  left: 100%;
   transition: all 500ms;
 }
 #jam {
@@ -339,18 +388,30 @@ export default {
 }
 #monitors{
   width: 60px;
-  height: 250px;
+  height: 300px;
   float: left;
+  overflow:scroll;
+  overflow-x: hidden;
+}
+#monitors::-webkit-scrollbar {
+  width: 3px;
+  height: 1px;
+}
+#monitors::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #c5c5c5;
+}
+#monitors::-webkit-scrollbar-track {
+  border-radius: 10px;
 }
 #chart{
   width: 435px;
   height: 300px;
   float: left;
-  border: 1px solid black;
 }
 #monitors .item{
   height: 25px;
-  width: 60px;
+  width: 55px;
   border: 1px solid black;
   border-radius: 10px;
   text-align: center;

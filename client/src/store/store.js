@@ -36,7 +36,7 @@ const dateCount = (dateArr, arr) => {
 const store = new Vuex.Store({
   state: {
     eventLieBie: null,
-    over: true, //over 和 detail切换,
+    over: true,    //over 和 detail切换,
     calendarData: {
       data: [],
       color: []
@@ -44,7 +44,9 @@ const store = new Vuex.Store({
     roadName: "all",
     calendarAllData: null,
     calendarAllRawData: null,
-    eventArea: ["all"]
+    eventArea: ["all"],
+    
+    monitors:[]   //监测站基本数据
   },
   mutations: {
     changeEventLieBie(state, events) {
@@ -184,6 +186,9 @@ const store = new Vuex.Store({
         }
       }
       state.eventArea = eventArea;
+    },
+    setMonitors(state,value){
+      state.monitors=value;
     }
   },
   actions: {

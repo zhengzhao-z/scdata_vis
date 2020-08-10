@@ -41,6 +41,15 @@ export default {
     control,
     calendar,
     container
+  },
+  mounted(){
+    //请求相关的数据
+    //1. 监测站基本数据--经纬度、名称、标识号
+    this.$axios.get("http://localhost:3000/monitor").then(res=>{
+      //写入vuex
+      this.$store.commit("setMonitors",res.data);
+    });
+    //2. 
   }
 };
 </script>
