@@ -6,6 +6,7 @@
 -->
 <template>
   <div id="detail">
+    <div id="back" @click="back">></div>
     <div id="sankey" ref="sankey"></div>
     <div id="jam">
       <div id="monitors">
@@ -365,7 +366,11 @@ export default {
         })
       );
     },
-  }
+    back(){
+      this.$store.commit('setOver',true)
+    }
+  },
+  
 };
 </script>
 
@@ -423,5 +428,26 @@ export default {
 }
 #monitors .item:hover{
   background: cornflowerblue;
+}
+#back {
+  position: absolute;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  outline: none;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 5px;
+  background: #f5f4ef;
+  color: #589ef8;
+  font-weight: 700;
+}
+#back:hover {
+  background: yellowgreen;
+  color: black;
+  width: 32px;
+  height: 32px;
 }
 </style>
