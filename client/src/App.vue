@@ -4,87 +4,52 @@
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
 -->
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
   <div id="app">
-    <!-- <traffic></traffic> -->
+    <traffic></traffic>
     <tmap></tmap>
     <calendar></calendar>
-
-    <div id="container">
-      <overView ref="overView"></overView>
-      <detail ref="detail"></detail>
-    </div>
-
-    <span class="button" @click="change" ref="button">
-      {{ this.arrow }}
-    </span>
+    <container></container>
   </div>
 </template>
 
 <script>
 // import HelloWorld from "./components/HelloWorld";
 import tmap from "./components/map";
-import overView from "./components/overView";
 import traffic from "./components/traffice";
 import control from "./components/control";
 import calendar from "./components/calendar";
-import detail from "./components/detail";
+import container from "./components/container";
+
 
 export default {
   name: "App",
   data() {
     return {
-      flag: false,
-      arrow: "<",
-      calendarMin: 0,
-      calendarMax: 0
+      arrow: "<"
     };
-  },
-  methods: {
-    getCalendarData() {
-      this.$store.dispatch("changeCalendarData", {
-        all: {
-          eventName: "all",
-          color: ["#ABDCFF", "#0396FF"],
-          flag: true
-        }
-      });
-    },
-
-    change() {
-      this.$store.commit("setOver",true);
-    }
-  },
-  mounted() {
-    this.getCalendarData();
-    console.log(this.over);
-  },
-  computed: {
-    over() {
-      return this.$store.state.over;
-    }
-  },
-  watch: {
-    over(val, nval) {
-      console.log(val, nval);
-      if (val == false) {
-        //隐藏
-        this.$refs.overView.$el.style.transform = "translateX(-600px)";
-        this.$refs.detail.$el.style.transform = "translateX(-600px)";
-      } else {
-        //显示
-        this.$refs.overView.$el.style.transform = "translateX(0px)";
-        this.$refs.detail.$el.style.transform = "translateX(0px)";
-      }
-    }
   },
   components: {
     tmap,
     traffic,
-    overView,
     control,
     calendar,
-    detail
+    container
+  },
+  mounted(){
+    //请求相关的数据
+    //1. 监测站基本数据--经纬度、名称、标识号
+    this.$axios.get("http://localhost:3000/monitor").then(res=>{
+      //写入vuex
+      this.$store.commit("setMonitors",res.data);
+    });
+    //2. 
   }
 };
 </script>
@@ -107,7 +72,7 @@ body,
 }
 .button {
   position: absolute;
-  left: 570px;
+  left: 470px;
   top: 600px;
   width: 30px;
   height: 30px;
@@ -127,11 +92,5 @@ body,
   color: black;
   width: 32px;
   height: 32px;
-}
-#container {
-  height: 75%;
-  width: 500px;
-  position: absolute;
-  overflow: hidden;
 }
 </style>

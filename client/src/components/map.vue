@@ -26,13 +26,17 @@ export default {
   computed: {
     G() {
       if (this.$store.state.eventLieBie) {
-        console.log(this.$store.state.eventLieBie);
+        let dataFilter;
         if (this.eventData) {
-          let leibie = [];
-          let dataFilter = this.eventData.filter(item => {
-            return this.$store.state.eventLieBie.includes(item.BLOCK_REASON);
-          });
-          console.log(dataFilter);
+          if (this.$store.state.eventLieBie[0] === "全部") {
+            dataFilter = this.eventData;
+          } else {
+            dataFilter = this.eventData.filter(item => {
+              return this.$store.state.eventLieBie.includes(item.BLOCK_REASON);
+            });
+          }
+
+          // console.log(dataFilter);
           return dataFilter;
         }
       } else {
