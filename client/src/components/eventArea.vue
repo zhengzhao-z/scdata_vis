@@ -14,8 +14,6 @@
 export default {
   data() {
     return {
-      value: true,
-      color: ["#123597", "#49C628", "#F8D800", "#9F44D3", "#F6416C", "#00EAFF"],
       road: [
         "G5",
         "G42",
@@ -45,7 +43,7 @@ export default {
         snowfall: "降雪（积雪）",
         smog: "雾霾",
       },
-      order: [],
+      order: [] //事件
     };
   },
   computed: {
@@ -163,9 +161,13 @@ export default {
           .attr("fill", "#409EFF")
           .text(this.road[i])
           .on("click", (d) => {
-            //todo
+            //todo 
             this.$store.commit("setOver", false);
             this.$store.commit("changeRoadName", this.road[i]);
+            //todo 判断选择的路 刷新detail 
+            //请求 监测站列表
+            //sankey
+            
           })
           .style("cursor", "pointer");
         g.append("g")

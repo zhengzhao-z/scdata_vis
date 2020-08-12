@@ -1,3 +1,9 @@
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
   <div class="bubbleChart"></div>
 </template>
@@ -86,59 +92,6 @@ export default {
           });
         index++;
       }
-
-    
-      // g.selectAll("text")
-      //   .data(this.legendName)
-      //   .enter()
-      //   .append("text")
-      //   .attr("y", (d, i) => {
-      //     return 15;
-      //   })
-      //   .attr("x", (d, i) => {
-      //     return i * 60;
-      //   })
-      //   .attr("dx", (d, i) => {
-      //     switch (d) {
-      //       case "speed0_60":
-      //         return 5;
-      //         break;
-      //       case "speed61_80":
-      //         return 8;
-      //         break;
-      //       case "speed81_100":
-      //         return 5;
-      //         break;
-      //       case "speed101_120":
-      //         return 2;
-      //         break;
-      //       default:
-      //         return 10;
-      //         break;
-      //     }
-      //   })
-      //   .style("text-algin", "center")
-      //   .attr("font-size", "14px")
-      //   .text(function (d) {
-      //     console.log(d);
-      //     switch (d) {
-      //       case "speed0_60":
-      //         return "00-60";
-      //         break;
-      //       case "speed61_80":
-      //         return "61-80";
-      //         break;
-      //       case "speed81_100":
-      //         return "81-100";
-      //         break;
-      //       case "speed101_120":
-      //         return "101-120";
-      //         break;
-      //       default:
-      //         return "120+";
-      //         break;
-      //     }
-      //   });
     },
   },
 };

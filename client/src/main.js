@@ -16,6 +16,7 @@ import axios from "axios";
 import * as d3 from "d3";
 import store from "./store/store";
 import Echart from "echarts";
+
 Vue.use(ElementUI);
 
 Vue.prototype.$axios = axios;

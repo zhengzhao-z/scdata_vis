@@ -18,11 +18,11 @@ export default {
     },
     mounted(){
         this.$axios.post("http://localhost:3000/traffic",{
-            "id":"51000020160508E7AE547BFDE3890F30",
+            "id":"51000020160504B7B7DE9BC2D5680D2C",
             "date":"2019-04-30 00:00:00"
         }).then(res=>{
             let data = res.data;
-            this.process(data);
+            this.draw(data);
         });
         let color = d3.scaleLinear()
             .domain([0, 0.5, 1])
@@ -139,18 +139,10 @@ export default {
             return [speed,speed_counter]
         },
         //绘制
-        draw(sx,xx){
-            let data = Object.entries(sx);
-            let data1 = Object.entries(xx);
-            let a = [];
-           for(let i=0;i<data.length;i++){
-               if(data[i][1].zly_counter){
-                   a.push(data[i][1].zly/data[i][1].zly_counter)
-               }else{
-                   a.push(0)
-               }
-               
-           }    
+        draw(data){
+            let sx = data[0];
+            let xx = data[1];
+            let a = [];   
             const svg = d3.select(this.$el)
                 .append("svg")
                 .attr("style","width:800px;height:400px")
@@ -159,35 +151,35 @@ export default {
             //上行速度
             svg.append("g")
                 .selectAll("rect")
-                .data(data)
+                .data(sx)
                 .enter()
                 .append("rect")
                 .attr("x",(d,i)=>parseInt(i/12)*13)
                 .attr("y",(d,i)=>(i%12)*9)
                 .attr("width",12)
                 .attr("height",8)
-                .attr("fill",d=>this.color(this.scale(d[1].speed/d[1].speed_counter)))
+                .attr("fill",d=>this.color(this.scale(d.speed)))
                 .append("title")
-                    .text(d=>d[1].speed/d[1].speed_counter);
+                    .text(d=>d.speed);
             //下行速度
             svg.append("g")
                 .attr("transform","translate(315,0)")
                 .selectAll("rect")
-                .data(data1)
+                .data(sx)
                 .enter()
                 .append("rect")
                 .attr("x",(d,i)=>parseInt(i/12)*13)
                 .attr("y",(d,i)=>(i%12)*9)
                 .attr("width",12)
                 .attr("height",8)
-                .attr("fill",d=>this.color(this.scale(d[1].speed/d[1].speed_counter)))
+                .attr("fill",d=>this.color(this.scale(d.speed)))
                 .append("title")
-                    .text(d=>d[1].speed/d[1].speed_counter);
+                    .text(d=>d.speed);
             //上行跟车百分比
             svg.append("g")
                 .attr("transform","translate(0,113)")
                 .selectAll("rect")
-                .data(data)
+                .data(xx)
                 .enter()
                 .append("rect")
                 .attr("x",(d,i)=>parseInt(i/12)*13)
@@ -195,18 +187,15 @@ export default {
                 .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>{
-                    if(d[1].gcbfb_counter){
-                        return this.color1(d[1].gcbfb/d[1].gcbfb_counter)
-                    }
-                    return this.color1(0)
+                    return this.color1(d.gcbfb)
                 })
                 .append("title")
-                    .text(d=>d[1].gcbfb/d[1].gcbfb_counter);
+                    .text(d=>d.gcbfb);
             //下行跟车百分比
             svg.append("g")
                 .attr("transform","translate(315,113)")
                 .selectAll("rect")
-                .data(data1)
+                .data(xx)
                 .enter()
                 .append("rect")
                 .attr("x",(d,i)=>parseInt(i/12)*13)
@@ -214,15 +203,10 @@ export default {
                 .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>{
-                    if(d[1].gcbfb_counter){
-                        return this.color1(d[1].gcbfb/d[1].gcbfb_counter)
-                    }
-                    return this.color1(0)
+                    return this.color1(d.gcbfb)
                 })
                 .append("title")
-                    .text(d=>d[1].gcbfb/d[1].gcbfb_counter);
-
-                
+                    .text(d=>d.gcbfb);
         }
 
     }
