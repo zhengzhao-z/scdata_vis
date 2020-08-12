@@ -382,7 +382,6 @@ export default {
   right: 0px;
   top: 0px;
   transition: all 500ms;
-  border: 1px solid black;
 }
 #jam {
   width: 100%;
