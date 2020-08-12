@@ -134,12 +134,12 @@ export default {
     draw(data,max) {
       let svg = this.svg;
       svg.selectAll("g").remove();
-      let scale = d3.scaleLinear().domain([0, max]).range([120, 0]); //算最大值
+      let scale = d3.scaleLinear().domain([0, max]).range([105, 0]); //算最大值
       let area = d3
         .area()
         .curve(d3.curveCardinal)
         .x((d, i) => {
-          return i * 10 + 15;
+          return i * 9 + 10;
         })
         .y0((d) =>scale(d[0]))
         .y1((d) => scale(d[1]));
@@ -147,7 +147,7 @@ export default {
         let arr = data[i];
         let g = svg
           .append("g")
-          .attr("transform", "translate(0," + i * 142 + ")");
+          .attr("transform", "translate(0," + i * 110 + ")");
         g.selectAll("path")
           .data(arr)
           .join("path")
@@ -155,6 +155,7 @@ export default {
             return this.color1[key]
           })
           .attr("d", area);
+        // continue
         g.append("text")
           .attr("x", 20)
           .attr("y", 30)
@@ -175,10 +176,27 @@ export default {
           .data([0, 8, 16])
           .enter()
           .append("text")
-          .attr("x", (d) => d * 10 + 15)
-          .attr("y", 142)
+          .attr("x", (d) => d * 9 + 10)
+          .attr("y", 116)
           .attr("font-size", "12")
           .text((d) => d);
+        g.append("text")
+          .attr("x",215)
+          .attr("y",116)
+          .attr("font-size", "12")
+          .text("(时)");
+        g.append("text")
+          .attr("font-size", "11")
+          .attr("x",210)
+          .attr("y",scale(parseInt(max))+25)
+          .text("Max："+parseInt(max));
+        g.append("line")
+          .attr("x1",10)
+          .attr("x2",217)
+          .attr("y1",105)
+          .attr("y2",105)
+          .attr("stroke","#aaa")
+          .attr("stroke-width",0.5)
       }
     },
     //数组求和

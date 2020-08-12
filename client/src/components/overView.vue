@@ -6,9 +6,9 @@
 -->
 <template>
   <div id="overview" class="bg">
-    <div id="charName">
+    <!-- <div id="charName">
       <h3>道路阻断事件面积图/速度比例图</h3>
-    </div>
+    </div> -->
     <div id="scrollbar">
       <div id="roadAccident">
         <eventArea></eventArea>
@@ -40,14 +40,10 @@ export default {
 
 <style scoped>
 #overview {
-  height: 800px;
+  height: calc(100% - 250px);
   width: 450px;
   position: absolute;
   transition: all 500ms;
-}
-#control {
-  height: 100px;
-  width: 100%;
 }
 .el-switch {
   /* display: block; */
@@ -55,13 +51,13 @@ export default {
   width: 150px;
 }
 #roadAccident {
-  flex: 1;
+  flex: 1.5;
 }
 #roadSpeed {
   flex: 1;
 }
 #scrollbar {
-  height: calc(100% - 100px);
+  height: 100%;
   overflow: scroll;
   overflow-x: hidden;
   position: absolute;

@@ -148,6 +148,7 @@ export default {
 <style scoped>
   #mySwitch{
     width: 500px;
+    height: 50px;
   }
   .el-switch{
     width: 150px;

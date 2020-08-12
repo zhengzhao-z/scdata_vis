@@ -12,6 +12,7 @@
     <mySwitch></mySwitch>
     <overView></overView>
     <detail></detail>
+    <sankey></sankey>
   </div>
 </template>
 
@@ -25,6 +26,7 @@ import container from "./components/container";
 import overView from "./components/overView";
 import detail from "./components/detail";
 import mySwitch from "./components/mySwitch";
+import sankey from "./components/sankey"
 
 
 export default {
@@ -42,7 +44,8 @@ export default {
     container,
     overView,
     detail,
-    mySwitch
+    mySwitch,
+    sankey
   },
   mounted(){
     //请求相关的数据
