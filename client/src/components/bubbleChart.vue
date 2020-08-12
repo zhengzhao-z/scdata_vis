@@ -32,10 +32,10 @@ export default {
       const option = {
         title: {
           text: "道路速度特征",
-          right: "0",
+          right: "-5",
           top: "20",
           textStyle: {
-            fontSize: "16"
+            fontSize: "15"
           }
         },
         legend: {
@@ -52,7 +52,7 @@ export default {
           formatter: function(name) {
             switch (name) {
               case "speed0_60":
-                return 60;
+                return "60-";
               case "speed61_80":
                 return "61-80";
               case "speed81_100":
@@ -257,11 +257,11 @@ export default {
 
 <style scoped>
 .bubbleChart {
-  width: 223px;
+  width: 200px;
   height: 994px;
   display: flex;
 }
 .bubbleChart > div {
-  width: 223px;
+  width: 200px;
 }
 </style>

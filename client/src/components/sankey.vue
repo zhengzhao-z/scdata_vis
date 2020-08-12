@@ -165,6 +165,6 @@ export default {
   height: 300px;
   position: absolute;
   bottom: 0px;
-  left: 450px;
+  left: 500px;
 }
 </style>

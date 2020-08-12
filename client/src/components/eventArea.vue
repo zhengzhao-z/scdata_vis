@@ -171,6 +171,7 @@ export default {
             
           })
           .style("cursor", "pointer");
+        
         g.append("g")
           .selectAll("text")
           .data([0, 8, 16])
@@ -180,11 +181,13 @@ export default {
           .attr("y", 116)
           .attr("font-size", "12")
           .text((d) => d);
+        
         g.append("text")
           .attr("x",215)
           .attr("y",116)
           .attr("font-size", "12")
           .text("(时)");
+        
         g.append("text")
           .attr("font-size", "11")
           .attr("x",210)
