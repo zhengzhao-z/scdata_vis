@@ -74,9 +74,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: -850,
+            top: -880,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -98,9 +98,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: -580,
+            top: -660,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -122,9 +122,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: -300,
+            top: -430,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -146,9 +146,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: 0,
+            top: -215,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -170,9 +170,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: 280,
+            top: 0,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -194,9 +194,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: 550,
+            top: 230,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -218,9 +218,9 @@ export default {
           {
             name: "访问来源",
             type: "pie",
-            top: 850,
+            top: 460,
             left: -80,
-            radius: [40, 60],
+            radius: [30, 50],
             avoidLabelOverlap: false,
             label: {
               show: false,
