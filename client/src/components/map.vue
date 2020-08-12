@@ -54,17 +54,17 @@ export default {
     getEventData() {
       // this.$axios.get("http://localhost:3000/heatmap").then(res => {
       // });
-      this.$axios.get("../../static/event.json").then(res => {
+      this.$axios.get("../../static/eventAll2.json").then(res => {
         this.eventData = res.data;
       });
     },
     mapInit() {
       let map = new T.Map("tmap");
-      map.centerAndZoom(new T.LngLat(99.902684, 30.570922), 7);
+      map.centerAndZoom(new T.LngLat(104.563148, 29.428819), 7);
       this.map = map;
       this.map.enableScrollWheelZoom();
-      this.map.setMinZoom(7);
-      this.map.setMaxZoom(10);
+      this.map.setMinZoom(6);
+      this.map.setMaxZoom(7);
     },
     heatmapInit(arr) {
       if (this.heatmapOverlay) {
@@ -72,14 +72,30 @@ export default {
       }
       this.heatmapOverlay = new T.HeatmapOverlay({
         radius: 10
+        // gradient: {
+        //   0.2: "blue",
+        //   0.5: "#f0fb5a",
+        //   0.8: "#eb3323"
+        // }
         //这里改热力图渐变颜色
       });
       let count = 4;
+      let max = 0;
       if (!arr) {
         return;
       }
-      if (arr.length < 1000) {
-        count = 10;
+      if (arr.length < 2000) {
+        console.log(arr.length);
+        count = 20;
+      } else if (arr.length < 1000) {
+        console.log(arr.length);
+        count = 40;
+      } else if (arr.length < 500) {
+        console.log(arr.length);
+        count = 50;
+      } else if (arr.length < 100) {
+        console.log(arr.length);
+        count = 60;
       }
       let points = [];
       for (let i = 0; i < arr.length; i++) {
@@ -91,7 +107,7 @@ export default {
       }
 
       this.map.addOverLay(this.heatmapOverlay);
-      this.heatmapOverlay.setDataSet({ data: points, max: 300 });
+      this.heatmapOverlay.setDataSet({ data: points, max: 250 });
     },
     mapOutlineInit() {
       this.$axios.get("../../static/四川省轮廓.json").then(res => {
