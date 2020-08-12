@@ -14,7 +14,7 @@
           <span>{{ item.GCZMC }}</span>
         </div>
       </div>
-      <div id="chart" ref="chart"></div>
+      <!-- <div id="chart" ref="chart"></div> -->
     </div>
   </div>
 </template>
@@ -43,25 +43,25 @@ export default {
   },
   mounted() {
     //基本初始化
-    let sankey = d3
-      .sankey()
-      .nodeId((d) => d.name)
-      .nodeWidth(12)
-      .nodePadding(20)
-      .size([380, 300]);
-    this.sankey = sankey;
-    this.sankeySvg = d3
-      .select(this.$refs.sankey)
-      .append("svg")
-      .attr("width", 500)
-      .attr("height", 350);
-    this.$axios
-      .post("http://localhost:3000/detail", {
-        road: "G5",
-      })
-      .then((res) => {
-        this.process(res.data);
-      });
+    // let sankey = d3
+    //   .sankey()
+    //   .nodeId((d) => d.name)
+    //   .nodeWidth(12)
+    //   .nodePadding(20)
+    //   .size([380, 300]);
+    // this.sankey = sankey;
+    // this.sankeySvg = d3
+    //   .select(this.$refs.sankey)
+    //   .append("svg")
+    //   .attr("width", 500)
+    //   .attr("height", 350);
+    // this.$axios
+    //   .post("http://localhost:3000/detail", {
+    //     road: "G5",
+    //   })
+    //   .then((res) => {
+    //     this.process(res.data);
+    //   });
     // this.$axios
     //   .get("./static/block_51000020120412204940202000110105.json")
     //   .then(res => {
