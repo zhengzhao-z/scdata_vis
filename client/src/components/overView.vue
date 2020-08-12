@@ -17,7 +17,6 @@
         <bubbleChart></bubbleChart>
       </div>
     </div>
-    <div id="legend" ref="legend"></div>
   </div>
 </template>
 
@@ -31,65 +30,11 @@ export default {
     bubbleChart
   },
   data() {
-    return {
-      color: ["#123597", "#49C628", "#F8D800", "#9F44D3", "#F6416C", "#00EAFF"],
-      legendName: ["00-60", "61-80", "81-100", "101-120", "120+"]
-    };
+    return {};
   },
 
-  mounted() {
-    this.legenChartInit();
-  },
-  methods: {
-    legenChartInit() {
-      //legend
-      let svg = d3
-        .select(this.$refs.legend)
-        .append("svg")
-        .attr("height", 200)
-        .attr("width", 80);
-      svg
-        .append("g")
-        .selectAll("rect")
-        .data(this.legendName)
-        .enter()
-        .append("rect")
-        .attr("width", 55)
-        .attr("height", 20)
-        .attr("ry", 10)
-        .attr("x", 0)
-        .attr("y", (d, i) => {
-          return i * 30;
-        })
-        .attr("fill", (d, i) => {
-          return this.color[i];
-        });
-      svg
-        .append("g")
-        .selectAll("text")
-        .data(this.legendName)
-        .enter()
-        .append("text")
-        .attr("x", 0)
-        .attr("dx", (d, i) => {
-          if (i == 0 || i == 1) {
-            return 10;
-          } else if (i == 2) {
-            return 5;
-          } else if (i == 3) {
-            return 1;
-          } else if (i == 4) {
-            return 10;
-          }
-        })
-        .attr("y", (d, i) => {
-          return i * 30 + 15;
-        })
-        .attr("font-size", "13px")
-        .text(d => d)
-        .attr("fill", "white");
-    }
-  }
+  mounted() {},
+  methods: {}
 };
 </script>
 
