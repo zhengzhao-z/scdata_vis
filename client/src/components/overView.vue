@@ -4,6 +4,12 @@
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
 -->
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
   <div id="overview" class="bg">
     <!-- <div id="charName">
@@ -41,7 +47,7 @@ export default {
 <style scoped>
 #overview {
   height: calc(100% - 250px);
-  width: 450px;
+  width: 500px;
   position: absolute;
   transition: all 500ms;
 }
@@ -51,10 +57,10 @@ export default {
   width: 150px;
 }
 #roadAccident {
-  flex: 1.5;
+  /* width:270px; */
 }
 #roadSpeed {
-  flex: 1;
+  /* width:200px; */
 }
 #scrollbar {
   height: 100%;
