@@ -14,14 +14,16 @@ export default {
     return {
       map: {},
       eventData: null,
-      heatmapOverlay: null
+      heatmapOverlay: null,
+      riskLine: null
     };
   },
   mounted() {
-    this.getEventData();
+    this.getEventData(this.drawRiskLine);
     this.mapInit();
     this.mapOutlineInit();
     this.drawMonitor();
+    this.drawRiskLine();
   },
   computed: {
     G() {
@@ -47,15 +49,19 @@ export default {
   watch: {
     G(newValue, oldValue) {
       console.log("重新绘制");
-      this.heatmapInit(newValue);
+      // this.heatmapInit(newValue);
     }
   },
   methods: {
-    getEventData() {
+    getEventData(callback) {
       // this.$axios.get("http://localhost:3000/heatmap").then(res => {
       // });
       this.$axios.get("../../static/eventAll2.json").then(res => {
         this.eventData = res.data;
+      });
+      this.$axios.get("../../static/G5_risk_line.json").then(res => {
+        this.riskLine = res.data;
+        callback();
       });
     },
     mapInit() {
@@ -64,7 +70,7 @@ export default {
       this.map = map;
       this.map.enableScrollWheelZoom();
       this.map.setMinZoom(6);
-      this.map.setMaxZoom(7);
+      this.map.setMaxZoom(10);
     },
     heatmapInit(arr) {
       if (this.heatmapOverlay) {
@@ -165,6 +171,24 @@ export default {
           this.map.addOverLay(marker);
         }
       });
+    },
+    drawRiskLine() {
+      console.log(this.riskLine);
+
+      for (let item of this.riskLine) {
+        let color = item.lineStyle.normal.color;
+        let coords = item.coords;
+        let dataArr = [];
+        for (let i = 0; i < coords.length; i++) {
+          dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+        }
+        let line = new T.Polyline(dataArr, {
+          weight: 10,
+          opacity: 0.7,
+          color: color
+        });
+        this.map.addOverLay(line); // 绘制线到地图上
+      }
     }
   }
 };
