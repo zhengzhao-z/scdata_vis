@@ -33,7 +33,7 @@ export default {
         legend: {
           orient: "vertical",
           right: "0",
-          top: "30%",
+          top: "58%",
           data: [
             "speed0_60",
             "speed61_80",
@@ -63,7 +63,13 @@ export default {
             return str;
           }
         },
-        color: ["#e575bc", "#5eb1e9", "#94f3f7", "#fdef7b", "#f4b191"],
+        color: [
+          "rgb(207,59,44)",
+          "rgb(252,220,33)",
+          "#348b7b",
+          "#758b34",
+          "rgb(52,139,68)"
+        ],
         series: [
           {
             name: "访问来源",
