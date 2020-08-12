@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="mySwitch" class="bg">
     <el-switch v-model="all" active-text="全部" @change="trigger1"></el-switch>
     <el-switch
       v-model="vehicleAccident"
@@ -145,4 +145,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  #mySwitch{
+    width: 500px;
+  }
+  .el-switch{
+    width: 150px;
+    margin-left: 10px;
+  }
+</style>

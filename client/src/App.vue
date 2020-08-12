@@ -4,18 +4,14 @@
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
 -->
-<!--
- * @Description: 
- * @version: 0.1
- * @Author: zhengzhao
- * @LastEditor: zhengzhao
--->
 <template>
   <div id="app">
     <traffic></traffic>
     <tmap></tmap>
     <calendar></calendar>
-    <container></container>
+    <mySwitch></mySwitch>
+    <overView></overView>
+    <detail></detail>
   </div>
 </template>
 
@@ -26,6 +22,9 @@ import traffic from "./components/traffice";
 import control from "./components/control";
 import calendar from "./components/calendar";
 import container from "./components/container";
+import overView from "./components/overView";
+import detail from "./components/detail";
+import mySwitch from "./components/mySwitch";
 
 
 export default {
@@ -40,7 +39,10 @@ export default {
     traffic,
     control,
     calendar,
-    container
+    container,
+    overView,
+    detail,
+    mySwitch
   },
   mounted(){
     //请求相关的数据
@@ -49,7 +51,8 @@ export default {
       //写入vuex
       this.$store.commit("setMonitors",res.data);
     });
-    //2. 
+    //2. 日历数据
+    this.$store.dispatch("changeCalendarAllData");
   }
 };
 </script>

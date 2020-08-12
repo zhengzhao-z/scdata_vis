@@ -5,7 +5,7 @@
  * @LastEditor: zhengzhao
 -->
 <template>
-  <div id="overview">
+  <div id="overview" class="bg">
     <div id="charName">
       <h3>道路阻断事件面积图/速度比例图</h3>
     </div>
@@ -95,8 +95,8 @@ export default {
 
 <style scoped>
 #overview {
-  height: 100%;
-  width: 100%;
+  height: 800px;
+  width: 450px;
   position: absolute;
   transition: all 500ms;
 }

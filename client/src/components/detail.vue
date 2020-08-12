@@ -5,7 +5,7 @@
  * @LastEditor: zhengzhao
 -->
 <template>
-  <div id="detail">
+  <div id="detail" class="bg">
     <div id="back" @click="back">></div>
     <div id="sankey" ref="sankey"></div>
     <div id="jam">
@@ -377,10 +377,12 @@ export default {
 <style scoped>
 #detail {
   height: 100%;
-  width: 100%;
+  width: 350px;
   position: absolute;
-  left: 100%;
+  right: 0px;
+  top: 0px;
   transition: all 500ms;
+  border: 1px solid black;
 }
 #jam {
   width: 100%;
