@@ -33,12 +33,28 @@ export default {
       const roadName = this.$store.state.roadName;
       console.log(eventLieBie);
       console.log(roadName);
+
       if (eventLieBie && roadName === "all") {
         let dataFilter;
+        let result = [];
+        let max = 0;
         if (this.eventData) {
           if (eventLieBie[0] === "全部") {
+            // let testData = this.eventFilterData;
+            // for (const key in testData) {
+            //   const road = testData[key];
+            //   for (const subKey in road) {
+            //     const event = road[subKey];
+            //     result.push(...event.data);
+            //     if (max < event.max) {
+            //       max = event.max;
+            //     }
+            //   }
+            // }
+            // this.maxCount = max;
             dataFilter = this.eventData;
           } else {
+            
             dataFilter = this.eventData.filter(item => {
               return eventLieBie.includes(item.BLOCK_REASON);
             });
@@ -48,8 +64,8 @@ export default {
         }
       } else {
         let dataFilter = this.eventFilterData[roadName];
-        if (!dataFilter){
-          return []
+        if (!dataFilter) {
+          return [];
         }
         let result = [];
         let max = 0;
@@ -65,7 +81,7 @@ export default {
         } else {
           for (let i = 0; i < eventLieBie.length; i++) {
             const eventName = eventLieBie[i];
-            console.log(dataFilter[eventName])
+            console.log(dataFilter[eventName]);
             if (!dataFilter[eventName]) continue;
             const singleEvent = dataFilter[eventName].data;
             result.push(...singleEvent);
@@ -146,7 +162,7 @@ export default {
           count: arr[i].count || count
         });
       }
-      let max = this.maxCount || 250;
+      let max = this.maxCount || 262;
       this.map.addOverLay(this.heatmapOverlay);
       this.heatmapOverlay.setDataSet({ data: points, max });
     },
