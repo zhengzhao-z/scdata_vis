@@ -28,7 +28,6 @@ export default {
     },
     initChart() {
       const chart = this.$echarts.init(this.$refs.bubbleChart);
-      console.log(this.data);
       const option = {
         title: {
           text: "道路速度特征",

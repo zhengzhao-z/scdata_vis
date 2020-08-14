@@ -243,7 +243,7 @@ export default {
     },
     //echarts -- 拥堵曲线
     chartInit(data) {
-      console.log(data)
+      // console.log(data)
       let date=[],arr=[];
       data.forEach((d,i)=>{
         date[i]=i;
@@ -262,10 +262,10 @@ export default {
         jj=1-jj/200;
         gcbfb=d.gcbfb/100;
         zyl=d.zyl/10;
-        console.log(jj,gcbfb,speed,zyl)
+        // console.log(jj,gcbfb,speed,zyl)
         arr[i]=jj*gcbfb*speed*zyl;
       })
-      console.log(arr);
+      // console.log(arr);
       const chartDom = this.$refs.chart;
       this.chart = this.$echarts.init(chartDom);
       let option;

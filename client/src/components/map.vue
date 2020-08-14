@@ -15,41 +15,74 @@ export default {
       map: {},
       eventData: null,
       heatmapOverlay: null,
-      riskLine: null
+      riskLine: null,
+      eventFilterData: null,
+      maxCount: 0
     };
   },
   mounted() {
-    this.getEventData(this.drawRiskLine);
+    this.getEventData();
     this.mapInit();
     this.mapOutlineInit();
     this.drawMonitor();
-    this.drawRiskLine();
+    // this.drawRiskLine();
   },
   computed: {
     G() {
-      if (this.$store.state.eventLieBie) {
+      const eventLieBie = this.$store.state.eventLieBie;
+      const roadName = this.$store.state.roadName;
+      console.log(eventLieBie);
+      console.log(roadName);
+      if (eventLieBie && roadName === "all") {
         let dataFilter;
         if (this.eventData) {
-          if (this.$store.state.eventLieBie[0] === "全部") {
+          if (eventLieBie[0] === "全部") {
             dataFilter = this.eventData;
           } else {
             dataFilter = this.eventData.filter(item => {
-              return this.$store.state.eventLieBie.includes(item.BLOCK_REASON);
+              return eventLieBie.includes(item.BLOCK_REASON);
             });
           }
-
-          // console.log(dataFilter);
+          // console.log(dataFilter)
           return dataFilter;
         }
       } else {
-        return this.eventData;
+        let dataFilter = this.eventFilterData[roadName];
+        let result = [];
+        let max = 0;
+        if (eventLieBie[0] === "全部") {
+          for (let key in dataFilter) {
+            let singleEvent = dataFilter[key].data;
+            result.push(...singleEvent);
+            if (max < dataFilter[key].max) {
+              max = dataFilter[key].max;
+            }
+          }
+          this.maxCount = max;
+
+          return result;
+        } else {
+          let result = [];
+          let max = 0;
+          for (let i = 0; i < eventLieBie.length; i++) {
+            
+            const eventName = eventLieBie[i];
+            const singleEvent = dataFilter[eventName].data;
+            result.push(...singleEvent);
+            if (max < dataFilter[eventName].max) {
+              max = dataFilter[eventName].max;
+            }
+          }
+          this.maxCount = max;
+          return result;
+        }
       }
     }
   },
   watch: {
     G(newValue, oldValue) {
       console.log("重新绘制");
-      // this.heatmapInit(newValue);
+      this.heatmapInit(newValue);
     }
   },
   methods: {
@@ -59,9 +92,12 @@ export default {
       this.$axios.get("../../static/eventAll2.json").then(res => {
         this.eventData = res.data;
       });
+      this.$axios.get("../../static/road_event.json").then(res => {
+        this.eventFilterData = res.data;
+      });
       this.$axios.get("../../static/G5_risk_line.json").then(res => {
         this.riskLine = res.data;
-        callback();
+        callback && callback();
       });
     },
     mapInit() {
@@ -86,7 +122,6 @@ export default {
         //这里改热力图渐变颜色
       });
       let count = 4;
-      let max = 0;
       if (!arr) {
         return;
       }
@@ -108,12 +143,12 @@ export default {
         points.push({
           lat: arr[i].latitude,
           lng: arr[i].longitude,
-          count: count
+          count: arr[i].count || count
         });
       }
-
+      let max = this.maxCount || 250;
       this.map.addOverLay(this.heatmapOverlay);
-      this.heatmapOverlay.setDataSet({ data: points, max: 250 });
+      this.heatmapOverlay.setDataSet({ data: points, max });
     },
     mapOutlineInit() {
       this.$axios.get("../../static/四川省轮廓.json").then(res => {
@@ -173,21 +208,21 @@ export default {
       });
     },
     drawRiskLine() {
-      console.log(this.riskLine);
-
-      for (let item of this.riskLine) {
-        let color = item.lineStyle.normal.color;
-        let coords = item.coords;
-        let dataArr = [];
-        for (let i = 0; i < coords.length; i++) {
-          dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+      if (this.riskLine) {
+        for (let item of this.riskLine) {
+          let color = item.lineStyle.normal.color;
+          let coords = item.coords;
+          let dataArr = [];
+          for (let i = 0; i < coords.length; i++) {
+            dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+          }
+          let line = new T.Polyline(dataArr, {
+            weight: 10,
+            opacity: 0.7,
+            color: color
+          });
+          this.map.addOverLay(line); // 绘制线到地图上
         }
-        let line = new T.Polyline(dataArr, {
-          weight: 10,
-          opacity: 0.7,
-          color: color
-        });
-        this.map.addOverLay(line); // 绘制线到地图上
       }
     }
   }

@@ -35,7 +35,7 @@ const dateCount = (dateArr, arr) => {
 };
 const store = new Vuex.Store({
   state: {
-    eventLieBie: null,
+    eventLieBie: ['全部'],
     over: true,    //over 和 detail切换,
     calendarData: {
       data: [],
@@ -131,7 +131,7 @@ const store = new Vuex.Store({
             if (params.hasOwnProperty(key)) {
               const element = params[key];
               if (key === "all" && element.flag === true) {
-                console.log(element.eventNameCN);
+                // console.log(element.eventNameCN);
                 const arr = state.calendarAllRawData.filter(item => {
                   if (item.road === state.roadName) {
                     return true;
