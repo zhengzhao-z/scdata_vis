@@ -48,6 +48,9 @@ export default {
         }
       } else {
         let dataFilter = this.eventFilterData[roadName];
+        if (!dataFilter){
+          return []
+        }
         let result = [];
         let max = 0;
         if (eventLieBie[0] === "全部") {
@@ -59,14 +62,11 @@ export default {
             }
           }
           this.maxCount = max;
-
-          return result;
         } else {
-          let result = [];
-          let max = 0;
           for (let i = 0; i < eventLieBie.length; i++) {
-            
             const eventName = eventLieBie[i];
+            console.log(dataFilter[eventName])
+            if (!dataFilter[eventName]) continue;
             const singleEvent = dataFilter[eventName].data;
             result.push(...singleEvent);
             if (max < dataFilter[eventName].max) {
@@ -74,8 +74,8 @@ export default {
             }
           }
           this.maxCount = max;
-          return result;
         }
+        return result;
       }
     }
   },
