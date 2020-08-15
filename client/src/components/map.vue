@@ -32,8 +32,8 @@ export default {
     heatMap() {
       const eventLieBie = this.$store.state.eventLieBie;
       const roadName = this.$store.state.roadName;
-      console.log(eventLieBie);
-      console.log(roadName);
+      // console.log(eventLieBie);
+      // console.log(roadName);
 
       if (eventLieBie && roadName === "all") {
         let dataFilter;
@@ -136,6 +136,7 @@ export default {
     },
     heatmapInit(arr) {
       if (!this.riskIsShow) {
+         this.map.clearOverLays()
         if (this.heatmapOverlay) {
           this.map.removeOverLay(this.heatmapOverlay);
         }
@@ -237,9 +238,7 @@ export default {
     },
     drawRiskLine() {
       if (this.riskIsShow && this.riskLineData) {
-        if (this.heatmapOverlay) {
-          this.map.removeOverLay(this.heatmapOverlay);
-        }
+        this.map.clearOverLays()
         for (let item of this.riskLineData) {
           let color = item.lineStyle.normal.color;
           let coords = item.coords;
