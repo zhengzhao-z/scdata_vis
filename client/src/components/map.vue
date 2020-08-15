@@ -29,6 +29,10 @@ export default {
     // this.drawRiskLine();
   },
   computed: {
+    riskRoadName(){
+      return this.$store.state.roadName
+
+    },
     heatMap() {
       const eventLieBie = this.$store.state.eventLieBie;
       const roadName = this.$store.state.roadName;
@@ -81,7 +85,6 @@ export default {
         } else {
           for (let i = 0; i < eventLieBie.length; i++) {
             const eventName = eventLieBie[i];
-            console.log(dataFilter[eventName]);
             if (!dataFilter[eventName]) continue;
             const singleEvent = dataFilter[eventName].data;
             result.push(...singleEvent);
@@ -106,9 +109,12 @@ export default {
     riskIsShow(newValue, oldValue) {
       if (newValue) {
         this.drawRiskLine();
-      }else {
-        this.heatmapInit(this.eventData)
+      } else {
+        this.heatmapInit(this.eventData);
       }
+    },
+    riskRoadName(){
+      this.drawRiskLine();
     }
   },
   methods: {
@@ -121,7 +127,8 @@ export default {
       this.$axios.get("../../static/road_event.json").then(res => {
         this.eventFilterData = res.data;
       });
-      this.$axios.get("../../static/G5_risk_line.json").then(res => {
+      this.$axios.get("../../static/riskRoadData.json").then(res => {
+        // console.log(res.data)
         this.riskLineData = res.data;
         callback && callback();
       });
@@ -136,7 +143,7 @@ export default {
     },
     heatmapInit(arr) {
       if (!this.riskIsShow) {
-         this.map.clearOverLays()
+        this.map.clearOverLays();
         if (this.heatmapOverlay) {
           this.map.removeOverLay(this.heatmapOverlay);
         }
@@ -238,20 +245,52 @@ export default {
     },
     drawRiskLine() {
       if (this.riskIsShow && this.riskLineData) {
-        this.map.clearOverLays()
-        for (let item of this.riskLineData) {
-          let color = item.lineStyle.normal.color;
-          let coords = item.coords;
-          let dataArr = [];
-          for (let i = 0; i < coords.length; i++) {
-            dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+        this.map.clearOverLays();
+        if (this.$store.state.roadName === "all") {
+          for (let i = 0; i < this.riskLineData.length; i++) {
+            let singleRiskLine = this.riskLineData[i];
+            singleRiskLine = Object.values(singleRiskLine)[0];
+            console.log(singleRiskLine);
+            for (let item of singleRiskLine) {
+              let color = item.lineStyle.normal.color;
+              let coords = item.coords;
+              let dataArr = [];
+
+              for (let i = 0; i < coords.length; i++) {
+                dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+              }
+              let riskLine = new T.Polyline(dataArr, {
+                weight: 5,
+                opacity: 0.7,
+                color: color
+              });
+              this.map.addOverLay(riskLine); // 绘制线到地图上
+              console.log("绘制了")
+            }
           }
-          let riskLine = new T.Polyline(dataArr, {
-            weight: 5,
-            opacity: 0.7,
-            color: color
-          });
-          this.map.addOverLay(riskLine); // 绘制线到地图上
+        } else {
+          for (let i = 0; i < this.riskLineData.length; i++) {
+            let singleRiskLine = this.riskLineData[i];
+            let singleRiskLineName = Object.keys(singleRiskLine)[0];
+            singleRiskLine = Object.values(singleRiskLine)[0];
+            if (singleRiskLineName === this.$store.state.roadName) {
+              for (let item of singleRiskLine) {
+                let color = item.lineStyle.normal.color;
+                let coords = item.coords;
+                let dataArr = [];
+
+                for (let i = 0; i < coords.length; i++) {
+                  dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+                }
+                let riskLine = new T.Polyline(dataArr, {
+                  weight: 5,
+                  opacity: 0.7,
+                  color: color
+                });
+                this.map.addOverLay(riskLine); // 绘制线到地图上
+              }
+            }
+          }
         }
       }
     }
