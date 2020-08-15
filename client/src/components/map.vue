@@ -15,9 +15,10 @@ export default {
       map: {},
       eventData: null,
       heatmapOverlay: null,
-      riskLine: null,
+      riskLineData: null,
       eventFilterData: null,
-      maxCount: 0
+      maxCount: 0,
+      riskLineOverlay: null
     };
   },
   mounted() {
@@ -54,7 +55,6 @@ export default {
             // this.maxCount = max;
             dataFilter = this.eventData;
           } else {
-            
             dataFilter = this.eventData.filter(item => {
               return eventLieBie.includes(item.BLOCK_REASON);
             });
@@ -93,12 +93,22 @@ export default {
         }
         return result;
       }
+    },
+    riskIsShow() {
+      return this.$store.state.riskIsShow;
     }
   },
   watch: {
     heatMap(newValue, oldValue) {
       console.log("重新绘制");
       this.heatmapInit(newValue);
+    },
+    riskIsShow(newValue, oldValue) {
+      if (newValue) {
+        this.drawRiskLine();
+      }else {
+        this.heatmapInit(this.eventData)
+      }
     }
   },
   methods: {
@@ -112,7 +122,7 @@ export default {
         this.eventFilterData = res.data;
       });
       this.$axios.get("../../static/G5_risk_line.json").then(res => {
-        this.riskLine = res.data;
+        this.riskLineData = res.data;
         callback && callback();
       });
     },
@@ -125,46 +135,48 @@ export default {
       this.map.setMaxZoom(10);
     },
     heatmapInit(arr) {
-      if (this.heatmapOverlay) {
-        this.map.removeOverLay(this.heatmapOverlay);
-      }
-      this.heatmapOverlay = new T.HeatmapOverlay({
-        radius: 10
-        // gradient: {
-        //   0.2: "blue",
-        //   0.5: "#f0fb5a",
-        //   0.8: "#eb3323"
-        // }
-        //这里改热力图渐变颜色
-      });
-      let count = 4;
-      if (!arr) {
-        return;
-      }
-      if (arr.length < 2000) {
-        console.log(arr.length);
-        count = 20;
-      } else if (arr.length < 1000) {
-        console.log(arr.length);
-        count = 40;
-      } else if (arr.length < 500) {
-        console.log(arr.length);
-        count = 50;
-      } else if (arr.length < 100) {
-        console.log(arr.length);
-        count = 60;
-      }
-      let points = [];
-      for (let i = 0; i < arr.length; i++) {
-        points.push({
-          lat: arr[i].latitude,
-          lng: arr[i].longitude,
-          count: arr[i].count || count
+      if (!this.riskIsShow) {
+        if (this.heatmapOverlay) {
+          this.map.removeOverLay(this.heatmapOverlay);
+        }
+        this.heatmapOverlay = new T.HeatmapOverlay({
+          radius: 10
+          // gradient: {
+          //   0.2: "blue",
+          //   0.5: "#f0fb5a",
+          //   0.8: "#eb3323"
+          // }
+          //这里改热力图渐变颜色
         });
+        let count = 4;
+        if (!arr) {
+          return;
+        }
+        if (arr.length < 2000) {
+          console.log(arr.length);
+          count = 20;
+        } else if (arr.length < 1000) {
+          console.log(arr.length);
+          count = 40;
+        } else if (arr.length < 500) {
+          console.log(arr.length);
+          count = 50;
+        } else if (arr.length < 100) {
+          console.log(arr.length);
+          count = 60;
+        }
+        let points = [];
+        for (let i = 0; i < arr.length; i++) {
+          points.push({
+            lat: arr[i].latitude,
+            lng: arr[i].longitude,
+            count: arr[i].count || count
+          });
+        }
+        let max = this.maxCount || 262;
+        this.map.addOverLay(this.heatmapOverlay);
+        this.heatmapOverlay.setDataSet({ data: points, max });
       }
-      let max = this.maxCount || 262;
-      this.map.addOverLay(this.heatmapOverlay);
-      this.heatmapOverlay.setDataSet({ data: points, max });
     },
     mapOutlineInit() {
       this.$axios.get("../../static/四川省轮廓.json").then(res => {
@@ -224,20 +236,23 @@ export default {
       });
     },
     drawRiskLine() {
-      if (this.riskLine) {
-        for (let item of this.riskLine) {
+      if (this.riskIsShow && this.riskLineData) {
+        if (this.heatmapOverlay) {
+          this.map.removeOverLay(this.heatmapOverlay);
+        }
+        for (let item of this.riskLineData) {
           let color = item.lineStyle.normal.color;
           let coords = item.coords;
           let dataArr = [];
           for (let i = 0; i < coords.length; i++) {
             dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
           }
-          let line = new T.Polyline(dataArr, {
-            weight: 10,
+          let riskLine = new T.Polyline(dataArr, {
+            weight: 5,
             opacity: 0.7,
             color: color
           });
-          this.map.addOverLay(line); // 绘制线到地图上
+          this.map.addOverLay(riskLine); // 绘制线到地图上
         }
       }
     }

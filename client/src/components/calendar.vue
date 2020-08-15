@@ -133,6 +133,7 @@ export default {
       let options = this.getOptions();
       this.chart.setOption(options);
       this.chart.on("click", params => {
+        this.$store.commit("changeSelectedDate",params.value[0])
         options.series[0].data.forEach((data, index) => {
           if (index === params.dataIndex) {
             if (!data.isChecked) {

@@ -22,6 +22,7 @@
       <div id="roadSpeed">
         <bubbleChart></bubbleChart>
       </div>
+      <button @click="click">是否显示危险道路</button>
     </div>
   </div>
 </template>
@@ -40,7 +41,11 @@ export default {
   },
 
   mounted() {},
-  methods: {}
+  methods: {
+    click(){
+      this.$store.commit("changeRiskIsShow", !this.$store.state.riskIsShow)
+    }
+  }
 };
 </script>
 

@@ -13,6 +13,7 @@
     <overView></overView>
     <detail></detail>
     <sankey></sankey>
+ 
   </div>
 </template>
 
@@ -56,6 +57,8 @@ export default {
     });
     //2. 日历数据
     this.$store.dispatch("changeCalendarAllData");
+  },
+  methods:{
   }
 };
 </script>

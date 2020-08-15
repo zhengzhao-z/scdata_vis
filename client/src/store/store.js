@@ -50,10 +50,19 @@ const store = new Vuex.Store({
     roadName: "all",
     calendarAllRawData: null,
     eventArea: ["all"],
-
-    monitors: [] //监测站基本数据
+    riskIsShow: false,
+    selectDate: null,
+    monitors: [] //监测站基本数据,
+    
   },
   mutations: {
+    changeRiskIsShow(state, value){
+      state.riskIsShow = value
+      console.log(state.riskIsShow)
+    },
+    changeSelectedDate(state, newDate){
+      state.selectDate = newDate
+    },
     changeEventLieBie(state, events) {
       const arr = [];
       for (const key in events) {
