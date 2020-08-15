@@ -59,7 +59,6 @@ const store = new Vuex.Store({
       color: []
     },
     roadName: "all",
-    calendarAllData: null,
     calendarAllRawData: null,
     eventArea: ["all"],
 
@@ -82,9 +81,6 @@ const store = new Vuex.Store({
       state.over = value;
       this.commit("changeRoadName", "all");
     },
-    changeCalendarAllData(state, value) {
-      state.calendarAllData = value;
-    },
     changeCalendarAllRawData(state, value) {
       state.calendarAllRawData = value;
     },
@@ -100,45 +96,38 @@ const store = new Vuex.Store({
       });
     },
     changeCalendarData(state, params) {
-      const arr = [];
       const dateArr = getDateData(2019);
-      if (state.calendarAllData) {
+      if (state.calendarAllRawData) {
         let dataAll = null;
+        let dataArrRaw = [];
         let dataArr = [];
         let colorAll = null;
         let colorArr = [];
         let color = null;
         if (state.roadName === "all") {
+          console.log(state.calendarAllRawData);
           for (const key in params) {
             if (params.hasOwnProperty(key)) {
               const element = params[key];
               if (key === "all" && element.flag === true) {
-                dataAll = state.calendarAllData.all;
+                dataAll = dateCount(dateArr, state.calendarAllRawData);
                 colorAll = element.color;
                 break;
               } else {
                 if (element.flag === true) {
-                  dataArr.push(...state.calendarAllData[key]);
+                  const arr = state.calendarAllRawData.filter(item => {
+                    if (item.reason === element.eventNameCN) {
+                      return true;
+                    }
+                  });
+                  dataArrRaw.push(...arr);
                   colorArr.push(element.color);
                 }
               }
             }
           }
-          if (colorArr.length === 1) {
-            color = colorArr[0];
-          } else {
-            color = ["#FFAA85", "#B3315F"];
-          }
-          state.calendarData.data = dataAll || dataArr;
-          state.calendarData.color = colorAll || color;
         } else {
-          console.log(state.roadName);
-          let dataArr = [];
-          let dataArrRaw = [];
-          let colorArr = [];
-          let dataAll = null;
-          let colorAll = null;
-          let color = null;
+        
           for (const key in params) {
             if (params.hasOwnProperty(key)) {
               const element = params[key];
@@ -168,18 +157,18 @@ const store = new Vuex.Store({
               }
             }
           }
-          if (colorArr.length === 1) {
-            color = colorArr[0];
-          } else {
-            color = ["#FFAA85", "#B3315F"];
-          }
-          if (dataArrRaw.length) {
-            dataArr = dateCount(dateArr, dataArrRaw);
-          }
-
-          state.calendarData.data = dataAll || dataArr;
-          state.calendarData.color = colorAll || color;
         }
+        if (colorArr.length === 1) {
+          color = colorArr[0];
+        } else {
+          color = ["#FFAA85", "#B3315F"];
+        }
+        if (dataArrRaw.length) {
+          dataArr = dateCount(dateArr, dataArrRaw);
+        }
+
+        state.calendarData.data = dataAll || dataArr;
+        state.calendarData.color = colorAll || color;
       }
     },
     changeEventArea(state, params) {
@@ -205,9 +194,8 @@ const store = new Vuex.Store({
   },
   actions: {
     changeCalendarAllData(context) {
-      axios.get("../../static/calendar.json").then(res => {
-        context.commit("changeCalendarAllData", res.data);
-
+      axios.get("../../static/calendarAllData.json").then(res => {
+        context.commit("changeCalendarAllRawData", res.data);
         context.commit("changeCalendarData", {
           all: {
             eventName: "all",
@@ -216,9 +204,6 @@ const store = new Vuex.Store({
             flag: true
           }
         });
-      });
-      axios.get("../../static/calendarAll.json").then(res => {
-        context.commit("changeCalendarAllRawData", res.data);
       });
     }
   }
