@@ -2,18 +2,7 @@ import Vuex from "vuex";
 import Vue from "vue";
 import axios from "axios";
 Vue.use(Vuex);
-const deduplicate = arr => {
-  for (var i = 0; i < arr.length; i++) {
-    for (var j = i + 1; j < arr.length; j++) {
-      if (arr[i] == arr[j]) {
-        //如果第一个等于第二个，splice方法删除第二个
-        arr.splice(j, 1);
-        j--;
-      }
-    }
-  }
-  return arr;
-};
+
 function getDateData(year) {
   year = year || "2019";
   let date = new Date(year + "-01-01").getTime();
@@ -96,6 +85,7 @@ const store = new Vuex.Store({
       });
     },
     changeCalendarData(state, params) {
+
       const dateArr = getDateData(2019);
       if (state.calendarAllRawData) {
         let dataAll = null;
@@ -105,7 +95,6 @@ const store = new Vuex.Store({
         let colorArr = [];
         let color = null;
         if (state.roadName === "all") {
-          console.log(state.calendarAllRawData);
           for (const key in params) {
             if (params.hasOwnProperty(key)) {
               const element = params[key];
@@ -127,7 +116,6 @@ const store = new Vuex.Store({
             }
           }
         } else {
-        
           for (const key in params) {
             if (params.hasOwnProperty(key)) {
               const element = params[key];

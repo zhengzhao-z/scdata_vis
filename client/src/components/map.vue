@@ -28,7 +28,7 @@ export default {
     // this.drawRiskLine();
   },
   computed: {
-    G() {
+    heatMap() {
       const eventLieBie = this.$store.state.eventLieBie;
       const roadName = this.$store.state.roadName;
       console.log(eventLieBie);
@@ -96,7 +96,7 @@ export default {
     }
   },
   watch: {
-    G(newValue, oldValue) {
+    heatMap(newValue, oldValue) {
       console.log("重新绘制");
       this.heatmapInit(newValue);
     }

@@ -368,6 +368,7 @@ export default {
     },
     back(){
       this.$store.commit('setOver',true)
+      this.$store.commit("changeRoadName","all")
     }
   },
   
