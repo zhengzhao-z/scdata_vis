@@ -14,6 +14,23 @@ const deduplicate = arr => {
   }
   return arr;
 };
+function getDateData(year) {
+  year = year || "2019";
+  let date = new Date(year + "-01-01").getTime();
+  let end = new Date(year + "-07-1").getTime();
+  let dayTime = 3600 * 24 * 1000;
+  let data = [];
+  for (let time = date; time < end; time += dayTime) {
+    let timeStamp = new Date(time);
+    let year = timeStamp.getFullYear();
+    let month = timeStamp.getMonth() + 1;
+
+    let day = timeStamp.getDate();
+
+    data.push(`${year}/${month}/${day}`);
+  }
+  return data;
+}
 const dateCount = (dateArr, arr) => {
   const result = [];
   for (let i = 0; i < dateArr.length; i++) {
@@ -35,8 +52,8 @@ const dateCount = (dateArr, arr) => {
 };
 const store = new Vuex.Store({
   state: {
-    eventLieBie: ['全部'],
-    over: true,    //over 和 detail切换,
+    eventLieBie: ["全部"],
+    over: true, //over 和 detail切换,
     calendarData: {
       data: [],
       color: []
@@ -45,8 +62,8 @@ const store = new Vuex.Store({
     calendarAllData: null,
     calendarAllRawData: null,
     eventArea: ["all"],
-    
-    monitors:[]   //监测站基本数据
+
+    monitors: [] //监测站基本数据
   },
   mutations: {
     changeEventLieBie(state, events) {
@@ -84,12 +101,7 @@ const store = new Vuex.Store({
     },
     changeCalendarData(state, params) {
       const arr = [];
-      if (state.calendarAllRawData) {
-        for (let i = 0; i < state.calendarAllRawData.length; i++) {
-          arr.push(state.calendarAllRawData[i].time);
-        }
-      }
-      const dateArr = deduplicate(arr);
+      const dateArr = getDateData(2019);
       if (state.calendarAllData) {
         let dataAll = null;
         let dataArr = [];
@@ -187,8 +199,8 @@ const store = new Vuex.Store({
       }
       state.eventArea = eventArea;
     },
-    setMonitors(state,value){
-      state.monitors=value;
+    setMonitors(state, value) {
+      state.monitors = value;
     }
   },
   actions: {
