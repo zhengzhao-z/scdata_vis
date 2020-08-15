@@ -53,15 +53,14 @@ const store = new Vuex.Store({
     riskIsShow: false,
     selectDate: null,
     monitors: [] //监测站基本数据,
-    
   },
   mutations: {
-    changeRiskIsShow(state, value){
-      state.riskIsShow = value
-      console.log(state.riskIsShow)
+    changeRiskIsShow(state, value) {
+      state.riskIsShow = value;
+      console.log(state.riskIsShow);
     },
-    changeSelectedDate(state, newDate){
-      state.selectDate = newDate
+    changeSelectedDate(state, newDate) {
+      state.selectDate = newDate;
     },
     changeEventLieBie(state, events) {
       const arr = [];
@@ -94,7 +93,6 @@ const store = new Vuex.Store({
       });
     },
     changeCalendarData(state, params) {
-
       const dateArr = getDateData(2019);
       if (state.calendarAllRawData) {
         let dataAll = null;

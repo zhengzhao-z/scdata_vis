@@ -16,13 +16,14 @@ import axios from "axios";
 import * as d3 from "d3";
 import store from "./store/store";
 import Echart from "echarts";
-
+import {Message} from 'element-ui';
 Vue.use(ElementUI);
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$d3 = d3;
 Vue.prototype.$echarts = Echart;
 window.d3 = d3; //暂时设置为全局变量
+Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false;
 

@@ -29,9 +29,8 @@ export default {
     // this.drawRiskLine();
   },
   computed: {
-    riskRoadName(){
-      return this.$store.state.roadName
-
+    riskRoadName() {
+      return this.$store.state.roadName;
     },
     heatMap() {
       const eventLieBie = this.$store.state.eventLieBie;
@@ -113,7 +112,7 @@ export default {
         this.heatmapInit(this.eventData);
       }
     },
-    riskRoadName(){
+    riskRoadName() {
       this.drawRiskLine();
     }
   },
@@ -243,7 +242,15 @@ export default {
         }
       });
     },
+    changeLoding(flag) {
+      this.isLoading = flag;
+    },
     drawRiskLine() {
+      console.log(this)
+      console.log(this.$message)
+      this.$message("hhhhh")
+      alert("数据量较大请稍后，请不要做其他操作，以免发生错误")
+      console.log("开始划线了");
       if (this.riskIsShow && this.riskLineData) {
         this.map.clearOverLays();
         if (this.$store.state.roadName === "all") {
@@ -265,7 +272,7 @@ export default {
                 color: color
               });
               this.map.addOverLay(riskLine); // 绘制线到地图上
-              console.log("绘制了")
+              console.log("绘制了");
             }
           }
         } else {
@@ -293,6 +300,8 @@ export default {
           }
         }
       }
+      alert("请求完毕")
+
     }
   }
 };
