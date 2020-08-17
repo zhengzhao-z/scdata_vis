@@ -7,41 +7,34 @@
 <template>
   <div id="detail" class="bg">
     <div id="back" @click="back">></div>
-    <div id="sankey" ref="sankey"></div>
-    <div id="jam">
-      <div id="monitors">
-        <div class="item" v-for="(item,i) in monitors" v-bind:key="i" @click="test(item.GCZBS)">
-          <span>{{ item.GCZMC }}</span>
-        </div>
+    <div id="monitors">
+      <div class="item" v-for="(item,i) in monitors" v-bind:key="i" @click="test(item.GCZBS)">
+        <span>{{ item.GCZMC }}</span>
       </div>
-      <!-- <div id="chart" ref="chart"></div> -->
     </div>
+    <traffic></traffic>
   </div>
 </template>
 
 <script>
+import traffic from "./traffice";
 export default {
+  components: {
+    traffic,
+  },
   data() {
     return {
-      color1: d3.schemeCategory10,
-      order: [
-        "车辆交通事故",
-        "车流量大",
-        "降雨（积水）",
-        "降雪（积雪）",
-        "雾霾",
-      ],
-      color: {
-        "车辆交通事故": "#1D6FA3",
-        "车流量大": "#49C628",
-        "降雨（积水）": "#FCCF31",
-        "降雪（积雪）": "#C346C2",
-        "雾霾": "#F6416C",
-      },
-      monitors:[]
+      monitors: [],
     };
   },
   mounted() {
+    //monitors默认设置为G5
+    console.log(this.$store.state.risk);
+
+    //canvas
+    let canvas = this.$refs.risk;
+    let ctx = canvas.getContext("2d");
+    this.ctx = ctx;
     //基本初始化
     // let sankey = d3
     //   .sankey()
@@ -73,34 +66,36 @@ export default {
       return this.$store.state.roadName;
     },
   },
-  watch:{
-    road(n,o){
-      if(n=="all"){
+  watch: {
+    road(n, o) {
+      if (n == "all") {
         return;
-      }else{
+      } else {
         let arr = this.$store.state.monitors;
-        this.monitors=[];
-        arr.forEach(d=>{
-          if(d.ROADCODE==n){
+        this.monitors = [];
+        arr.forEach((d) => {
+          if (d.ROADCODE == n) {
             this.monitors.push(d);
           }
         });
-        if(this.monitors.length!=0){
+        if (this.monitors.length != 0) {
           //默认显示第一个监测站数据
-          this.$axios.post("http://localhost:3000/traffic",{
-            "id":this.monitors[0].GCZBS,
-            "date":"2019-04-30 00:00:00"
-          }).then(res=>{
-            // console.log(res.data)
-            this.chartInit(res.data[0])
-          })
+          this.$axios
+            .post("http://localhost:3000/traffic", {
+              id: this.monitors[0].GCZBS,
+              date: "2019-04-30 00:00:00",
+            })
+            .then((res) => {
+              // console.log(res.data)
+              this.chartInit(res.data[0]);
+            });
         }
       }
-    }
+    },
   },
   methods: {
-    test(e){
-      console.log(e)
+    test(e) {
+      console.log(e);
     },
     //数据处理
     process(data) {
@@ -148,7 +143,6 @@ export default {
         links: edge,
       });
     },
-    //绘制
     sum(arr) {
       let sum = 0;
       arr.forEach((d) => {
@@ -156,115 +150,31 @@ export default {
       });
       return sum;
     },
-    //桑基图绘制
-    drawSankey(data) {
-      let sankey = this.sankey;
-      let svg = this.sankeySvg;
-
-      let { nodes, links } = sankey(data);
-      let g = svg.append("g").attr("transform", "translate(50,30)");
-      const node = g.append("g").selectAll("rect").data(nodes);
-      node
-        .join("rect")
-        .attr("x", (d) => d.x0)
-        .attr("y", (d) => d.y0)
-        .attr("height", (d) => d.y1 - d.y0)
-        .attr("width", (d) => d.x1 - d.x0)
-        .attr("fill", (d) => {
-          if (this.color[d.name]) {
-            return this.color[d.name];
-          } else {
-            return "#409EFF";
-          }
-        })
-        .style("stroke", "black")
-        .on("mouseover", (d) => {
-          let thisName = d.name;
-          svg.selectAll("rect").style("opacity", (d) => {
-            return this.highlightNodes(d, thisName);
-          });
-          svg.selectAll(".sankey-link").style("opacity", function (l) {
-            return l.source.name == thisName || l.target.name == thisName
-              ? 1
-              : 0.3;
-          });
-          svg.selectAll("text").style("opacity", (d) => {
-            return this.highlightNodes(d, thisName);
-          });
-        })
-        .on("mouseout", (d) => {
-          svg.selectAll("rect").style("opacity", 1);
-          svg.selectAll(".sankey-link").style("opacity", 0.7);
-          svg.selectAll("text").style("opacity", 1);
-        });
-      node
-        .join("text")
-        .attr("x", (d) => (d.x0 + d.x1) / 2)
-        .attr("y", (d) => d.y0 - 5)
-        .attr("text-anchor", "middle")
-        .text((d) => d.name)
-        .attr("font-size", "14px");
-      const link = g
-        .append("g")
-        .attr("fill", "none")
-        .attr("stroke-opacity", 0.5)
-        .selectAll("g")
-        .data(links)
-        .join("g")
-        .style("mix-blend-mode", "multiply");
-      link
-        .append("path")
-        .style("opacity", "0.7")
-        .attr("class", "sankey-link")
-        .attr("d", d3.sankeyLinkHorizontal())
-        .attr("stroke", (d) => this.color[d.source.name])
-        .attr("stroke-width", (d) => Math.max(1, d.width));
-    },
-    //sankey 高亮
-    highlightNodes(node, name) {
-      let opacity = 0.3;
-
-      if (node.name == name) {
-        opacity = 1;
-      }
-      node.sourceLinks.forEach(function (link) {
-        if (link.target.name == name) {
-          opacity = 1;
-        }
-      });
-      node.targetLinks.forEach(function (link) {
-        if (link.source.name == name) {
-          opacity = 1;
-        }
-      });
-
-      return opacity;
-      console.log(opacity);
-    },
     //echarts -- 拥堵曲线
     chartInit(data) {
       // console.log(data)
-      let date=[],arr=[];
-      data.forEach((d,i)=>{
-        date[i]=i;
-        let speed,gcbfb,jj,zyl;
-        speed=d.speed-40;
-        if(speed<0){
-          speed=0;
-        }else if(speed>50){
-          speed=50;
+      let date = [],
+        arr = [];
+      data.forEach((d, i) => {
+        date[i] = i;
+        let speed, gcbfb, jj, zyl;
+        speed = d.speed - 40;
+        if (speed < 0) {
+          speed = 0;
+        } else if (speed > 50) {
+          speed = 50;
         }
-        speed=(1-speed/50);
-        jj=d.jj;
-        if(jj>200){
-          jj=200;
+        speed = 1 - speed / 50;
+        jj = d.jj;
+        if (jj > 200) {
+          jj = 200;
         }
-        jj=1-jj/200;
-        gcbfb=d.gcbfb/100;
-        zyl=d.zyl/10;
+        jj = 1 - jj / 200;
+        gcbfb = d.gcbfb / 100;
+        zyl = d.zyl / 10;
         // console.log(jj,gcbfb,speed,zyl)
-        arr[i]=jj*gcbfb*speed*zyl;
-      })
+        arr[i] = jj * gcbfb * speed * zyl;
+      });
       // console.log(arr);
       const chartDom = this.$refs.chart;
       this.chart = this.$echarts.init(chartDom);
@@ -273,7 +183,7 @@ export default {
         (option = {
           title: {
             text: "拥堵曲线",
-            left:20
+            left: 20,
           },
           tooltip: {
             trigger: "axis",
@@ -332,7 +242,7 @@ export default {
                 gt: 0.8,
                 lte: 1,
                 color: "#660099",
-              }
+              },
             ],
             outOfRange: {
               color: "#999",
@@ -366,38 +276,28 @@ export default {
         })
       );
     },
-    back(){
-      this.$store.commit('setOver',true)
-      this.$store.commit("changeRoadName","all")
-    }
+    back() {
+      this.$store.commit("setOver", true);
+      this.$store.commit("changeRoadName", "all");
+    },
   },
-  
 };
 </script>
 
 <style scoped>
 #detail {
-  height: 100%;
+  height: calc(100% - 300px);
   width: 350px;
   position: absolute;
   right: 0px;
   top: 0px;
   transition: all 500ms;
 }
-#jam {
+#monitors {
   width: 100%;
-  height: 400px;
-}
-.el-switch {
-  /* display: block; */
-  margin-top: 5px;
-  width: 150px;
-}
-#monitors{
-  width: 60px;
-  height: 300px;
+  height: 64px;
   float: left;
-  overflow:scroll;
+  overflow: scroll;
   overflow-x: hidden;
 }
 #monitors::-webkit-scrollbar {
@@ -411,12 +311,12 @@ export default {
 #monitors::-webkit-scrollbar-track {
   border-radius: 10px;
 }
-#chart{
+#chart {
   width: 435px;
   height: 300px;
   float: left;
 }
-#monitors .item{
+#monitors .item {
   height: 25px;
   width: 55px;
   border: 1px solid black;
@@ -425,10 +325,11 @@ export default {
   margin-top: 5px;
   cursor: pointer;
   overflow: hidden;
-  font-size:13px ;
+  font-size: 13px;
   line-height: 25px;
+  float: left;
 }
-#monitors .item:hover{
+#monitors .item:hover {
   background: cornflowerblue;
 }
 #back {

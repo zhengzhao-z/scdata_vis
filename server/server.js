@@ -21,7 +21,7 @@ app.all('*', (req, res, next)=>{
     if (req.method == "OPTIONS") res.sendStatus(200);
     else next();
 });
-const {G5zd,G65zd,G76zd,Monitor,Monitors} =  require('./db.js');
+const {zd,G5zd,G65zd,G76zd,Monitor,Monitors} =  require('./db.js');
 
 
 app.get("/a",(req,res)=>{
@@ -155,6 +155,14 @@ app.post("/traffic", (req, res) => {
             return t;
         })
         res.send([s,x]);
+    })
+})
+
+// risk
+app.post("/risk",(req,res)=>{
+    let road = req.body.road;
+    zd.find({"ROAD_ID":road,"BLOCK_REASON":"车辆交通事故"},{"_id":0,"START_STAKE":1},(err,clo)=>{
+        res.send(clo);
     })
 })
 

@@ -17,3 +17,11 @@ content-type: application/json
     "id":"51000020160416172821205SpZ3O8tEy",
     "date":"2019-06-01 00:00:00"
 }
+
+###
+POST http://localhost:3000/risk
+content-type: application/json
+
+{
+    "road":"G5"
+}

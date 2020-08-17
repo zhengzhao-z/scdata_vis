@@ -145,9 +145,9 @@ export default {
             let a = [];   
             const svg = d3.select(this.$el)
                 .append("svg")
-                .attr("style","width:800px;height:400px")
-                .attr("wdith",800)
-                .attr("height",400);
+                .attr("style","width:350px;height:450px")
+                .attr("wdith",350)
+                .attr("height",450);
             //上行速度
             svg.append("g")
                 .selectAll("rect")
@@ -163,7 +163,7 @@ export default {
                     .text(d=>d.speed);
             //下行速度
             svg.append("g")
-                .attr("transform","translate(315,0)")
+                .attr("transform","translate(0,226)")
                 .selectAll("rect")
                 .data(sx)
                 .enter()
@@ -193,7 +193,7 @@ export default {
                     .text(d=>d.gcbfb);
             //下行跟车百分比
             svg.append("g")
-                .attr("transform","translate(315,113)")
+                .attr("transform","translate(0,339)")
                 .selectAll("rect")
                 .data(xx)
                 .enter()
@@ -208,17 +208,12 @@ export default {
                 .append("title")
                     .text(d=>d.gcbfb);
         }
-
     }
 }
 </script>
 
 <style>
 #traffic{
-    width: 600px;
-    position:absolute;
-    z-index: 99;
-    left: 30%;
-    top: 3%;
+    width: 350px;
 }
 </style>

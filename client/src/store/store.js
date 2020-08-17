@@ -52,7 +52,8 @@ const store = new Vuex.Store({
     eventArea: ["all"],
     riskIsShow: false,
     selectDate: null,
-    monitors: [] //监测站基本数据,
+    monitors: [], //监测站基本数据,
+    risk:[] //危险曲线基本数据 默认G5
   },
   mutations: {
     changeRiskIsShow(state, value) {
@@ -185,6 +186,9 @@ const store = new Vuex.Store({
     },
     setMonitors(state, value) {
       state.monitors = value;
+    },
+    setRisk(state,value){
+      state.risk=value;
     }
   },
   actions: {

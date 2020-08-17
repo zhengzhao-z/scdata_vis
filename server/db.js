@@ -13,6 +13,7 @@ mongoose.connect('mongodb://zz:123456zr@121.89.218.162/scdata?authSource=scdata'
 const G5zd = mongoose.model('G5zd',new mongoose.Schema(),'G5zd');
 const G65zd = mongoose.model('G65zd',new mongoose.Schema(),'G65zd');
 const G76zd = mongoose.model('G76zd',new mongoose.Schema(),'G76zd');
+const zd = mongoose.model('zd',new mongoose.Schema(),'zd');
 const Monitor = mongoose.model('Monitor',new mongoose.Schema(),'Monitor');
 let Monitors = new Map();
 let arr=[
@@ -46,4 +47,4 @@ for(let i=0;i<arr.length;i++){
 }
 
 
-module.exports = {G5zd,G65zd,G76zd,Monitor,Monitors}
+module.exports = {zd,G5zd,G65zd,G76zd,Monitor,Monitors}

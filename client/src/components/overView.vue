@@ -4,12 +4,6 @@
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
 -->
-<!--
- * @Description: 
- * @version: 0.1
- * @Author: zhengzhao
- * @LastEditor: zhengzhao
--->
 <template>
   <div id="overview" class="bg">
     <!-- <div id="charName">
@@ -22,7 +16,6 @@
       <div id="roadSpeed">
         <bubbleChart></bubbleChart>
       </div>
-      <button @click="click">是否显示危险道路</button>
     </div>
   </div>
 </template>
@@ -42,9 +35,6 @@ export default {
 
   mounted() {},
   methods: {
-    click(){
-      this.$store.commit("changeRiskIsShow", !this.$store.state.riskIsShow)
-    }
   }
 };
 </script>

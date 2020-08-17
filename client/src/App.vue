@@ -6,12 +6,12 @@
 -->
 <template>
   <div id="app">
-    <traffic></traffic>
     <tmap></tmap>
     <calendar></calendar>
     <mySwitch></mySwitch>
     <overView></overView>
     <detail></detail>
+    <risk></risk>
     <sankey></sankey>
  
   </div>
@@ -28,7 +28,7 @@ import overView from "./components/overView";
 import detail from "./components/detail";
 import mySwitch from "./components/mySwitch";
 import sankey from "./components/sankey"
-
+import risk from "./components/risk"
 
 export default {
   name: "App",
@@ -46,7 +46,8 @@ export default {
     overView,
     detail,
     mySwitch,
-    sankey
+    sankey,
+    risk
   },
   mounted(){
     //请求相关的数据
@@ -57,6 +58,13 @@ export default {
     });
     //2. 日历数据
     this.$store.dispatch("changeCalendarAllData");
+    //3.risk曲线 默认G5
+    this.$axios.post("http://localhost:3000/risk",{
+      "road":"G5"
+    }).then(res=>{
+      this.$store.commit("setRisk",res.data);
+      console.log(res.data);
+    })
   },
   methods:{
   }
