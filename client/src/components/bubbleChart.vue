@@ -51,7 +51,7 @@ export default {
           formatter: function(name) {
             switch (name) {
               case "speed0_60":
-                return "60-";
+                return "0-60";
               case "speed61_80":
                 return "61-80";
               case "speed81_100":

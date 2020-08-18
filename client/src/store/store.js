@@ -89,7 +89,7 @@ const store = new Vuex.Store({
         all: {
           eventName: "all",
           eventNameCN: "全部",
-          color: ["#ABDCFF", "#0396FF"],
+          color: ["#bdc3c7", "#2c3e50"],
           flag: true
         }
       });
@@ -165,7 +165,7 @@ const store = new Vuex.Store({
         }
 
         state.calendarData.data = dataAll || dataArr;
-        state.calendarData.color = colorAll || color;
+        state.calendarData.color = ["#fceabb", "#f8b500"];
       }
     },
     changeEventArea(state, params) {
