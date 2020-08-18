@@ -39,7 +39,7 @@ export default {
   name: "mySwitch",
   data() {
     return {
-      color: ["#123597", "#49C628", "#F8D800", "#9F44D3", "#F6416C", "#00EAFF"],
+      color:d3.schemeCategory10,
       all: true,
       eventArr: [],
       vehicleAccident: false,

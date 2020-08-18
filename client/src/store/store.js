@@ -51,7 +51,7 @@ const store = new Vuex.Store({
     calendarAllRawData: null,
     eventArea: ["all"],
     riskIsShow: false,
-    selectDate: null,
+    selectDate: "2019/1/1",
     monitors: [], //监测站基本数据,
     risk:[], //危险曲线基本数据 默认G5
     traffic:[]  //traffic

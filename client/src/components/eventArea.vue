@@ -29,11 +29,11 @@ export default {
         "G75",
       ], //道路的排列顺序
       color1: {
-        "车辆交通事故": "#123597",
-        "车流量大": "#49C628",
-        "降雨（积水）": "#F8D800",
-        "降雪（积雪）": "#9F44D3",
-        "雾霾": "#F6416C",
+        "车辆交通事故": d3.schemeCategory10[0],
+        "车流量大": d3.schemeCategory10[1],
+        "降雨（积水）": d3.schemeCategory10[2],
+        "降雪（积雪）": d3.schemeCategory10[3],
+        "雾霾": d3.schemeCategory10[4],
         "all": "#0396FF",
       }, //事件顺序
       match: {
@@ -155,20 +155,27 @@ export default {
             return this.color1[key]
           })
           .attr("d", area);
-        // continue
-        g.append("text")
-          .attr("x", 20)
+        g.selectAll("text")
+          .data([this.road[i]])
+          .enter()
+          .append("text")
+          .attr("x", 15)
           .attr("y", 30)
+          .attr("class","road")
           .attr("fill", "#409EFF")
           .text(this.road[i])
           .on("click", (d) => {
+            let t =d;
             //todo 
-            this.$store.commit("setOver", false);
-            this.$store.commit("changeRoadName", this.road[i]);
-            //todo 判断选择的路 刷新detail 
-            //请求 监测站列表
-            //sankey
-            
+            this.$store.commit("changeRoadName", this.road[i]);      
+            d3.selectAll(".road")
+              .attr("fill",d=>{
+                if(d==this.road[i]){
+                  return "tomato"
+                }else{
+                  return "#409EFF"
+                }
+              })      
           })
           .style("cursor", "pointer");
         

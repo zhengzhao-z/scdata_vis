@@ -7,7 +7,7 @@
 -->
 <template>
   <div id="risk-container" class="bg">
-    <div class="title">{{name}}道路危险程度曲线</div>
+    <div class="title" @click="change">{{name}}道路危险程度曲线</div>
     <canvas id="risk" ref="risk" width="800" height="300"></canvas>
   </div>
 </template>
@@ -99,6 +99,9 @@ export default {
     },
     guass(x,x0){
       return  3/30*Math.pow(Math.E,(x-x0)**2/(-2*30**2))*10;
+    },
+    change(){
+      this.$store.commit("changeRiskIsShow",!this.$store.state.riskIsShow);
     }
   },
   watch:{
