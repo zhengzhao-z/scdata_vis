@@ -109,6 +109,7 @@ export default {
         console.log(newValue);
         this.drawRiskLine();
       } else {
+        this.maxCount = null
         this.heatmapInit(this.eventData);
       }
     },
@@ -156,22 +157,22 @@ export default {
           //这里改热力图渐变颜色
         });
         let count = 4;
-        if (!arr) {
-          return;
-        }
-        if (arr.length < 2000) {
-          console.log(arr.length);
-          count = 20;
-        } else if (arr.length < 1000) {
-          console.log(arr.length);
-          count = 40;
-        } else if (arr.length < 500) {
-          console.log(arr.length);
-          count = 50;
-        } else if (arr.length < 100) {
-          console.log(arr.length);
-          count = 60;
-        }
+        // if (!arr) {
+        //   return;
+        // }
+        // if (arr.length < 2000) {
+        //   console.log('arr长度',arr.length);
+        //   count = 20;
+        // } else if (arr.length < 1000) {
+        //   console.log('arr长度',arr.length);
+        //   count = 40;
+        // } else if (arr.length < 500) {
+        //   console.log('arr长度',arr.length);
+        //   count = 50;
+        // } else if (arr.length < 100) {
+        //   console.log('arr长度',arr.length);
+        //   count = 60;
+        // }
         let points = [];
         for (let i = 0; i < arr.length; i++) {
           points.push({
