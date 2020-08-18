@@ -26,7 +26,6 @@ export default {
     this.mapInit();
     this.mapOutlineInit();
     this.drawMonitor();
-    // this.drawRiskLine();
   },
   computed: {
     riskRoadName() {
@@ -107,6 +106,7 @@ export default {
     },
     riskIsShow(newValue, oldValue) {
       if (newValue) {
+        console.log(newValue);
         this.drawRiskLine();
       } else {
         this.heatmapInit(this.eventData);
@@ -246,33 +246,33 @@ export default {
       this.isLoading = flag;
     },
     drawRiskLine() {
-      console.log(this)
-      console.log(this.$message)
-      this.$message("hhhhh")
-      alert("数据量较大请稍后，请不要做其他操作，以免发生错误")
-      console.log("开始划线了");
+      this.$message("正在请求数据");
+
       if (this.riskIsShow && this.riskLineData) {
         this.map.clearOverLays();
         if (this.$store.state.roadName === "all") {
           for (let i = 0; i < this.riskLineData.length; i++) {
             let singleRiskLine = this.riskLineData[i];
+            let singleRiskLineName = Object.keys(singleRiskLine)[0];
             singleRiskLine = Object.values(singleRiskLine)[0];
-            console.log(singleRiskLine);
-            for (let item of singleRiskLine) {
-              let color = item.lineStyle.normal.color;
-              let coords = item.coords;
-              let dataArr = [];
+            if (singleRiskLineName === "G5") {
+              for (let item of singleRiskLine) {
+                let color = item.lineStyle.normal.color;
+                let coords = item.coords;
+                let dataArr = [];
 
-              for (let i = 0; i < coords.length; i++) {
-                dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+                for (let i = 0; i < coords.length; i++) {
+                  dataArr.push(new T.LngLat(coords[i][0], coords[i][1]));
+                }
+                let riskLine = new T.Polyline(dataArr, {
+                  weight: 5,
+                  opacity: 0.7,
+                  color: color
+                });
+                this.map.addOverLay(riskLine); // 绘制线到地图上
+                console.log("绘制了");
               }
-              let riskLine = new T.Polyline(dataArr, {
-                weight: 5,
-                opacity: 0.7,
-                color: color
-              });
-              this.map.addOverLay(riskLine); // 绘制线到地图上
-              console.log("绘制了");
+              break
             }
           }
         } else {
@@ -300,8 +300,6 @@ export default {
           }
         }
       }
-      alert("请求完毕")
-
     }
   }
 };
