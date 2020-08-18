@@ -63,7 +63,13 @@ export default {
       "road":"G5"
     }).then(res=>{
       this.$store.commit("setRisk",res.data);
-      console.log(res.data);
+    })
+    //4. traffic 像素矩阵默认
+    this.$axios.post("http://localhost:3000/traffic",{
+      id:"51000020160504B7B7DE9BC2D5680D2C",  //G5 黄许
+      date:"2019-01-01 00:00:00"
+    }).then(res=>{
+      this.$store.commit("setTraffic",res.data);
     })
   },
   methods:{
@@ -109,5 +115,12 @@ body,
   color: black;
   width: 32px;
   height: 32px;
+}
+.title{
+  /* 图标题 */
+  font-size: 16px;
+  font-weight: 600;
+  color: #409EFF;
+  cursor:pointer;
 }
 </style>

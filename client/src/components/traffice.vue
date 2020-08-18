@@ -17,13 +17,6 @@ export default {
         }
     },
     mounted(){
-        this.$axios.post("http://localhost:3000/traffic",{
-            "id":"51000020160504B7B7DE9BC2D5680D2C",
-            "date":"2019-04-30 00:00:00"
-        }).then(res=>{
-            let data = res.data;
-            this.draw(data);
-        });
         let color = d3.scaleLinear()
             .domain([0, 0.5, 1])
             .range(["rgb(207,59,44)","rgb(252,220,33)", "rgb(52,139,68)"])
@@ -39,6 +32,14 @@ export default {
             .range(["rgb(255,255,255)","rgb(77,73,137)"])
             .interpolate(d3.interpolateRgb);
         this.color1 = color1;
+        const svg = d3.select(this.$el)
+            .append("svg")
+            .attr("style","width:350px;height:490px")
+            .attr("wdith",350)
+            .attr("height",490);
+        this.svg = svg;
+        this.lengend();
+
     },
     methods:{
         //数据处理
@@ -143,13 +144,12 @@ export default {
             let sx = data[0];
             let xx = data[1];
             let a = [];   
-            const svg = d3.select(this.$el)
-                .append("svg")
-                .attr("style","width:350px;height:450px")
-                .attr("wdith",350)
-                .attr("height",450);
+            let svg = this.svg;
+            let gs = svg.append("g")
+                .attr("transform","translate(0,15)");
             //上行速度
-            svg.append("g")
+           gs.append("g")
+                .attr("transform","translate(35,0)")
                 .selectAll("rect")
                 .data(sx)
                 .enter()
@@ -162,10 +162,10 @@ export default {
                 .append("title")
                     .text(d=>d.speed);
             //下行速度
-            svg.append("g")
-                .attr("transform","translate(0,226)")
+            gs.append("g")
+                .attr("transform","translate(35,220)")
                 .selectAll("rect")
-                .data(sx)
+                .data(xx)
                 .enter()
                 .append("rect")
                 .attr("x",(d,i)=>parseInt(i/12)*13)
@@ -176,10 +176,10 @@ export default {
                 .append("title")
                     .text(d=>d.speed);
             //上行跟车百分比
-            svg.append("g")
-                .attr("transform","translate(0,113)")
+            gs.append("g")
+                .attr("transform","translate(35,110)")
                 .selectAll("rect")
-                .data(xx)
+                .data(sx)
                 .enter()
                 .append("rect")
                 .attr("x",(d,i)=>parseInt(i/12)*13)
@@ -192,8 +192,8 @@ export default {
                 .append("title")
                     .text(d=>d.gcbfb);
             //下行跟车百分比
-            svg.append("g")
-                .attr("transform","translate(0,339)")
+            gs.append("g")
+                .attr("transform","translate(35,330)")
                 .selectAll("rect")
                 .data(xx)
                 .enter()
@@ -207,6 +207,120 @@ export default {
                 })
                 .append("title")
                     .text(d=>d.gcbfb);
+        },
+        lengend(){
+            let svg = this.svg;
+            let g1 = svg.append("g");
+            g1.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(37,10)")
+                .text("0");
+            g1.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(141,10)")
+                .text("8");
+            g1.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(243,10)")
+                .text("16");
+            g1.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(323,10)")
+                .text("(时)");
+            let g = svg.append("g")
+                .attr("transform","translate(0,15)");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(4,54)")
+                .text("上行");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(4,67)")
+                .text("速度");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(4,164)")
+                .text("上行");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(0,177)")
+                .text("跟车比");
+
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(4,279)")
+                .text("下行");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(4,292)")
+                .text("速度");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(4,389)")
+                .text("下行");
+            g.append("text")
+                .attr("font-size",12)
+                .attr("transform","translate(0,402)")
+                .text("跟车比");
+            
+            let speed=[];
+            for(let i=0;i<=100;i++){
+                speed.push(i);
+            }
+            g.append("g")
+                .selectAll("rect")
+                .data(speed)
+                .enter()
+                .append("rect")
+                .attr("x",(d,i)=>{
+                    return i*1+35;
+                })
+                .attr("y",450)
+                .attr("width",1)
+                .attr("height",10)
+                .attr("fill",d=>this.color(d/100));
+            g.append("g")
+                .selectAll("rect")
+                .data(speed)
+                .enter()
+                .append("rect")
+                .attr("x",(d,i)=>{
+                    return i*1+200;
+                })
+                .attr("y",450)
+                .attr("width",1)
+                .attr("height",10)
+                .attr("fill",d=>this.color1(d));
+            g.append("text")
+                .attr("x",20)
+                .attr("y",471)
+                .attr("font-size",12)
+                .text("40km/h");
+            g.append("text")
+                .attr("x",115)
+                .attr("y",471)
+                .attr("font-size",12)
+                .text("100km/h");
+            g.append("text")
+                .attr("x",195)
+                .attr("y",471)
+                .attr("font-size",12)
+                .text("0%");
+            g.append("text")
+                .attr("x",285)
+                .attr("y",471)
+                .attr("font-size",12)
+                .text("100%")
+        }
+    },
+    computed:{
+        traffic(){
+            return this.$store.state.traffic;
+        }
+    },
+    watch:{
+        traffic(n,o){
+            this.draw(n);
         }
     }
 }
@@ -215,5 +329,6 @@ export default {
 <style>
 #traffic{
     width: 350px;
+    /* border: 1px solid black; */
 }
 </style>

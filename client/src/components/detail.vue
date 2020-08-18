@@ -6,13 +6,15 @@
 -->
 <template>
   <div id="detail" class="bg">
-    <div id="back" @click="back">></div>
+    <!-- <div id="back" @click="back">></div> -->
+    <div class="title">G5道路监测站 日期: {{date}}</div>
     <div id="monitors">
-      <div class="item" v-for="(item,i) in monitors" v-bind:key="i" @click="test(item.GCZBS)">
+      <div v-for="(item,i) in monitors" v-bind:key="i" @click="change(item,i)" :class="{'choose':choose==i,'item':true}">
         <span>{{ item.GCZMC }}</span>
       </div>
     </div>
     <traffic></traffic>
+    <div id="jam" ref="jam"></div>
   </div>
 </template>
 
@@ -25,45 +27,32 @@ export default {
   data() {
     return {
       monitors: [],
+      gcz: "51000020160504B7B7DE9BC2D5680D2C",
+      choose:0
     };
   },
   mounted() {
-    //monitors默认设置为G5
-    console.log(this.$store.state.risk);
-
-    //canvas
-    let canvas = this.$refs.risk;
-    let ctx = canvas.getContext("2d");
-    this.ctx = ctx;
-    //基本初始化
-    // let sankey = d3
-    //   .sankey()
-    //   .nodeId((d) => d.name)
-    //   .nodeWidth(12)
-    //   .nodePadding(20)
-    //   .size([380, 300]);
-    // this.sankey = sankey;
-    // this.sankeySvg = d3
-    //   .select(this.$refs.sankey)
-    //   .append("svg")
-    //   .attr("width", 500)
-    //   .attr("height", 350);
-    // this.$axios
-    //   .post("http://localhost:3000/detail", {
-    //     road: "G5",
-    //   })
-    //   .then((res) => {
-    //     this.process(res.data);
-    //   });
-    // this.$axios
-    //   .get("./static/block_51000020120412204940202000110105.json")
-    //   .then(res => {
-    //     this.chartInit(res.data);
-    //   });
+    //观测站默认为G5道路
+    //默认观测站
+    const svg = d3
+      .select(this.$refs.jam)
+      .append("svg")
+      .attr("width", "100%")
+      .attr("height", 220);
+    this.svg = svg;
   },
   computed: {
     road() {
       return this.$store.state.roadName;
+    },
+    date() {
+      return this.$store.state.selectDate;
+    },
+    arr() {
+      return this.$store.state.monitors;
+    },
+    traffic() {
+      return this.$store.state.traffic;
     },
   },
   watch: {
@@ -72,13 +61,15 @@ export default {
         return;
       } else {
         let arr = this.$store.state.monitors;
-        this.monitors = [];
+        let monitors = [];
         arr.forEach((d) => {
           if (d.ROADCODE == n) {
-            this.monitors.push(d);
+            monitors.push(d);
           }
         });
-        if (this.monitors.length != 0) {
+        if (monitors.length != 0) {
+          this.monitors = monitors;
+          this.choose=0;
           //默认显示第一个监测站数据
           this.$axios
             .post("http://localhost:3000/traffic", {
@@ -86,16 +77,45 @@ export default {
               date: "2019-04-30 00:00:00",
             })
             .then((res) => {
-              // console.log(res.data)
-              this.chartInit(res.data[0]);
+              // this.chartInit(res.data[0]);
             });
+        } else {
+          this.$notify.info({
+            title: "提示",
+            message:
+              "因数据原因，目前观测站详细信息仅支持G5 G76 G65！后续可陆续添加数据以支持所有道路。",
+            duration: 3000,
+          });
         }
       }
     },
+    date(n, o) {
+      //日期改变时 刷新像素矩阵 拥堵曲线
+      this.$axios
+        .post("http://localhost:3000/traffic", {
+          id: this.gcz,
+          date: this.dateTran(n) + " 00:00:00",
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.$store.commit("setTraffic", res.data);
+        });
+    },
+    arr(n, o) {
+      n.forEach((d) => {
+        if (d.ROADCODE == "G5") {
+          this.monitors.push(d);
+        }
+      });
+      this.monitors[0].choose=true;
+    },
+    traffic(n, o) {
+      this.jamChart(n);
+    },
   },
   methods: {
-    test(e) {
-      console.log(e);
+    change(e,index) {
+      this.choose=index;
     },
     //数据处理
     process(data) {
@@ -152,6 +172,7 @@ export default {
     },
     //echarts -- 拥堵曲线
     chartInit(data) {
+      console.text;
       // console.log(data)
       let date = [],
         arr = [];
@@ -176,7 +197,7 @@ export default {
         arr[i] = jj * gcbfb * speed * zyl;
       });
       // console.log(arr);
-      const chartDom = this.$refs.chart;
+      const chartDom = this.$refs.jam;
       this.chart = this.$echarts.init(chartDom);
       let option;
       this.chart.setOption(
@@ -206,14 +227,14 @@ export default {
               saveAsImage: {},
             },
           },
-          dataZoom: [
-            {
-              startValue: "2014-06-01",
-            },
-            {
-              type: "inside",
-            },
-          ],
+          // dataZoom: [
+          //   {
+          //     startValue: "2014-06-01",
+          //   },
+          //   {
+          //     type: "inside",
+          //   },
+          // ],
           visualMap: {
             top: 10,
             right: 10,
@@ -222,26 +243,6 @@ export default {
                 gt: 0,
                 lte: 0.2,
                 color: "#096",
-              },
-              {
-                gt: 0.2,
-                lte: 0.4,
-                color: "#ffde33",
-              },
-              {
-                gt: 0.4,
-                lte: 0.6,
-                color: "#ff9933",
-              },
-              {
-                gt: 0.6,
-                lte: 0.8,
-                color: "#cc0033",
-              },
-              {
-                gt: 0.8,
-                lte: 1,
-                color: "#660099",
               },
             ],
             outOfRange: {
@@ -252,33 +253,87 @@ export default {
             name: "Beijing AQI",
             type: "line",
             data: arr,
-            markLine: {
-              silent: true,
-              data: [
-                {
-                  yAxis: 50,
-                },
-                {
-                  yAxis: 100,
-                },
-                {
-                  yAxis: 150,
-                },
-                {
-                  yAxis: 200,
-                },
-                {
-                  yAxis: 300,
-                },
-              ],
-            },
           },
         })
       );
     },
     back() {
-      this.$store.commit("setOver", true);
       this.$store.commit("changeRoadName", "all");
+    },
+    //拥堵曲线绘制
+    jamChart(data) {
+      let line1 = [],
+        line2 = [];
+      let max=0.5;
+      data[0].forEach((d, i) => {
+        let speed, gcbfb, jj, zyl;
+        speed = d.speed - 40;
+        if (speed < 0) {
+          speed = 0;
+        } else if (speed > 50) {
+          speed = 50;
+        }
+        speed = 1 - speed / 50;
+        jj = d.jj;
+        if (jj > 200) {
+          jj = 200;
+        }
+        jj = 1 - jj / 200;
+        gcbfb = d.gcbfb / 100;
+        zyl = d.zyl / 10;
+        line1[i] = jj * gcbfb * speed * zyl;
+        if(max<line1[i]){
+          max = line1[i];
+        }
+      });
+      data[1].forEach((d, i) => {
+        let speed, gcbfb, jj, zyl;
+        speed = d.speed - 40;
+        if (speed < 0) {
+          speed = 0;
+        } else if (speed > 50) {
+          speed = 50;
+        }
+        speed = 1 - speed / 50;
+        jj = d.jj;
+        if (jj > 200) {
+          jj = 200;
+        }
+        jj = 1 - jj / 200;
+        gcbfb = d.gcbfb / 100;
+        zyl = d.zyl / 10;
+        line2[i] = jj * gcbfb * speed * zyl;
+        if(max<line2[i]){
+          max = line2[i];
+        }
+      });
+      console.log(line1, line2);
+      let svg = this.svg;
+      svg.selectAll("g").remove();
+      let scale = d3.scaleLinear()
+        .domain([0,287])
+        .range([35,340]);
+      let scaley = d3.scaleLinear()
+        .domain([0,max])
+        .range([200,10]);
+      let line = d3.line()
+        .x((d,i)=>scale(i))
+        .y(d=>scaley(d));
+      svg.append("g")
+        .append("path")
+        .attr("d",line(line1))
+        .attr("stroke","#0396FF")
+        .attr("stroke-width",0.02)
+    },
+    dateTran(str) {
+      let arr = str.split("/");
+      if (arr[1].length == 1) {
+        arr[1] = "0" + arr[1];
+      }
+      if (arr[2].length == 1) {
+        arr[2] = "0" + arr[2];
+      }
+      return arr[0] + "-" + arr[1] + "-" + arr[2];
     },
   },
 };
@@ -286,7 +341,7 @@ export default {
 
 <style scoped>
 #detail {
-  height: calc(100% - 300px);
+  height: calc(100% - 280px);
   width: 350px;
   position: absolute;
   right: 0px;
@@ -299,6 +354,7 @@ export default {
   float: left;
   overflow: scroll;
   overflow-x: hidden;
+  margin-bottom: 5px;
 }
 #monitors::-webkit-scrollbar {
   width: 3px;
@@ -311,15 +367,16 @@ export default {
 #monitors::-webkit-scrollbar-track {
   border-radius: 10px;
 }
-#chart {
-  width: 435px;
-  height: 300px;
+#jam {
+  width: 100%;
+  height: 200px;
   float: left;
 }
 #monitors .item {
   height: 25px;
   width: 55px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  margin-left:2px ;
   border-radius: 10px;
   text-align: center;
   margin-top: 5px;
@@ -328,29 +385,12 @@ export default {
   font-size: 13px;
   line-height: 25px;
   float: left;
+  background:#ABDCFF;
 }
 #monitors .item:hover {
   background: cornflowerblue;
 }
-#back {
-  position: absolute;
-  right: 0px;
-  width: 30px;
-  height: 30px;
-  outline: none;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  text-align: center;
-  line-height: 30px;
-  border-radius: 5px;
-  background: #f5f4ef;
-  color: #589ef8;
-  font-weight: 700;
-}
-#back:hover {
-  background: yellowgreen;
-  color: black;
-  width: 32px;
-  height: 32px;
+.choose{
+  background: tomato !important;
 }
 </style>

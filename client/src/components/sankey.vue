@@ -28,13 +28,13 @@ export default {
       .nodeId((d) => d.name)
       .nodeWidth(12)
       .nodePadding(20)
-      .size([400, 280]);
+      .size([450, 250]);
     this.sankey = sankey;
     this.sankeySvg = d3
       .select(this.$refs.sankey)
       .append("svg")
-      .attr("width", 500)
-      .attr("height", 300);
+      .attr("width", 600)
+      .attr("height", 280);
     this.$axios
       .post("http://localhost:3000/detail", {
         road: "G5",
@@ -77,7 +77,7 @@ export default {
       let sankey = this.sankey;
       let svg = this.sankeySvg;
       let { nodes, links } = sankey(data);
-      let g = svg.append("g").attr("transform", "translate(50,30)");
+      let g = svg.append("g").attr("transform", "translate(20,10)");
       const node = g.append("g").selectAll("rect").data(nodes);
       node
         .join("rect")
@@ -114,9 +114,9 @@ export default {
         });
       node
         .join("text")
-        .attr("x", (d) => (d.x0 + d.x1) / 2)
-        .attr("y", (d) => d.y0 - 5)
-        .attr("text-anchor", "middle")
+        .attr("x", (d) => d.x1+10)
+        .attr("y", (d) => (d.y0+d.y1)/2+7)
+        // .attr("text-anchor", "middle")
         .text((d) => d.name)
         .attr("font-size", "14px");
       const link = g
@@ -151,9 +151,7 @@ export default {
           opacity = 1;
         }
       });
-
       return opacity;
-      console.log(opacity);
     },
   },
 };
@@ -161,8 +159,8 @@ export default {
 
 <style scoped>
 #sankey {
-  width: 500px;
-  height: 300px;
+  width: 620px;
+  height: 280px;
   position: absolute;
   bottom: 0px;
   left: 1300px;

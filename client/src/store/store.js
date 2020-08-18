@@ -53,7 +53,8 @@ const store = new Vuex.Store({
     riskIsShow: false,
     selectDate: null,
     monitors: [], //监测站基本数据,
-    risk:[] //危险曲线基本数据 默认G5
+    risk:[], //危险曲线基本数据 默认G5
+    traffic:[]  //traffic
   },
   mutations: {
     changeRiskIsShow(state, value) {
@@ -189,6 +190,9 @@ const store = new Vuex.Store({
     },
     setRisk(state,value){
       state.risk=value;
+    },
+    setTraffic(state,value){
+      state.traffic=value;
     }
   },
   actions: {
