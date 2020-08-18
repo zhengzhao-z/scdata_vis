@@ -7,7 +7,7 @@
 <template>
   <div id="detail" class="bg">
     <!-- <div id="back" @click="back">></div> -->
-    <div class="title">G5道路监测站 日期: {{date}}</div>
+    <div class="title">{{name}}道路监测站 日期: {{date}}</div>
     <div id="monitors">
       <div v-for="(item,i) in monitors" v-bind:key="i" @click="change(item,i)" :class="{'choose':choose==i,'item':true}">
         <span>{{ item.GCZMC }}</span>
@@ -28,7 +28,8 @@ export default {
     return {
       monitors: [],
       gcz: "51000020160504B7B7DE9BC2D5680D2C",
-      choose:0
+      choose:0,
+      name:"G5"
     };
   },
   mounted() {
@@ -68,6 +69,7 @@ export default {
           }
         });
         if (monitors.length != 0) {
+          this.name = n;
           this.monitors = monitors;
           this.choose=0;
           //默认显示第一个监测站数据
@@ -78,6 +80,7 @@ export default {
             })
             .then((res) => {
               // this.chartInit(res.data[0]);
+              this.$store.commit("setTraffic",res.data);
             });
         } else {
           this.$notify.info({
@@ -116,6 +119,16 @@ export default {
   methods: {
     change(e,index) {
       this.choose=index;
+      //  改变traffic
+      this.$axios
+        .post("http://localhost:3000/traffic", {
+          id: e.GCZBS,
+          date: this.dateTran(this.$store.state.selectDate) + " 00:00:00",
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.$store.commit("setTraffic", res.data);
+        });
     },
     //数据处理
     process(data) {

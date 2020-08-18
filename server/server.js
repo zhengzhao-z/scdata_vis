@@ -161,7 +161,7 @@ app.post("/traffic", (req, res) => {
 // risk
 app.post("/risk",(req,res)=>{
     let road = req.body.road;
-    zd.find({"ROAD_ID":road,"BLOCK_REASON":"车辆交通事故"},{"_id":0,"START_STAKE":1},(err,clo)=>{
+    zd.find({"ROAD_ID":road,"BLOCK_REASON":"车辆交通事故","START_STAKE":{$ne:"0",$ne:"0,0"}},{"_id":0,"START_STAKE":1},(err,clo)=>{
         res.send(clo);
     })
 })
@@ -175,7 +175,8 @@ app.get("/monitor",(req,res)=>{
 
 //某条路的详细信息
 app.post("/detail",(req,res)=>{
-    G5zd.find({},{"_id":0,"START_STAKE":1,"BLOCK_REASON":1,"MEASURES_NAME":1,"DETECT_TIME":1,"RESUME_TIME":1},(err,clo)=>{
+    let road = req.body.road;
+    zd.find({"ROAD_ID":road},{"_id":0,"START_STAKE":1,"BLOCK_REASON":1,"MEASURES_NAME":1},(err,clo)=>{
         res.send(clo);
     })
 })

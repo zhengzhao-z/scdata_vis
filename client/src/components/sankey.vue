@@ -14,11 +14,11 @@ export default {
         "雾霾",
       ],
       color: {
-        "车辆交通事故": "#1D6FA3",
-        "车流量大": "#49C628",
-        "降雨（积水）": "#FCCF31",
-        "降雪（积雪）": "#C346C2",
-        "雾霾": "#F6416C",
+        "车辆交通事故": d3.schemeCategory10[0],
+        "车流量大": d3.schemeCategory10[1],
+        "降雨（积水）": d3.schemeCategory10[2],
+        "降雪（积雪）": d3.schemeCategory10[3],
+        "雾霾": d3.schemeCategory10[4],
       },
     };
   },
@@ -34,7 +34,15 @@ export default {
       .select(this.$refs.sankey)
       .append("svg")
       .attr("width", 600)
-      .attr("height", 280);
+      .attr("height", 270);
+    let g = this.sankeySvg.append("g");
+    g.append("text")
+      .attr("x",15)
+      .attr("y",18)
+      .attr("font-size",16)
+      .attr("fill","#409EFF")
+      .attr("font-weight",600)
+      .text("事件类型/处理措施");
     this.$axios
       .post("http://localhost:3000/detail", {
         road: "G5",
@@ -77,7 +85,9 @@ export default {
       let sankey = this.sankey;
       let svg = this.sankeySvg;
       let { nodes, links } = sankey(data);
-      let g = svg.append("g").attr("transform", "translate(20,10)");
+      svg.select("#sankey").remove();
+      console.log("remove")
+      let g = svg.append("g").attr("id","sankey").attr("transform", "translate(20,30)");
       const node = g.append("g").selectAll("rect").data(nodes);
       node
         .join("rect")
@@ -154,6 +164,22 @@ export default {
       return opacity;
     },
   },
+  computed:{
+    road() {
+      return this.$store.state.roadName;
+    },
+  },
+  watch:{
+    road(n,o){
+      if(n!="all"){
+        this.$axios.post("http://localhost:3000/detail",{
+          road:n
+        }).then(res=>{
+          this.process(res.data);
+        })
+      }
+    }
+  }
 };
 </script>
 

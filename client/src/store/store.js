@@ -59,7 +59,6 @@ const store = new Vuex.Store({
   mutations: {
     changeRiskIsShow(state, value) {
       state.riskIsShow = value;
-      console.log(state.riskIsShow);
     },
     changeSelectedDate(state, newDate) {
       state.selectDate = newDate;

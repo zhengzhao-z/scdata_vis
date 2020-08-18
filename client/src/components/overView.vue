@@ -6,9 +6,9 @@
 -->
 <template>
   <div id="overview" class="bg">
-    <!-- <div id="charName">
-      <h3>道路阻断事件面积图/速度比例图</h3>
-    </div> -->
+    <div class="title" style="height:30px;line-height:30px">
+        道路阻断事件面积图/速度比例图
+    </div>
     <div id="scrollbar">
       <div id="roadAccident">
         <eventArea></eventArea>
@@ -58,7 +58,7 @@ export default {
   /* width:200px; */
 }
 #scrollbar {
-  height: 100%;
+  height: calc(100% - 30px);
   overflow: scroll;
   overflow-x: hidden;
   position: absolute;
