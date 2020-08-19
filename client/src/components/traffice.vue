@@ -34,9 +34,9 @@ export default {
         this.color1 = color1;
         const svg = d3.select(this.$el)
             .append("svg")
-            .attr("style","width:350px;height:490px")
+            .attr("style","width:350px;height:485px")
             .attr("wdith",350)
-            .attr("height",490);
+            .attr("height",485);
         this.svg = svg;
         this.lengend();
 
@@ -145,7 +145,9 @@ export default {
             let xx = data[1];
             let a = [];   
             let svg = this.svg;
+            svg.select("#tra").remove();
             let gs = svg.append("g")
+                .attr("id","tra")
                 .attr("transform","translate(0,15)");
             //上行速度
            gs.append("g")
@@ -158,9 +160,15 @@ export default {
                 .attr("y",(d,i)=>(i%12)*9)
                 .attr("width",12)
                 .attr("height",8)
-                .attr("fill",d=>this.color(this.scale(d.speed)))
+                .attr("fill",d=>{
+                    if(d){
+                        return this.color(this.scale(d.speed))
+                    }else{
+                        return "black"
+                    }
+                })
                 .append("title")
-                    .text(d=>d.speed);
+                    .text(d=>d?d.speed:"缺失");
             //下行速度
             gs.append("g")
                 .attr("transform","translate(35,220)")
@@ -172,9 +180,15 @@ export default {
                 .attr("y",(d,i)=>(i%12)*9)
                 .attr("width",12)
                 .attr("height",8)
-                .attr("fill",d=>this.color(this.scale(d.speed)))
+                .attr("fill",d=>{
+                    if(d){
+                        return this.color(this.scale(d.speed))
+                    }else{
+                        return "black"
+                    }
+                })
                 .append("title")
-                    .text(d=>d.speed);
+                    .text(d=>d?d.speed:"缺失");
             //上行跟车百分比
             gs.append("g")
                 .attr("transform","translate(35,110)")
@@ -187,10 +201,14 @@ export default {
                 .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>{
-                    return this.color1(d.gcbfb)
+                    if(d){
+                        return this.color1(d.gcbfb)
+                    }else{
+                        return "black"
+                    }
                 })
                 .append("title")
-                    .text(d=>d.gcbfb);
+                    .text(d=>d?d.gcbfb:"缺失");
             //下行跟车百分比
             gs.append("g")
                 .attr("transform","translate(35,330)")
@@ -203,10 +221,14 @@ export default {
                 .attr("width",12)
                 .attr("height",8)
                 .attr("fill",d=>{
-                    return this.color1(d.gcbfb)
+                    if(d){
+                        return this.color1(d.gcbfb)
+                    }else{
+                        return "black"
+                    }
                 })
                 .append("title")
-                    .text(d=>d.gcbfb);
+                    .text(d=>d?d.gcbfb:"缺失");
         },
         lengend(){
             let svg = this.svg;
@@ -275,7 +297,7 @@ export default {
                 .attr("x",(d,i)=>{
                     return i*1+35;
                 })
-                .attr("y",450)
+                .attr("y",445)
                 .attr("width",1)
                 .attr("height",10)
                 .attr("fill",d=>this.color(d/100));
@@ -287,28 +309,28 @@ export default {
                 .attr("x",(d,i)=>{
                     return i*1+200;
                 })
-                .attr("y",450)
+                .attr("y",445)
                 .attr("width",1)
                 .attr("height",10)
                 .attr("fill",d=>this.color1(d));
             g.append("text")
                 .attr("x",20)
-                .attr("y",471)
+                .attr("y",467)
                 .attr("font-size",12)
                 .text("40km/h");
             g.append("text")
                 .attr("x",115)
-                .attr("y",471)
+                .attr("y",467)
                 .attr("font-size",12)
                 .text("100km/h");
             g.append("text")
                 .attr("x",195)
-                .attr("y",471)
+                .attr("y",467)
                 .attr("font-size",12)
                 .text("0%");
             g.append("text")
                 .attr("x",285)
-                .attr("y",471)
+                .attr("y",467)
                 .attr("font-size",12)
                 .text("100%")
         }

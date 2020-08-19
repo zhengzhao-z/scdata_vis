@@ -50,15 +50,15 @@ const store = new Vuex.Store({
     roadName: "all",
     calendarAllRawData: null,
     eventArea: ["all"],
-    riskIsShow: false,
+    mapShow: 0, // 0热力图 1道路risk 2监测站 
     selectDate: "2019/1/1",
     monitors: [], //监测站基本数据,
     risk:[], //危险曲线基本数据 默认G5
     traffic:[]  //traffic
   },
   mutations: {
-    changeRiskIsShow(state, value) {
-      state.riskIsShow = value;
+    changeMapShow(state, value) {
+      state.mapShow = value;
     },
     changeSelectedDate(state, newDate) {
       state.selectDate = newDate;

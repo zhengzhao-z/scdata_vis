@@ -48,7 +48,7 @@ export default {
         road: "G5",
       })
       .then((res) => {
-        this.process(res.data);
+        this.drawSankey(res.data);
       });
   },
   methods: {
@@ -78,7 +78,6 @@ export default {
       let node = Array.from(new Set(nodes)).map((d) => {
         return { name: d };
       });
-      console.log(node,edge)
       this.drawSankey({ nodes: node, links: edge });
     },
     drawSankey(data) {
@@ -86,8 +85,7 @@ export default {
       let svg = this.sankeySvg;
       let { nodes, links } = sankey(data);
       svg.select("#sankey").remove();
-      console.log("remove")
-      let g = svg.append("g").attr("id","sankey").attr("transform", "translate(20,30)");
+      let g = svg.append("g").attr("id","sankey").attr("transform", "translate(20,25)");
       const node = g.append("g").selectAll("rect").data(nodes);
       node
         .join("rect")
@@ -147,7 +145,9 @@ export default {
     },
     highlightNodes(node, name) {
       let opacity = 0.3;
-
+      if(!node){
+        return 1
+      }
       if (node.name == name) {
         opacity = 1;
       }
@@ -175,7 +175,7 @@ export default {
         this.$axios.post("http://localhost:3000/detail",{
           road:n
         }).then(res=>{
-          this.process(res.data);
+          this.drawSankey(res.data);
         })
       }
     }

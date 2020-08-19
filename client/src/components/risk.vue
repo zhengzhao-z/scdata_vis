@@ -101,7 +101,7 @@ export default {
       return (3 / 30) * Math.pow(Math.E, (x - x0) ** 2 / (-2 * 30 ** 2)) * 10;
     },
     change() {
-      this.$store.commit("changeRiskIsShow", !this.$store.state.riskIsShow);
+      this.$store.commit("changeMapShow", 1);
     },
   },
   watch: {

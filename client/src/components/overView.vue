@@ -4,9 +4,15 @@
  * @Author: zhengzhao
  * @LastEditor: zhengzhao
 -->
+<!--
+ * @Description: 
+ * @version: 0.1
+ * @Author: zhengzhao
+ * @LastEditor: zhengzhao
+-->
 <template>
   <div id="overview" class="bg">
-    <div class="title" style="height:30px;line-height:30px">
+    <div class="title" style="height:30px;line-height:30px" @click="change">
         道路阻断事件面积图/速度比例图
     </div>
     <div id="scrollbar">
@@ -35,6 +41,9 @@ export default {
 
   mounted() {},
   methods: {
+    change(){
+      this.$store.commit("changeMapShow",0);
+    }
   }
 };
 </script>

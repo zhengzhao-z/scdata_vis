@@ -7,9 +7,14 @@
 <template>
   <div id="detail" class="bg">
     <!-- <div id="back" @click="back">></div> -->
-    <div class="title">{{name}}道路监测站 日期: {{date}}</div>
+    <div class="title" @click="changeMap">{{name}}道路监测站 日期: {{date}}</div>
     <div id="monitors">
-      <div v-for="(item,i) in monitors" v-bind:key="i" @click="change(item,i)" :class="{'choose':choose==i,'item':true}">
+      <div
+        v-for="(item,i) in monitors"
+        v-bind:key="i"
+        @click="change(item,i)"
+        :class="{'choose':choose==i,'item':true}"
+      >
         <span>{{ item.GCZMC }}</span>
       </div>
     </div>
@@ -28,8 +33,8 @@ export default {
     return {
       monitors: [],
       gcz: "51000020160504B7B7DE9BC2D5680D2C",
-      choose:0,
-      name:"G5"
+      choose: 0,
+      name: "G5",
     };
   },
   mounted() {
@@ -40,7 +45,32 @@ export default {
       .append("svg")
       .attr("width", "100%")
       .attr("height", 220);
-    this.svg = svg;
+    this.svg = svg.append("g");
+    let g = svg.append("g");
+    g.append("line")
+      .attr("x1", 35)
+      .attr("y1", 0)
+      .attr("x2", 35)
+      .attr("y2", 90)
+      .attr("stroke", "#aaa");
+    g.append("line")
+      .attr("x1", 35)
+      .attr("y1", 100)
+      .attr("x2", 35)
+      .attr("y2", 190)
+      .attr("stroke", "#aaa");
+    g.append("text")
+      .attr("font-size", 12)
+      .attr("transform", "translate(4,55)")
+      .text("上行");
+    g.append("text")
+      .attr("font-size", 12)
+      .attr("transform", "translate(4,155)")
+      .text("下行");
+    g.append("text")
+      .attr("font-size", 16)
+      .attr("transform", "translate(280,16)")
+      .text("拥堵曲线");
   },
   computed: {
     road() {
@@ -71,16 +101,15 @@ export default {
         if (monitors.length != 0) {
           this.name = n;
           this.monitors = monitors;
-          this.choose=0;
+          this.choose = 0;
           //默认显示第一个监测站数据
           this.$axios
             .post("http://localhost:3000/traffic", {
               id: this.monitors[0].GCZBS,
-              date: "2019-04-30 00:00:00",
+              date: this.dateTran(this.$store.state.selectDate) + " 00:00:00",
             })
             .then((res) => {
-              // this.chartInit(res.data[0]);
-              this.$store.commit("setTraffic",res.data);
+              this.$store.commit("setTraffic", res.data);
             });
         } else {
           this.$notify.info({
@@ -100,7 +129,6 @@ export default {
           date: this.dateTran(n) + " 00:00:00",
         })
         .then((res) => {
-          console.log(res.data);
           this.$store.commit("setTraffic", res.data);
         });
     },
@@ -110,15 +138,15 @@ export default {
           this.monitors.push(d);
         }
       });
-      this.monitors[0].choose=true;
+      this.monitors[0].choose = true;
     },
     traffic(n, o) {
       this.jamChart(n);
     },
   },
   methods: {
-    change(e,index) {
-      this.choose=index;
+    change(e, index) {
+      this.choose = index;
       //  改变traffic
       this.$axios
         .post("http://localhost:3000/traffic", {
@@ -126,9 +154,11 @@ export default {
           date: this.dateTran(this.$store.state.selectDate) + " 00:00:00",
         })
         .then((res) => {
-          console.log(res.data);
           this.$store.commit("setTraffic", res.data);
         });
+    },
+    changeMap() {
+      this.$store.commit("changeMapShow", 2);
     },
     //数据处理
     process(data) {
@@ -185,8 +215,6 @@ export default {
     },
     //echarts -- 拥堵曲线
     chartInit(data) {
-      console.text;
-      // console.log(data)
       let date = [],
         arr = [];
       data.forEach((d, i) => {
@@ -206,10 +234,8 @@ export default {
         jj = 1 - jj / 200;
         gcbfb = d.gcbfb / 100;
         zyl = d.zyl / 10;
-        // console.log(jj,gcbfb,speed,zyl)
         arr[i] = jj * gcbfb * speed * zyl;
       });
-      // console.log(arr);
       const chartDom = this.$refs.jam;
       this.chart = this.$echarts.init(chartDom);
       let option;
@@ -277,7 +303,7 @@ export default {
     jamChart(data) {
       let line1 = [],
         line2 = [];
-      let max=0.5;
+      let max = 0;
       data[0].forEach((d, i) => {
         let speed, gcbfb, jj, zyl;
         speed = d.speed - 40;
@@ -295,7 +321,7 @@ export default {
         gcbfb = d.gcbfb / 100;
         zyl = d.zyl / 10;
         line1[i] = jj * gcbfb * speed * zyl;
-        if(max<line1[i]){
+        if (max < line1[i]) {
           max = line1[i];
         }
       });
@@ -316,27 +342,49 @@ export default {
         gcbfb = d.gcbfb / 100;
         zyl = d.zyl / 10;
         line2[i] = jj * gcbfb * speed * zyl;
-        if(max<line2[i]){
+        if (max < line2[i]) {
           max = line2[i];
         }
       });
-      console.log(line1, line2);
       let svg = this.svg;
       svg.selectAll("g").remove();
-      let scale = d3.scaleLinear()
-        .domain([0,287])
-        .range([35,340]);
-      let scaley = d3.scaleLinear()
-        .domain([0,max])
-        .range([200,10]);
-      let line = d3.line()
-        .x((d,i)=>scale(i))
-        .y(d=>scaley(d));
-      svg.append("g")
+      let scale = d3.scaleLinear().domain([0, 287]).range([35, 340]);
+      let scaley = d3.scaleLinear().domain([0, max]).range([10, 100]);
+      let line = d3
+        .line()
+        .x((d, i) => scale(i))
+        .y((d) => {
+          if (d) {
+            return 100 - scaley(d);
+          } else {
+            return 100 - scaley(0);
+          }
+        });
+      svg
+        .append("g")
         .append("path")
-        .attr("d",line(line1))
-        .attr("stroke","#0396FF")
-        .attr("stroke-width",0.02)
+        .attr("fill", "none")
+        .attr("stroke", "#409EFF")
+        .attr("stroke-width", 1)
+        .attr("d", line(line1));
+
+      svg
+        .append("g")
+        .attr("transform", "translate(0,100)")
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "#409EFF")
+        .attr("stroke-width", 1)
+        .attr("d", line(line2));
+      let g=svg.append("g");
+      g.append("text")
+        .attr("font-size", 12)
+        .attr("transform", "translate(35,12)")
+        .text("Max: "+max.toFixed(1));
+      g.append("text")
+        .attr("font-size", 12)
+        .attr("transform", "translate(35,112)")
+        .text("Max: "+max.toFixed(1));
     },
     dateTran(str) {
       let arr = str.split("/");
@@ -389,7 +437,7 @@ export default {
   height: 25px;
   width: 55px;
   /* border: 1px solid black; */
-  margin-left:2px ;
+  margin-left: 2px;
   border-radius: 10px;
   text-align: center;
   margin-top: 5px;
@@ -398,12 +446,12 @@ export default {
   font-size: 13px;
   line-height: 25px;
   float: left;
-  background:#ABDCFF;
+  background: #abdcff;
 }
 #monitors .item:hover {
   background: cornflowerblue;
 }
-.choose{
+.choose {
   background: tomato !important;
 }
 </style>
